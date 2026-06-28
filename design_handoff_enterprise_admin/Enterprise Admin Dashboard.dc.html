@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <script src="https://unpkg.com/lucide@0.447.0/dist/umd/lucide.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; }
+
+    :root {
+      --bg:#06090f; --sb:#080c15; --sur:#0e1420; --sur2:#141c2c; --sur3:#1b2538; --sur4:#232f45;
+      --bdr:#1a2540; --bdr2:#243352;
+      --t1:#e8edf5; --t2:#8896aa; --t3:#4f6075;
+      --pri:#1e8ec8; --prih:#2399d8; --pris:rgba(30,142,200,.10);
+      --nab:rgba(30,142,200,.12); --naf:#3aaee0; --nhb:rgba(255,255,255,.04);
+      --ok:#22c55e; --oks:rgba(34,197,94,.12);
+      --warn:#f59e0b; --warns:rgba(245,158,11,.12);
+      --err:#ef4444; --errs:rgba(239,68,68,.12);
+      --info:#3b82f6; --infos:rgba(59,130,246,.12);
+      --shd:0 8px 32px rgba(0,0,0,.48),0 2px 8px rgba(0,0,0,.32);
+    }
+
+    [data-theme="dark"] {
+      --bg:#06090f; --sb:#080c15; --sur:#0e1420; --sur2:#141c2c; --sur3:#1b2538; --sur4:#232f45;
+      --bdr:#1a2540; --bdr2:#243352;
+      --t1:#e8edf5; --t2:#8896aa; --t3:#4f6075;
+      --pri:#1e8ec8; --prih:#2399d8; --pris:rgba(30,142,200,.10);
+      --nab:rgba(30,142,200,.12); --naf:#3aaee0; --nhb:rgba(255,255,255,.04);
+      --ok:#22c55e;  --oks:rgba(34,197,94,.12);
+      --warn:#f59e0b; --warns:rgba(245,158,11,.12);
+      --err:#ef4444;  --errs:rgba(239,68,68,.12);
+      --info:#3b82f6; --infos:rgba(59,130,246,.12);
+      --shd:0 8px 32px rgba(0,0,0,.48),0 2px 8px rgba(0,0,0,.32);
+      color-scheme:dark;
+    }
+    [data-theme="light"] {
+      --bg:#f0f4f8; --sb:#fff; --sur:#fff; --sur2:#f8f9fb; --sur3:#f0f2f5; --sur4:#e8ecf0;
+      --bdr:#e2e8f0; --bdr2:#cbd5e1;
+      --t1:#0f1117; --t2:#475569; --t3:#94a3b8;
+      --pri:#005184; --prih:#006aa8; --pris:rgba(0,81,132,.08);
+      --nab:rgba(0,81,132,.08); --naf:#005184; --nhb:rgba(0,0,0,.03);
+      --ok:#16a34a;  --oks:rgba(22,163,74,.10);
+      --warn:#d97706; --warns:rgba(217,119,6,.10);
+      --err:#dc2626;  --errs:rgba(220,38,38,.10);
+      --info:#2563eb; --infos:rgba(37,99,235,.10);
+      --shd:0 8px 24px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
+      color-scheme:light;
+    }
+
+    ::-webkit-scrollbar{width:4px;height:4px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:99px}
+
+    .nav-item{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--t2);transition:background 100ms,color 100ms;user-select:none;white-space:nowrap}
+    .nav-item:hover{background:var(--nhb);color:var(--t1)}
+    .nav-item.active{background:var(--nab);color:var(--naf)}
+    .nav-item.active .ni{color:var(--naf)!important}
+    .ni{width:15px;height:15px;flex-shrink:0;color:var(--t3);pointer-events:none}
+
+    .ibtn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;cursor:pointer;color:var(--t2);border:none;background:transparent;transition:background 100ms,color 100ms;flex-shrink:0;position:relative}
+    .ibtn:hover{background:var(--sur3);color:var(--t1)}
+    .ibtn i,.ibtn svg{width:15px;height:15px;pointer-events:none}
+
+    .card{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+    .cp{padding:20px 22px}
+    .ch{padding:16px 22px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+
+    .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+    .bl{background:var(--pris);color:var(--pri)}
+    .bg{background:var(--oks);color:var(--ok)}
+    .br{background:var(--errs);color:var(--err)}
+    .ba{background:var(--warns);color:var(--warn)}
+    .bx{background:var(--sur3);color:var(--t2)}
+    .bn{background:var(--sur3);color:var(--t3);font-size:10.5px;padding:1px 6px}
+
+    .sidebar{width:240px;transition:width 200ms cubic-bezier(.4,0,.2,1);overflow:hidden;flex-shrink:0}
+    .sidebar.coll{width:52px}
+    .sidebar.coll .nlbl,.sidebar.coll .nbdg,.sidebar.coll .glbl,
+    .sidebar.coll .wsn,.sidebar.coll .wsp,.sidebar.coll .wsc,
+    .sidebar.coll .uinf,.sidebar.coll .sbar{display:none!important}
+    .sidebar.coll .nav-item{padding:7px;justify-content:center}
+    .sidebar.coll .ni{width:16px;height:16px}
+    .sidebar.coll .wsw{justify-content:center;padding:0 10px}
+
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:background 100ms;letter-spacing:-0.01em;white-space:nowrap}
+    .bp{background:var(--pri);color:#fff}
+    .bp:hover{background:var(--prih)}
+    .bs{background:var(--sur);color:var(--t2);border:1px solid var(--bdr2)}
+    .bs:hover{background:var(--sur3);color:var(--t1)}
+    .bg2{background:transparent;color:var(--t2);border:none}
+    .bg2:hover{background:var(--sur3);color:var(--t1)}
+    .bdr-btn{background:var(--err);color:#fff}
+    .btn i,.btn svg{width:14px;height:14px;pointer-events:none}
+
+    .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+    .tbl th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);padding:10px 14px;text-align:left;border-bottom:1px solid var(--bdr);background:var(--sur2);white-space:nowrap}
+    .tbl td{padding:11px 14px;color:var(--t2);border-bottom:1px solid var(--bdr);vertical-align:middle}
+    .tbl tbody tr{transition:background 80ms;cursor:pointer}
+    .tbl tbody tr:hover{background:var(--sur2)}
+    .tbl tbody tr:last-child td{border-bottom:none}
+
+    .sk{background:linear-gradient(90deg,var(--sur2) 25%,var(--sur3) 50%,var(--sur2) 75%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:4px}
+
+    .dropdown{position:absolute;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:5px;box-shadow:var(--shd);z-index:300;animation:dropin 150ms ease-out}
+    .ddi{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--t2);transition:background 80ms,color 80ms}
+    .ddi:hover{background:var(--sur3);color:var(--t1)}
+    .ddi i,.ddi svg{width:14px;height:14px;color:var(--t3);flex-shrink:0;pointer-events:none}
+    .dds{height:1px;background:var(--bdr);margin:4px 0}
+    .ddd{color:var(--err)}
+    .ddd i{color:var(--err)}
+
+    .cmd-box{background:var(--sur);border:1px solid var(--bdr2);border-radius:12px;width:560px;max-width:calc(100vw - 32px);box-shadow:var(--shd);overflow:hidden}
+    .cir{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--bdr)}
+    .cir input{flex:1;background:transparent;border:none;outline:none;font-size:15px;color:var(--t1);font-family:inherit}
+    .cir input::placeholder{color:var(--t3)}
+    .cres{max-height:340px;overflow-y:auto;padding:6px}
+    .cgrp{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);padding:8px 10px 4px}
+    .crow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--t2);transition:background 80ms}
+    .crow:hover{background:var(--pris);color:var(--t1)}
+    .crow i,.crow svg{width:14px;height:14px;color:var(--t3);flex-shrink:0;pointer-events:none}
+    .cft{display:flex;gap:16px;padding:8px 14px;border-top:1px solid var(--bdr);font-size:11.5px;color:var(--t3)}
+    .kbd{background:var(--sur3);border:1px solid var(--bdr2);border-radius:4px;padding:1px 6px;font-size:10.5px;margin-right:4px}
+
+    .prog{height:4px;background:var(--sur3);border-radius:99px;overflow:hidden}
+    .progf{height:100%;border-radius:99px}
+
+    .ndot{width:7px;height:7px;border-radius:99px;flex-shrink:0}
+    .npip{position:absolute;top:4px;right:4px;width:15px;height:15px;background:var(--err);color:#fff;font-size:9px;font-weight:700;border-radius:99px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);pointer-events:none}
+
+    .arow{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--bdr)}
+    .arow:last-child{border-bottom:none}
+
+    .sv{font-size:26px;font-weight:700;color:var(--t1);letter-spacing:-0.025em;line-height:1;font-variant-numeric:tabular-nums}
+
+    .pw{padding:28px 32px;max-width:1400px;margin:0 auto}
+    .inp{padding:8px 12px;border:1.5px solid var(--bdr2);border-radius:6px;font-size:13.5px;color:var(--t1);background:var(--sur);outline:none;font-family:inherit;width:100%;transition:border-color 120ms,box-shadow 120ms}
+    .inp:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pris)}
+    .lbl{font-size:12.5px;font-weight:500;color:var(--t2);margin-bottom:5px;display:block}
+
+    @keyframes dropin{from{opacity:0;transform:translateY(-5px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes slideup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.82)}}
+    :focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:4px;}
+
+    /* ── Mobile responsive ────────────────────────── */
+    @media(max-width:768px){
+      .sidebar{position:fixed!important;top:0;left:0;bottom:0;z-index:200;
+        transform:translateX(-100%);transition:transform 200ms cubic-bezier(.4,0,.2,1)!important;
+        width:240px!important;box-shadow:none}
+      .sidebar.mob-open{transform:translateX(0)!important;box-shadow:8px 0 40px rgba(0,0,0,.5)}
+      .sidebar.coll{width:240px!important;transform:translateX(-100%)}
+      .mob-overlay{display:none}
+      .mob-overlay.act{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;animation:fadeIn 200ms ease}
+      .pw{padding:20px 16px!important}
+    }
+    @media(min-width:769px){.mob-overlay{display:none!important}}
+
+    /* ── Reduced motion ───────────────────────────── */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+      .sk{animation:none!important;background:var(--sur3)!important}
+    }
+
+    /* ── Tablet tweaks ────────────────────────────── */
+    @media(max-width:1100px){
+      .grid-4c{grid-template-columns:repeat(2,1fr)!important}
+      .grid-2c{grid-template-columns:1fr!important}
+    }
+  </style>
+</helmet>
+
+<div data-theme="{{ theme }}" style="display:flex;height:100vh;overflow:hidden;background:var(--bg);color:var(--t1);position:relative;">
+
+  <!-- ── CMD PALETTE ──────────────────────────────────────── -->
+  <div class="mob-overlay {{ mobOvCls }}" onClick="{{ closeMobile }}"></div>
+
+  <div style="{{ pgCmd }}">
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding-top:12vh;" onClick="{{ closeCmd }}">
+      <div class="cmd-box" onClick="{{ stopProp }}">
+        <div class="cir">
+          <i data-lucide="search" style="width:15px;height:15px;color:var(--t3);flex-shrink:0;"></i>
+          <input id="cmd-input" placeholder="Search pages, users, actions…" />
+          <span style="background:var(--sur3);border:1px solid var(--bdr2);border-radius:4px;padding:2px 7px;font-size:11px;color:var(--t3);">ESC</span>
+        </div>
+        <div class="cres">
+          <div class="cgrp">Pages</div>
+          <div class="crow" onClick="{{ goDashboard }}"><i data-lucide="layout-dashboard"></i>Dashboard</div>
+          <div class="crow" onClick="{{ goTasks }}"><i data-lucide="list-checks"></i>Tasks</div>
+          <div class="crow" onClick="{{ goChat }}"><i data-lucide="message-square"></i>Chat</div>
+          <div class="crow" onClick="{{ goProjects }}"><i data-lucide="folder-kanban"></i>Projects</div>
+          <div class="crow" onClick="{{ goActivity }}"><i data-lucide="activity"></i>Activity</div>
+          <div class="crow" onClick="{{ goUsers }}"><i data-lucide="users"></i>Users</div>
+          <div class="crow" onClick="{{ goAnalytics }}"><i data-lucide="bar-chart-3"></i>Analytics</div>
+          <div class="crow" onClick="{{ goBilling }}"><i data-lucide="credit-card"></i>Billing</div>
+          <div class="crow" onClick="{{ goSettings }}"><i data-lucide="settings"></i>Settings</div>
+          <div class="cgrp">Actions</div>
+          <div class="crow"><i data-lucide="user-plus"></i>Invite User</div>
+          <div class="crow"><i data-lucide="folder-plus"></i>New Project</div>
+          <div class="crow"><i data-lucide="key-round"></i>Create API Key</div>
+          <div class="crow" onClick="{{ toggleTheme }}"><i data-lucide="sun-moon"></i>Toggle Theme</div>
+        </div>
+        <div class="cft">
+          <span><span class="kbd">↑↓</span>Navigate</span>
+          <span><span class="kbd">↵</span>Open</span>
+          <span><span class="kbd">ESC</span>Close</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────── -->
+  <aside class="{{ sbCls }}" style="background:var(--sb);border-right:1px solid var(--bdr);display:flex;flex-direction:column;height:100vh;z-index:10;">
+
+    <div style="padding:12px 10px 8px;">
+      <div class="wsw" style="display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:background 100ms;" onMouseEnter="{{ wsIn }}" onMouseLeave="{{ wsOut }}">
+        <div style="width:28px;height:28px;background:var(--pri);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="color:#fff;font-size:12px;font-weight:700;">A</span>
+        </div>
+        <div class="wsn" style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--t1);overflow:hidden;text-overflow:ellipsis;">Acme Corp</div>
+          <div class="wsp" style="font-size:11px;color:var(--t3);margin-top:1px;">Professional Plan</div>
+        </div>
+        <i data-lucide="chevrons-up-down" class="ni wsc"></i>
+      </div>
+    </div>
+
+    <div class="sbar" style="padding:0 10px 8px;">
+      <div onClick="{{ openCmd }}" style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;cursor:pointer;">
+        <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+        <span style="flex:1;font-size:13px;color:var(--t3);">Search…</span>
+        <span style="font-size:11px;color:var(--t3);background:var(--sur3);border:1px solid var(--bdr2);border-radius:4px;padding:1px 5px;">⌘K</span>
+      </div>
+    </div>
+
+    <nav id="snav" style="flex:1;padding:0 8px;overflow-y:auto;display:flex;flex-direction:column;gap:1px;">
+      <div class="nav-item" data-pg="dashboard"><i data-lucide="layout-dashboard" class="ni"></i><span class="nlbl">Dashboard</span></div>
+      <div class="nav-item" data-pg="tasks"><i data-lucide="list-checks" class="ni"></i><span class="nlbl">Tasks</span><span class="nbdg" style="margin-left:auto;background:var(--pri);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;">20</span></div>
+      <div class="nav-item" data-pg="chat"><i data-lucide="message-square" class="ni"></i><span class="nlbl">Chat</span><span class="nbdg" style="margin-left:auto;background:var(--err);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;">4</span></div>
+
+      <div class="glbl" style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);padding:14px 8px 5px;">People &amp; Access</div>
+      <div class="nav-item" data-pg="users"><i data-lucide="users" class="ni"></i><span class="nlbl">Users</span><span class="nbdg bn" style="margin-left:auto;">2.4k</span></div>
+      <div class="nav-item" data-pg="roles"><i data-lucide="shield" class="ni"></i><span class="nlbl">Roles</span></div>
+      <div class="nav-item" data-pg="permissions"><i data-lucide="lock" class="ni"></i><span class="nlbl">Permissions</span></div>
+      <div class="nav-item" data-pg="teams"><i data-lucide="users-2" class="ni"></i><span class="nlbl">Teams</span></div>
+      <div class="nav-item" data-pg="organizations"><i data-lucide="building-2" class="ni"></i><span class="nlbl">Organizations</span></div>
+
+      <div class="glbl" style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);padding:14px 8px 5px;">Projects</div>
+      <div class="nav-item" data-pg="projects"><i data-lucide="folder-kanban" class="ni"></i><span class="nlbl">Projects</span></div>
+      <div class="nav-item" data-pg="activity"><i data-lucide="activity" class="ni"></i><span class="nlbl">Activity</span></div>
+
+      <div class="glbl" style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);padding:14px 8px 5px;">Analytics &amp; Logs</div>
+      <div class="nav-item" data-pg="analytics"><i data-lucide="bar-chart-3" class="ni"></i><span class="nlbl">Analytics</span></div>
+      <div class="nav-item" data-pg="audit-logs"><i data-lucide="file-text" class="ni"></i><span class="nlbl">Audit Logs</span></div>
+      <div class="nav-item" data-pg="logs"><i data-lucide="terminal" class="ni"></i><span class="nlbl">Logs</span></div>
+      <div class="nav-item" data-pg="monitoring">
+        <i data-lucide="monitor" class="ni"></i><span class="nlbl">Monitoring</span>
+        <span style="margin-left:auto;width:7px;height:7px;border-radius:99px;background:var(--ok);animation:pulse 2s ease-in-out infinite;flex-shrink:0;"></span>
+      </div>
+
+      <div class="glbl" style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);padding:14px 8px 5px;">Configuration</div>
+      <div class="nav-item" data-pg="notifications">
+        <i data-lucide="bell" class="ni"></i><span class="nlbl">Notifications</span>
+        <span class="nbdg" style="margin-left:auto;background:var(--err);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;">3</span>
+      </div>
+      <div class="nav-item" data-pg="integrations"><i data-lucide="link-2" class="ni"></i><span class="nlbl">Integrations</span></div>
+      <div class="nav-item" data-pg="api-keys"><i data-lucide="key-round" class="ni"></i><span class="nlbl">API Keys</span></div>
+
+      <div class="glbl" style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);padding:14px 8px 5px;">Settings</div>
+      <div class="nav-item" data-pg="settings"><i data-lucide="settings" class="ni"></i><span class="nlbl">Settings</span></div>
+      <div class="nav-item" data-pg="billing"><i data-lucide="credit-card" class="ni"></i><span class="nlbl">Billing</span></div>
+      <div class="nav-item" data-pg="security"><i data-lucide="shield-check" class="ni"></i><span class="nlbl">Security</span></div>
+      <div class="nav-item" data-pg="sessions"><i data-lucide="laptop" class="ni"></i><span class="nlbl">Sessions</span></div>
+      <div style="height:12px;"></div>
+    </nav>
+
+    <div style="padding:8px 10px;border-top:1px solid var(--bdr);">
+      <div class="nav-item" data-pg="profile">
+        <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--pri) 0%,#0ea5c8 100%);border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="color:#fff;font-size:10px;font-weight:700;">JD</span>
+        </div>
+        <div class="uinf" style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--t1);overflow:hidden;text-overflow:ellipsis;">Jordan Davis</div>
+          <div style="font-size:11px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;">jordan@acme.com</div>
+        </div>
+        <i data-lucide="chevron-right" class="ni uinf"></i>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ─────────────────────────────────────────────── -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;">
+
+    <header style="height:52px;background:var(--sb);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;padding:0 20px;flex-shrink:0;z-index:100;position:relative;">
+
+      <button class="ibtn" onClick="{{ toggleSb }}">
+        <i data-lucide="{{ sbIcon }}"></i>
+      </button>
+
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t3);">
+        <span style="cursor:pointer;" onClick="{{ goDashboard }}">Home</span>
+        <span style="{{ pgBread }}">
+          <i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--t3);flex-shrink:0;"></i>
+          <span style="color:var(--t1);font-weight:500;margin-left:6px;">{{ pageTitle }}</span>
+        </span>
+      </div>
+
+      <div style="flex:1;"></div>
+
+      <button class="btn bs" onClick="{{ openCmd }}" style="height:32px;padding:0 12px;font-size:12.5px;gap:8px;">
+        <i data-lucide="search" style="width:13px;height:13px;"></i>
+        <span style="color:var(--t3);">Search…</span>
+        <span style="font-size:10.5px;background:var(--sur3);border:1px solid var(--bdr2);border-radius:4px;padding:1px 6px;color:var(--t3);">⌘K</span>
+      </button>
+
+      <div style="position:relative;">
+        <button class="ibtn" id="notif-btn" onClick="{{ toggleNotif }}" style="position:relative;">
+          <i data-lucide="bell"></i>
+          <span class="npip">3</span>
+        </button>
+        <div style="{{ pgNotif }}">
+          <div id="notif-dd" class="dropdown" style="top:calc(100% + 8px);right:0;width:340px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px 6px;">
+              <span style="font-size:13.5px;font-weight:600;color:var(--t1);">Notifications</span>
+              <span style="font-size:12px;color:var(--pri);cursor:pointer;font-weight:500;">Mark all read</span>
+            </div>
+            <div class="dds"></div>
+            <div class="ddi" style="gap:10px;align-items:flex-start;padding:10px;">
+              <div class="ndot" style="background:var(--pri);margin-top:4px;"></div>
+              <div style="flex:1;"><div style="font-size:13px;color:var(--t1);font-weight:500;line-height:1.4;">New user registered</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">sarah.chen@acme.com joined</div><div style="font-size:11px;color:var(--t3);margin-top:4px;">2 minutes ago</div></div>
+            </div>
+            <div class="ddi" style="gap:10px;align-items:flex-start;padding:10px;">
+              <div class="ndot" style="background:var(--pri);margin-top:4px;"></div>
+              <div style="flex:1;"><div style="font-size:13px;color:var(--t1);font-weight:500;line-height:1.4;">API key expiring soon</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">Production key expires in 3 days</div><div style="font-size:11px;color:var(--t3);margin-top:4px;">1 hour ago</div></div>
+            </div>
+            <div class="ddi" style="gap:10px;align-items:flex-start;padding:10px;">
+              <div class="ndot" style="background:var(--warn);margin-top:4px;"></div>
+              <div style="flex:1;"><div style="font-size:13px;color:var(--t1);font-weight:500;line-height:1.4;">System health alert</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">CPU usage above 85% for 10 min</div><div style="font-size:11px;color:var(--t3);margin-top:4px;">3 hours ago</div></div>
+            </div>
+            <div class="dds"></div>
+            <div class="ddi" style="justify-content:center;color:var(--pri);font-weight:500;font-size:12.5px;" onClick="{{ goNotifications }}">View all notifications</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="ibtn" onClick="{{ toggleTheme }}"><i data-lucide="{{ themeIcon }}"></i></button>
+      <button class="ibtn"><i data-lucide="globe"></i></button>
+
+      <div style="position:relative;margin-left:4px;">
+        <button id="user-btn" onClick="{{ toggleUser }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:8px;transition:background 100ms;" onMouseEnter="{{ ubIn }}" onMouseLeave="{{ ubOut }}">
+          <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--pri) 0%,#0ea5c8 100%);border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="color:#fff;font-size:10px;font-weight:700;">JD</span>
+          </div>
+          <div style="text-align:left;line-height:1.3;">
+            <div style="font-size:12.5px;font-weight:600;color:var(--t1);">Jordan Davis</div>
+            <div style="font-size:11px;color:var(--t3);">Admin</div>
+          </div>
+          <i data-lucide="chevron-down" style="width:13px;height:13px;color:var(--t3);pointer-events:none;"></i>
+        </button>
+        <div style="{{ pgUser }}">
+          <div id="user-dd" class="dropdown" style="top:calc(100% + 8px);right:0;min-width:200px;">
+            <div style="padding:8px 10px 6px;">
+              <div style="font-size:13px;font-weight:600;color:var(--t1);">Jordan Davis</div>
+              <div style="font-size:12px;color:var(--t3);margin-top:1px;">jordan@acme.com</div>
+            </div>
+            <div class="dds"></div>
+            <div class="ddi" onClick="{{ goProfile }}"><i data-lucide="user"></i>Profile</div>
+            <div class="ddi" onClick="{{ goSettings }}"><i data-lucide="settings"></i>Settings</div>
+            <div class="ddi" onClick="{{ goBilling }}"><i data-lucide="credit-card"></i>Billing</div>
+            <div class="ddi"><i data-lucide="help-circle"></i>Help &amp; Support</div>
+            <div class="dds"></div>
+            <div class="ddi ddd"><i data-lucide="log-out"></i>Sign out</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── PAGE AREA ──────────────────────────────────────── -->
+    <div id="pgarea" style="flex:1;overflow-y:auto;">
+
+      <!-- DASHBOARD -->
+      <div style="{{ pgDash }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap;">
+            <div>
+              <h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Good morning, Jordan 👋</h1>
+              <p style="font-size:13.5px;color:var(--t3);">{{ todayDate }} · Here's what's happening in your workspace.</p>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn bs"><i data-lucide="download"></i>Export</button>
+              <button class="btn bp"><i data-lucide="plus"></i>New Project</button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+            <div class="card cp">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:500;color:var(--t3);">Total Revenue</div>
+                <div style="width:32px;height:32px;background:var(--pris);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i data-lucide="trending-up" style="width:15px;height:15px;color:var(--pri);"></i>
+                </div>
+              </div>
+              <div class="sv">$128,420</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                <span style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);">
+                  <i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+12.4%
+                </span>
+                <div>{{ sRev }}</div>
+              </div>
+              <div style="font-size:11.5px;color:var(--t3);margin-top:5px;">vs last month</div>
+            </div>
+            <div class="card cp">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:500;color:var(--t3);">Active Users</div>
+                <div style="width:32px;height:32px;background:var(--infos);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i data-lucide="users" style="width:15px;height:15px;color:var(--info);"></i>
+                </div>
+              </div>
+              <div class="sv">24,891</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                <span style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);">
+                  <i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+8.1%
+                </span>
+                <div>{{ sUsers }}</div>
+              </div>
+              <div style="font-size:11.5px;color:var(--t3);margin-top:5px;">vs last month</div>
+            </div>
+            <div class="card cp">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:500;color:var(--t3);">Conversion Rate</div>
+                <div style="width:32px;height:32px;background:var(--warns);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i data-lucide="percent" style="width:15px;height:15px;color:var(--warn);"></i>
+                </div>
+              </div>
+              <div class="sv">3.24%</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                <span style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);">
+                  <i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+0.6%
+                </span>
+                <div>{{ sConv }}</div>
+              </div>
+              <div style="font-size:11.5px;color:var(--t3);margin-top:5px;">vs last month</div>
+            </div>
+            <div class="card cp">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:500;color:var(--t3);">API Requests</div>
+                <div style="width:32px;height:32px;background:var(--oks);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i data-lucide="zap" style="width:15px;height:15px;color:var(--ok);"></i>
+                </div>
+              </div>
+              <div class="sv">1.24M</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                <span style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);">
+                  <i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+21.3%
+                </span>
+                <div>{{ sApi }}</div>
+              </div>
+              <div style="font-size:11.5px;color:var(--t3);margin-top:5px;">vs last month</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:20px;">
+            <div class="card">
+              <div class="ch">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--t1);">Revenue Overview</div>
+                  <div style="font-size:12px;color:var(--t3);margin-top:2px;">Monthly revenue — last 12 months</div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <span class="badge bx">12 mo</span>
+                  <span class="badge bl">↑ 28.4%</span>
+                </div>
+              </div>
+              <div style="padding:16px 22px 8px;">
+                <div style="height:152px;">{{ cRev }}</div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                  <span style="font-size:10.5px;color:var(--t3);">Jan</span><span style="font-size:10.5px;color:var(--t3);">Feb</span><span style="font-size:10.5px;color:var(--t3);">Mar</span><span style="font-size:10.5px;color:var(--t3);">Apr</span><span style="font-size:10.5px;color:var(--t3);">May</span><span style="font-size:10.5px;color:var(--t3);">Jun</span><span style="font-size:10.5px;color:var(--t3);">Jul</span><span style="font-size:10.5px;color:var(--t3);">Aug</span><span style="font-size:10.5px;color:var(--t3);">Sep</span><span style="font-size:10.5px;color:var(--t3);">Oct</span><span style="font-size:10.5px;color:var(--t3);">Nov</span><span style="font-size:10.5px;color:var(--t3);">Dec</span>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="ch">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--t1);">New Users</div>
+                  <div style="font-size:12px;color:var(--t3);margin-top:2px;">Weekly signups — last 8 weeks</div>
+                </div>
+              </div>
+              <div style="padding:16px 22px 8px;">
+                <div style="height:140px;">{{ cUG }}</div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                  <span style="font-size:10.5px;color:var(--t3);">W1</span><span style="font-size:10.5px;color:var(--t3);">W2</span><span style="font-size:10.5px;color:var(--t3);">W3</span><span style="font-size:10.5px;color:var(--t3);">W4</span><span style="font-size:10.5px;color:var(--t3);">W5</span><span style="font-size:10.5px;color:var(--t3);">W6</span><span style="font-size:10.5px;color:var(--t3);">W7</span><span style="font-size:10.5px;color:var(--t3);">W8</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px;padding-bottom:32px;">
+            <div class="card">
+              <div class="ch">
+                <div style="font-size:14px;font-weight:600;color:var(--t1);">Recent Activity</div>
+                <span style="font-size:12px;color:var(--pri);cursor:pointer;font-weight:500;">View all →</span>
+              </div>
+              <div style="padding:4px 22px;">
+                <div class="arow"><div class="ndot" style="background:var(--ok);margin-top:5px;"></div><div style="flex:1;"><div style="font-size:13.5px;color:var(--t1);font-weight:500;">System health check passed</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">All 12 services reporting healthy</div></div><div style="font-size:11.5px;color:var(--t3);white-space:nowrap;">2m ago</div></div>
+                <div class="arow"><div class="ndot" style="background:var(--pri);margin-top:5px;"></div><div style="flex:1;"><div style="font-size:13.5px;color:var(--t1);font-weight:500;">New user invited</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">sarah.chen@acme.com · Role: Developer</div></div><div style="font-size:11.5px;color:var(--t3);white-space:nowrap;">18m ago</div></div>
+                <div class="arow"><div class="ndot" style="background:var(--info);margin-top:5px;"></div><div style="flex:1;"><div style="font-size:13.5px;color:var(--t1);font-weight:500;">Project "Atlas" updated</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">3 tasks completed · 12 remaining</div></div><div style="font-size:11.5px;color:var(--t3);white-space:nowrap;">1h ago</div></div>
+                <div class="arow"><div class="ndot" style="background:var(--warn);margin-top:5px;"></div><div style="flex:1;"><div style="font-size:13.5px;color:var(--t1);font-weight:500;">API key rotated</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">Production key renewed · expires Dec 2026</div></div><div style="font-size:11.5px;color:var(--t3);white-space:nowrap;">3h ago</div></div>
+                <div class="arow"><div class="ndot" style="background:var(--err);margin-top:5px;"></div><div style="flex:1;"><div style="font-size:13.5px;color:var(--t1);font-weight:500;">Failed login attempt blocked</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">IP 192.168.2.44 · 5 attempts</div></div><div style="font-size:11.5px;color:var(--t3);white-space:nowrap;">5h ago</div></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div class="card">
+                <div class="ch">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="width:7px;height:7px;border-radius:99px;background:var(--ok);animation:pulse 2s ease-in-out infinite;flex-shrink:0;"></span>
+                    <div style="font-size:14px;font-weight:600;color:var(--t1);">System Health</div>
+                  </div>
+                  <span style="font-size:11.5px;color:var(--ok);font-weight:500;">All Operational</span>
+                </div>
+                <div style="padding:14px 22px;display:flex;flex-direction:column;gap:12px;">
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12.5px;color:var(--t2);">API Latency</span><span style="font-size:12px;color:var(--ok);font-weight:500;">48ms</span></div><div class="prog"><div class="progf" style="width:18%;background:var(--ok);"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12.5px;color:var(--t2);">CPU Usage</span><span style="font-size:12px;color:var(--warn);font-weight:500;">72%</span></div><div class="prog"><div class="progf" style="width:72%;background:var(--warn);"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12.5px;color:var(--t2);">Memory</span><span style="font-size:12px;color:var(--t2);font-weight:500;">54%</span></div><div class="prog"><div class="progf" style="width:54%;background:var(--pri);"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12.5px;color:var(--t2);">Storage</span><span style="font-size:12px;color:var(--t2);font-weight:500;">38%</span></div><div class="prog"><div class="progf" style="width:38%;background:var(--pri);"></div></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Active Members</div></div>
+                <div style="padding:10px 22px 14px;display:flex;flex-direction:column;gap:10px;">
+                  <div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="color:#fff;font-size:10px;font-weight:700;">SC</span></div><div style="flex:1;"><div style="font-size:13px;color:var(--t1);font-weight:500;">Sarah Chen</div><div style="font-size:11.5px;color:var(--t3);">Developer · 42 actions</div></div><span class="badge bg">Active</span></div>
+                  <div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="color:#fff;font-size:10px;font-weight:700;">MR</span></div><div style="flex:1;"><div style="font-size:13px;color:var(--t1);font-weight:500;">Mark Rivera</div><div style="font-size:11.5px;color:var(--t3);">Designer · 28 actions</div></div><span class="badge bg">Active</span></div>
+                  <div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="color:#fff;font-size:10px;font-weight:700;">AK</span></div><div style="flex:1;"><div style="font-size:13px;color:var(--t1);font-weight:500;">Aiko Kobayashi</div><div style="font-size:11.5px;color:var(--t3);">Manager · 19 actions</div></div><span class="badge ba">Away</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div style="{{ pgUsers }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Users</h1><p style="font-size:13px;color:var(--t3);">Manage workspace members, roles and invitations.</p></div>
+            <div style="display:flex;gap:8px;"><button class="btn bs"><i data-lucide="upload"></i>Import</button><button class="btn bp" onClick="{{ openInvite }}"><i data-lucide="user-plus"></i>Invite User</button></div>
+          </div>
+          <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:6px 12px;flex:1;max-width:280px;">
+              <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+              <span style="font-size:13px;color:var(--t3);">Search users…</span>
+            </div>
+            <button class="btn bs" style="height:34px;"><i data-lucide="sliders-horizontal"></i>Filter</button>
+            <button class="btn bs" style="height:34px;"><i data-lucide="columns-3"></i>Columns</button>
+            <button class="btn bs" style="height:34px;"><i data-lucide="download"></i>Export</button>
+            <span style="font-size:12.5px;color:var(--t3);padding-left:10px;border-left:1px solid var(--bdr);white-space:nowrap;">2,481 users</span>
+          </div>
+          <div class="card" style="border-radius:0 0 10px 10px;overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr>
+                <th style="width:40px;"><input type="checkbox" style="accent-color:var(--pri);" /></th>
+                <th>User</th><th>Status</th><th>Role</th><th>Team</th><th>Joined</th><th>Last Active</th>
+                <th style="width:48px;"></th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ users }}" as="u" hint-placeholder-count="10">
+                  <tr>
+                    <td><input type="checkbox" style="accent-color:var(--pri);" /></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="{{ u.ast }}"><span style="color:#fff;font-size:11px;font-weight:700;">{{ u.initials }}</span></div>
+                        <div><div style="font-size:13.5px;font-weight:500;color:var(--t1);">{{ u.name }}</div><div style="font-size:12px;color:var(--t3);">{{ u.email }}</div></div>
+                      </div>
+                    </td>
+                    <td><span class="badge {{ u.sc }}">{{ u.sl }}</span></td>
+                    <td style="color:var(--t1);font-weight:500;">{{ u.role }}</td>
+                    <td>{{ u.team }}</td>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;">{{ u.joined }}</td>
+                    <td>{{ u.lastActive }}</td>
+                    <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--bdr);">
+              <div style="font-size:12.5px;color:var(--t3);">Showing 1–10 of 2,481 results</div>
+              <div style="display:flex;gap:4px;">
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-left" style="width:13px;height:13px;"></i></button>
+                <button style="width:28px;height:28px;background:var(--pri);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">1</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">2</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">3</button>
+                <span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3);">…</span>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">249</button>
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div style="{{ pgAnalytics }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Analytics</h1><p style="font-size:13px;color:var(--t3);">Workspace usage metrics and growth trends.</p></div>
+            <div style="display:flex;gap:4px;background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:4px;">
+              <button class="btn bg2" style="height:28px;padding:0 12px;font-size:12.5px;">7d</button>
+              <button class="btn bp" style="height:28px;padding:0 12px;font-size:12.5px;">30d</button>
+              <button class="btn bg2" style="height:28px;padding:0 12px;font-size:12.5px;">90d</button>
+              <button class="btn bg2" style="height:28px;padding:0 12px;font-size:12.5px;">Custom</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Page Views</div><div class="sv">842,310</div><div style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);margin-top:8px;"><i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+18.2%</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Sessions</div><div class="sv">294,718</div><div style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);margin-top:8px;"><i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+11.5%</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Bounce Rate</div><div class="sv">34.8%</div><div style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);margin-top:8px;"><i data-lucide="arrow-down-right" style="width:13px;height:13px;"></i>−2.1%</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Avg Duration</div><div class="sv">4m 12s</div><div style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--ok);margin-top:8px;"><i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+0:34</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:20px;">
+            <div class="card">
+              <div class="ch"><div><div style="font-size:14px;font-weight:600;color:var(--t1);">Traffic Overview</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">Page views per day — last 30 days</div></div></div>
+              <div style="padding:16px 22px 10px;"><div style="height:160px;">{{ cTraffic }}</div></div>
+            </div>
+            <div class="card">
+              <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Traffic Sources</div></div>
+              <div style="padding:16px 22px;">
+                <div style="display:flex;align-items:center;gap:20px;">
+                  <div>{{ cDonut }}</div>
+                  <div style="display:flex;flex-direction:column;gap:9px;flex:1;">
+                    <sc-for list="{{ donutLeg }}" as="d" hint-placeholder-count="5">
+                      <div style="display:flex;align-items:center;gap:7px;">
+                        <div style="width:8px;height:8px;border-radius:2px;flex-shrink:0;background:{{ d.c }};"></div>
+                        <span style="font-size:12.5px;color:var(--t2);flex:1;">{{ d.label }}</span>
+                        <span style="font-size:12.5px;font-weight:600;color:var(--t1);">{{ d.pct }}%</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:20px;">
+            <div class="ch"><div><div style="font-size:14px;font-weight:600;color:var(--t1);">Events by Hour</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">Average event count — last 30 days</div></div></div>
+            <div style="padding:16px 22px 8px;">
+              <div style="height:100px;">{{ cEvents }}</div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                <span style="font-size:10px;color:var(--t3);">12am</span><span style="font-size:10px;color:var(--t3);">3am</span><span style="font-size:10px;color:var(--t3);">6am</span><span style="font-size:10px;color:var(--t3);">9am</span><span style="font-size:10px;color:var(--t3);">12pm</span><span style="font-size:10px;color:var(--t3);">3pm</span><span style="font-size:10px;color:var(--t3);">6pm</span><span style="font-size:10px;color:var(--t3);">9pm</span><span style="font-size:10px;color:var(--t3);">12am</span>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="padding-bottom:8px;">
+            <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Top Pages</div></div>
+            <table class="tbl">
+              <thead><tr><th>Page</th><th>Views</th><th>Unique</th><th>Bounce</th><th>Avg Time</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ topPages }}" as="pg" hint-placeholder-count="6">
+                  <tr>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--pri);">{{ pg.path }}</td>
+                    <td style="font-weight:500;color:var(--t1);">{{ pg.views }}</td>
+                    <td>{{ pg.unique }}</td><td>{{ pg.bounce }}</td><td>{{ pg.time }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div style="{{ pgProfile }}">
+        <div class="pw" style="max-width:800px;animation:slideup 180ms ease;">
+          <div style="margin-bottom:28px;"><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Profile</h1><p style="font-size:13px;color:var(--t3);">Manage your personal information and preferences.</p></div>
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="display:flex;align-items:center;gap:20px;">
+              <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--pri) 0%,#0ea5c8 100%);border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="color:#fff;font-size:22px;font-weight:700;">JD</span></div>
+              <div style="flex:1;"><div style="font-size:18px;font-weight:700;color:var(--t1);">Jordan Davis</div><div style="font-size:13px;color:var(--t3);margin-top:3px;">jordan@acme.com · Admin</div></div>
+              <button class="btn bs"><i data-lucide="camera"></i>Change Photo</button>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--bdr);">Personal Information</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div><label class="lbl">First name</label><input class="inp" defaultValue="Jordan" /></div>
+              <div><label class="lbl">Last name</label><input class="inp" defaultValue="Davis" /></div>
+              <div><label class="lbl">Email address</label><input class="inp" type="email" defaultValue="jordan@acme.com" /></div>
+              <div><label class="lbl">Phone</label><input class="inp" defaultValue="+1 (555) 012-3456" /></div>
+              <div style="grid-column:1/-1;"><label class="lbl">Bio</label><textarea class="inp" style="height:80px;resize:vertical;line-height:1.6;">Admin at Acme Corp. Passionate about building great products.</textarea></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:20px;"><button class="btn bp">Save Changes</button><button class="btn bs">Cancel</button></div>
+          </div>
+          <div class="card" style="padding:24px;border-color:rgba(239,68,68,.3);">
+            <div style="font-size:15px;font-weight:600;color:var(--err);margin-bottom:8px;">Danger Zone</div>
+            <p style="font-size:13.5px;color:var(--t2);margin-bottom:16px;">Once you delete your account, there is no going back. Please be certain.</p>
+            <button class="btn bdr-btn"><i data-lucide="trash-2"></i>Delete Account</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BILLING -->
+      <div style="{{ pgBilling }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="margin-bottom:28px;"><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Billing</h1><p style="font-size:13px;color:var(--t3);">Manage your subscription, usage and invoices.</p></div>
+          <div class="card" style="margin-bottom:16px;padding:28px;background:linear-gradient(135deg,var(--pri) 0%,#0d6fa8 100%);border-color:transparent;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+              <div>
+                <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.65);margin-bottom:6px;">Current Plan</div>
+                <div style="font-size:26px;font-weight:700;color:#fff;letter-spacing:-0.02em;">Professional</div>
+                <div style="font-size:13.5px;color:rgba(255,255,255,.75);margin-top:6px;">$299 / month · Billed annually · Renews Jan 12, 2027</div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;">Manage Plan</button>
+                <button style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:#fff;color:var(--pri);">Upgrade →</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Seats Used</div><div class="sv" style="margin-bottom:10px;">18 / 25</div><div class="prog"><div class="progf" style="width:72%;background:var(--pri);"></div></div><div style="font-size:11.5px;color:var(--t3);margin-top:6px;">7 seats remaining</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">API Calls</div><div class="sv" style="margin-bottom:10px;">1.24M / 5M</div><div class="prog"><div class="progf" style="width:25%;background:var(--ok);"></div></div><div style="font-size:11.5px;color:var(--t3);margin-top:6px;">Resets Jul 1, 2026</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Storage</div><div class="sv" style="margin-bottom:10px;">38 / 100 GB</div><div class="prog"><div class="progf" style="width:38%;background:var(--pri);"></div></div><div style="font-size:11.5px;color:var(--t3);margin-top:6px;">62 GB available</div></div>
+          </div>
+          <div class="card">
+            <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Invoice History</div></div>
+            <table class="tbl">
+              <thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th><th style="width:48px;"></th></tr></thead>
+              <tbody>
+                <sc-for list="{{ invoices }}" as="inv" hint-placeholder-count="6">
+                  <tr>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--pri);">{{ inv.id }}</td>
+                    <td>{{ inv.date }}</td>
+                    <td style="font-weight:600;color:var(--t1);">{{ inv.amount }}</td>
+                    <td><span class="badge bg">Paid</span></td>
+                    <td><button class="ibtn"><i data-lucide="download"></i></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- AUDIT LOGS -->
+      <div style="{{ pgAuditLogs }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Audit Logs</h1><p style="font-size:13px;color:var(--t3);">Immutable history of all actions in your workspace.</p></div>
+            <div style="display:flex;gap:8px;"><button class="btn bs"><i data-lucide="download"></i>Export CSV</button><button class="btn bs"><i data-lucide="refresh-cw"></i>Refresh</button></div>
+          </div>
+          <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:6px 12px;flex:1;max-width:240px;">
+              <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+              <span style="font-size:13px;color:var(--t3);">Search events…</span>
+            </div>
+            <select style="padding:6px 10px;border:1px solid var(--bdr);background:var(--sur2);color:var(--t2);border-radius:6px;font-size:13px;outline:none;cursor:pointer;">
+              <option>All Actions</option><option>Auth Events</option><option>User Changes</option><option>Settings</option><option>API Keys</option>
+            </select>
+            <select style="padding:6px 10px;border:1px solid var(--bdr);background:var(--sur2);color:var(--t2);border-radius:6px;font-size:13px;outline:none;cursor:pointer;">
+              <option>All Statuses</option><option>Success</option><option>Failure</option>
+            </select>
+            <select style="padding:6px 10px;border:1px solid var(--bdr);background:var(--sur2);color:var(--t2);border-radius:6px;font-size:13px;outline:none;cursor:pointer;">
+              <option>Last 24 hours</option><option>Last 7 days</option><option>Last 30 days</option><option>Custom range</option>
+            </select>
+            <span style="font-size:12.5px;color:var(--t3);padding-left:10px;border-left:1px solid var(--bdr);">1,284 events</span>
+          </div>
+          <div class="card" style="border-radius:0 0 10px 10px;overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr><th>Timestamp</th><th>Actor</th><th>Action</th><th>Resource</th><th>IP Address</th><th>Status</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ auditLogs }}" as="log" hint-placeholder-count="10">
+                  <tr>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap;color:var(--t3);">{{ log.ts }}</td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div style="{{ log.ast }}"><span style="color:#fff;font-size:10px;font-weight:700;">{{ log.actorInitials }}</span></div>
+                        <span style="color:var(--t1);font-weight:500;font-size:13.5px;">{{ log.actor }}</span>
+                      </div>
+                    </td>
+                    <td><span class="badge {{ log.actionCls }}">{{ log.actionLabel }}</span></td>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t2);">{{ log.resource }}</td>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t3);">{{ log.ip }}</td>
+                    <td><span class="badge {{ log.statusCls }}">{{ log.status }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--bdr);">
+              <div style="font-size:12.5px;color:var(--t3);">Showing 10 of 1,284 events</div>
+              <div style="display:flex;gap:4px;">
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-left" style="width:13px;height:13px;"></i></button>
+                <button style="width:28px;height:28px;background:var(--pri);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">1</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">2</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">3</button>
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API KEYS -->
+      <div style="{{ pgApiKeys }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">API Keys</h1><p style="font-size:13px;color:var(--t3);">Manage authentication keys for programmatic API access.</p></div>
+            <button class="btn bp"><i data-lucide="plus"></i>Create API Key</button>
+          </div>
+          <div style="background:var(--pris);border:1px solid rgba(30,142,200,.2);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+            <i data-lucide="info" style="width:15px;height:15px;color:var(--pri);flex-shrink:0;"></i>
+            <span style="font-size:13px;color:var(--t2);">API keys grant full workspace access. Never share them publicly — rotate keys regularly and use minimal scopes.</span>
+          </div>
+          <div class="card" style="overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr><th>Name</th><th>Key</th><th>Scopes</th><th>Created</th><th>Last Used</th><th>Expires</th><th>Status</th><th style="width:48px;"></th></tr></thead>
+              <tbody>
+                <sc-for list="{{ apiKeys }}" as="k" hint-placeholder-count="6">
+                  <tr>
+                    <td style="font-weight:600;color:var(--t1);">{{ k.name }}</td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--sur2);padding:3px 8px;border-radius:4px;color:var(--t2);border:1px solid var(--bdr);">{{ k.masked }}</code>
+                        <button class="ibtn" style="width:24px;height:24px;" title="Copy key"><i data-lucide="copy" style="width:12px;height:12px;"></i></button>
+                      </div>
+                    </td>
+                    <td><span class="badge bx" style="font-size:11px;">{{ k.scopes }}</span></td>
+                    <td style="font-size:12.5px;">{{ k.created }}</td>
+                    <td style="font-size:12.5px;">{{ k.lastUsed }}</td>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;">{{ k.expires }}</td>
+                    <td><span class="badge {{ k.statusCls }}">{{ k.statusLabel }}</span></td>
+                    <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONITORING -->
+      <div style="{{ pgMonitoring }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Monitoring</h1><p style="font-size:13px;color:var(--t3);">Real-time system health and performance metrics.</p></div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:99px;background:var(--ok);animation:pulse 2s ease-in-out infinite;"></span><span style="font-size:13px;font-weight:500;color:var(--ok);">All Systems Operational</span></div>
+              <button class="btn bs"><i data-lucide="refresh-cw"></i>Refresh</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Uptime (30d)</div><div class="sv">99.97%</div><div style="font-size:12px;color:var(--ok);margin-top:8px;font-weight:500;display:flex;align-items:center;gap:3px;"><i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>+0.02% vs last month</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Avg Latency (p50)</div><div class="sv">48ms</div><div style="font-size:12px;color:var(--ok);margin-top:8px;font-weight:500;display:flex;align-items:center;gap:3px;"><i data-lucide="arrow-down-right" style="width:13px;height:13px;"></i>−3ms vs last week</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Error Rate</div><div class="sv">0.04%</div><div style="font-size:12px;color:var(--ok);margin-top:8px;font-weight:500;display:flex;align-items:center;gap:3px;"><i data-lucide="arrow-down-right" style="width:13px;height:13px;"></i>−0.01% vs last week</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Active Incidents</div><div class="sv" style="color:var(--ok);">0</div><div style="font-size:12px;color:var(--ok);margin-top:8px;font-weight:500;">No open incidents</div></div>
+          </div>
+          <div class="card" style="margin-bottom:20px;">
+            <div class="ch"><div><div style="font-size:14px;font-weight:600;color:var(--t1);">API Response Time</div><div style="font-size:12px;color:var(--t3);margin-top:2px;">P50 latency — last 24 hours</div></div><span class="badge bg">p50: 48ms avg</span></div>
+            <div style="padding:16px 22px 8px;">
+              <div style="height:140px;">{{ cLatency }}</div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                <span style="font-size:10px;color:var(--t3);">12am</span><span style="font-size:10px;color:var(--t3);">3am</span><span style="font-size:10px;color:var(--t3);">6am</span><span style="font-size:10px;color:var(--t3);">9am</span><span style="font-size:10px;color:var(--t3);">12pm</span><span style="font-size:10px;color:var(--t3);">3pm</span><span style="font-size:10px;color:var(--t3);">6pm</span><span style="font-size:10px;color:var(--t3);">9pm</span><span style="font-size:10px;color:var(--t3);">now</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Service Status</div><span style="font-size:12px;color:var(--t3);">12 services · last checked 30s ago</span></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);">
+              <sc-for list="{{ services }}" as="svc" hint-placeholder-count="12">
+                <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--bdr);border-right:1px solid var(--bdr);">
+                  <span style="width:8px;height:8px;border-radius:99px;flex-shrink:0;background:{{ svc.statusColor }};"></span>
+                  <div style="flex:1;">
+                    <div style="font-size:13.5px;font-weight:500;color:var(--t1);">{{ svc.name }}</div>
+                    <div style="font-size:11.5px;color:var(--t3);margin-top:1px;">{{ svc.uptime }} uptime</div>
+                  </div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t2);">{{ svc.latency }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div style="{{ pgSecurity }}">
+        <div class="pw" style="max-width:800px;animation:slideup 180ms ease;">
+          <div style="margin-bottom:28px;"><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Security</h1><p style="font-size:13px;color:var(--t3);">Manage authentication methods and account security settings.</p></div>
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--bdr);">
+              <div><div style="font-size:15px;font-weight:600;color:var(--t1);">Password</div><div style="font-size:13px;color:var(--t3);margin-top:3px;">Last changed 3 months ago</div></div>
+              <button class="btn bs"><i data-lucide="key"></i>Change Password</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div><label class="lbl">Current password</label><input class="inp" type="password" value="••••••••••" /></div>
+              <div></div>
+              <div><label class="lbl">New password</label><input class="inp" type="password" placeholder="Minimum 12 characters" /></div>
+              <div><label class="lbl">Confirm new password</label><input class="inp" type="password" placeholder="Repeat new password" /></div>
+            </div>
+            <button class="btn bp" style="margin-top:16px;">Update Password</button>
+          </div>
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--bdr);">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;"><div style="font-size:15px;font-weight:600;color:var(--t1);">Two-Factor Authentication</div><span class="badge bg">Enabled</span></div>
+                <div style="font-size:13px;color:var(--t3);">Authenticator app configured · 8 backup codes remaining</div>
+              </div>
+              <button class="btn bs"><i data-lucide="settings"></i>Manage 2FA</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:8px;padding:16px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><i data-lucide="smartphone" style="width:15px;height:15px;color:var(--pri);"></i><div style="font-size:13.5px;font-weight:600;color:var(--t1);">Authenticator App</div></div>
+                <div style="font-size:12.5px;color:var(--t3);">Google Authenticator · Configured</div>
+                <div style="margin-top:10px;"><span class="badge bg" style="font-size:11px;">Active</span></div>
+              </div>
+              <div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:8px;padding:16px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><i data-lucide="mail" style="width:15px;height:15px;color:var(--t3);"></i><div style="font-size:13.5px;font-weight:600;color:var(--t1);">Email Backup</div></div>
+                <div style="font-size:12.5px;color:var(--t3);">jordan@acme.com</div>
+                <div style="margin-top:10px;"><button class="btn bs" style="height:26px;padding:0 10px;font-size:11.5px;">Configure</button></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Recent Login History</div></div>
+            <table class="tbl">
+              <thead><tr><th>Date &amp; Time</th><th>Browser / OS</th><th>Location</th><th>IP Address</th><th>Status</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ loginHistory }}" as="lh" hint-placeholder-count="5">
+                  <tr>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap;color:var(--t3);">{{ lh.ts }}</td>
+                    <td style="color:var(--t1);">{{ lh.browser }}</td>
+                    <td>{{ lh.location }}</td>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;">{{ lh.ip }}</td>
+                    <td><span class="badge {{ lh.statusCls }}">{{ lh.status }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSIONS -->
+      <div style="{{ pgSessions }}">
+        <div class="pw" style="max-width:800px;animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Sessions</h1><p style="font-size:13px;color:var(--t3);">Manage your active login sessions across all devices.</p></div>
+            <button class="btn bdr-btn"><i data-lucide="log-out"></i>Revoke All Others</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;padding-bottom:32px;">
+            <sc-for list="{{ sessions }}" as="sess" hint-placeholder-count="5">
+              <div class="card" style="padding:18px 22px;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <div style="width:42px;height:42px;background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="{{ sess.icon }}" style="width:18px;height:18px;color:var(--t2);"></i>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                      <div style="font-size:14px;font-weight:600;color:var(--t1);">{{ sess.browser }}</div>
+                      <span class="badge bg" style="{{ sess.currentBadgeSt }}">Current session</span>
+                    </div>
+                    <div style="font-size:12.5px;color:var(--t3);">{{ sess.os }} · {{ sess.location }} · {{ sess.ip }}</div>
+                  </div>
+                  <div style="text-align:right;flex-shrink:0;">
+                    <div style="font-size:12px;color:var(--t3);margin-bottom:8px;">{{ sess.lastActive }}</div>
+                    <button class="btn bs" style="{{ sess.revokeBtnSt }};height:28px;padding:0 10px;font-size:12px;"><i data-lucide="x" style="width:12px;height:12px;"></i>Revoke</button>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- NOTIFICATIONS -->
+      <div style="{{ pgNotifications }}">
+        <div class="pw" style="max-width:800px;animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Notifications</h1><p style="font-size:13px;color:var(--t3);">Stay up to date with your workspace activity.</p></div>
+            <div style="display:flex;gap:8px;"><button class="btn bs"><i data-lucide="check-check"></i>Mark all read</button><button class="btn bs"><i data-lucide="settings"></i>Preferences</button></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:20px;">
+            <button class="btn bp" style="height:32px;padding:0 14px;font-size:12.5px;">All</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Unread <span class="badge br" style="margin-left:4px;font-size:10px;">3</span></button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Mentions</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">System</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="8">
+              <div class="card" style="padding:0;border-radius:8px;overflow:hidden;border-left:3px solid {{ n.accentColor }};">
+                <div style="display:flex;align-items:flex-start;gap:14px;padding:14px 18px;transition:background 80ms;" onMouseEnter="{{ n.hoverIn }}" onMouseLeave="{{ n.hoverOut }}">
+                  <div style="width:34px;height:34px;border-radius:99px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:{{ n.iconBg }};">
+                    <i data-lucide="{{ n.icon }}" style="width:15px;height:15px;color:{{ n.iconColor }};"></i>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
+                      <div style="font-size:13.5px;font-weight:600;color:var(--t1);">{{ n.title }}</div>
+                      <span style="width:6px;height:6px;border-radius:99px;background:var(--pri);flex-shrink:0;{{ n.unreadDot }}"></span>
+                    </div>
+                    <div style="font-size:13px;color:var(--t2);line-height:1.5;">{{ n.body }}</div>
+                    <div style="font-size:11.5px;color:var(--t3);margin-top:6px;">{{ n.time }}</div>
+                  </div>
+                  <button class="ibtn" style="width:24px;height:24px;flex-shrink:0;"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTEGRATIONS -->
+      <div style="{{ pgIntegrations }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Integrations</h1><p style="font-size:13px;color:var(--t3);">Connect third-party services and configure webhooks.</p></div>
+            <button class="btn bp"><i data-lucide="plus"></i>New Integration</button>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:20px;">
+            <button class="btn bp" style="height:32px;padding:0 14px;font-size:12.5px;">All</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Connected <span class="badge bg" style="margin-left:4px;font-size:10px;">6</span></button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Available</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Webhooks</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;">
+            <sc-for list="{{ integrations }}" as="itg" hint-placeholder-count="9">
+              <div class="card" style="padding:20px;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                  <div style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;background:var(--sur2);border:1px solid var(--bdr);">{{ itg.emoji }}</div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-size:14px;font-weight:600;color:var(--t1);">{{ itg.name }}</div>
+                    <div style="font-size:11.5px;color:var(--t3);margin-top:1px;">{{ itg.category }}</div>
+                  </div>
+                  <span class="badge {{ itg.statusCls }}">{{ itg.statusLabel }}</span>
+                </div>
+                <p style="font-size:12.5px;color:var(--t2);line-height:1.5;margin-bottom:14px;">{{ itg.description }}</p>
+                <div style="display:flex;gap:8px;">
+                  <button class="btn {{ itg.btnCls }}" style="height:28px;padding:0 12px;font-size:12px;flex:1;">{{ itg.btnLabel }}</button>
+                  <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="settings"></i></button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div class="card">
+            <div class="ch"><div style="font-size:14px;font-weight:600;color:var(--t1);">Webhooks</div><button class="btn bs" style="height:28px;padding:0 12px;font-size:12px;"><i data-lucide="plus"></i>Add Endpoint</button></div>
+            <table class="tbl">
+              <thead><tr><th>Endpoint URL</th><th>Events</th><th>Status</th><th>Last Delivery</th><th style="width:48px;"></th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pri);">https://api.acme.com/hooks/prod</td>
+                  <td><span class="badge bx" style="font-size:10.5px;">user.*, project.*</span></td>
+                  <td><span class="badge bg">Active</span></td>
+                  <td style="font-size:12.5px;">2 min ago · 200 OK</td>
+                  <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pri);">https://hooks.slack.com/T0****</td>
+                  <td><span class="badge bx" style="font-size:10.5px;">alert.*</span></td>
+                  <td><span class="badge bg">Active</span></td>
+                  <td style="font-size:12.5px;">1 hr ago · 200 OK</td>
+                  <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pri);">https://staging.acme.com/hooks</td>
+                  <td><span class="badge bx" style="font-size:10.5px;">*</span></td>
+                  <td><span class="badge br">Failing</span></td>
+                  <td style="font-size:12.5px;">3 hr ago · 503 Error</td>
+                  <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ROLES -->
+      <div style="{{ pgRoles }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Roles</h1><p style="font-size:13px;color:var(--t3);">Define permission sets that can be assigned to workspace members.</p></div>
+            <button class="btn bp"><i data-lucide="plus"></i>Create Role</button>
+          </div>
+          <div class="card" style="overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr><th>Role</th><th>Description</th><th>Members</th><th>Permissions</th><th>Created</th><th style="width:96px;"></th></tr></thead>
+              <tbody>
+                <sc-for list="{{ roles }}" as="r" hint-placeholder-count="6">
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div style="{{ r.dot }}"></div>
+                        <span style="font-size:13.5px;font-weight:600;color:var(--t1);">{{ r.name }}</span>
+                      </div>
+                    </td>
+                    <td style="max-width:280px;color:var(--t2);font-size:13px;">{{ r.description }}</td>
+                    <td><span class="badge bx">{{ r.members }} members</span></td>
+                    <td><span class="badge bl">{{ r.perms }} permissions</span></td>
+                    <td style="font-size:12.5px;color:var(--t3);">{{ r.created }}</td>
+                    <td>
+                      <div style="display:flex;gap:4px;">
+                        <button class="ibtn" title="Edit"><i data-lucide="pencil"></i></button>
+                        <button class="ibtn" title="Duplicate"><i data-lucide="copy"></i></button>
+                        <button class="ibtn" style="color:var(--err);" title="Delete"><i data-lucide="trash-2"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERMISSIONS -->
+      <div style="{{ pgPermissions }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Permissions</h1><p style="font-size:13px;color:var(--t3);">Full permission matrix across all workspace roles.</p></div>
+            <button class="btn bs"><i data-lucide="download"></i>Export</button>
+          </div>
+          <div class="card" style="overflow-x:auto;">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th style="min-width:200px;">Permission</th>
+                  <th style="text-align:center;min-width:90px;"><span style="color:var(--err);">Super Admin</span></th>
+                  <th style="text-align:center;min-width:70px;"><span style="color:var(--pri);">Admin</span></th>
+                  <th style="text-align:center;min-width:70px;"><span style="color:#8b5cf6;">Manager</span></th>
+                  <th style="text-align:center;min-width:80px;"><span style="color:var(--ok);">Developer</span></th>
+                  <th style="text-align:center;min-width:70px;"><span style="color:var(--warn);">Analyst</span></th>
+                  <th style="text-align:center;min-width:70px;"><span style="color:var(--t3);">Viewer</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ perms }}" as="p" hint-placeholder-count="18">
+                  <tr>
+                    <td>
+                      <div style="font-size:13px;font-weight:500;color:var(--t1);">{{ p.name }}</div>
+                      <div style="font-size:11.5px;color:var(--t3);margin-top:1px;">{{ p.desc }}</div>
+                    </td>
+                    <td style="text-align:center;font-size:15px;color:{{ p.c0 }};">●</td>
+                    <td style="text-align:center;font-size:15px;color:{{ p.c1 }};">●</td>
+                    <td style="text-align:center;font-size:15px;color:{{ p.c2 }};">●</td>
+                    <td style="text-align:center;font-size:15px;color:{{ p.c3 }};">●</td>
+                    <td style="text-align:center;font-size:15px;color:{{ p.c4 }};">●</td>
+                    <td style="text-align:center;font-size:15px;color:{{ p.c5 }};">●</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEAMS -->
+      <div style="{{ pgTeams }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Teams</h1><p style="font-size:13px;color:var(--t3);">Organize workspace members into functional teams.</p></div>
+            <button class="btn bp"><i data-lucide="plus"></i>Create Team</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-bottom:32px;">
+            <sc-for list="{{ teams }}" as="t" hint-placeholder-count="6">
+              <div class="card" style="padding:20px;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                  <div style="{{ t.ast }}">
+                    <span style="font-size:14px;font-weight:700;color:{{ t.initialsColor }};">{{ t.initials }}</span>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="font-size:14px;font-weight:600;color:var(--t1);">{{ t.name }}</div>
+                  </div>
+                  <button class="ibtn" style="width:26px;height:26px;"><i data-lucide="more-horizontal" style="width:14px;height:14px;"></i></button>
+                </div>
+                <p style="font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:16px;">{{ t.desc }}</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--bdr);">
+                  <div style="display:flex;gap:20px;">
+                    <div style="text-align:center;">
+                      <div style="font-size:18px;font-weight:700;color:var(--t1);">{{ t.members }}</div>
+                      <div style="font-size:11px;color:var(--t3);">Members</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:18px;font-weight:700;color:var(--t1);">{{ t.projects }}</div>
+                      <div style="font-size:11px;color:var(--t3);">Projects</div>
+                    </div>
+                  </div>
+                  <div style="font-size:12px;color:var(--t3);">{{ t.lead }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGS -->
+      <div style="{{ pgLogs }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">System Logs</h1><p style="font-size:13px;color:var(--t3);">Application logs, errors, and debug output from all services.</p></div>
+            <div style="display:flex;gap:8px;"><button class="btn bs"><i data-lucide="download"></i>Export</button><button class="btn bs"><i data-lucide="refresh-cw"></i>Refresh</button></div>
+          </div>
+          <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="display:flex;gap:5px;">
+              <button class="badge br" style="cursor:pointer;font-size:11.5px;padding:3px 10px;">ERROR</button>
+              <button class="badge ba" style="cursor:pointer;font-size:11.5px;padding:3px 10px;">WARN</button>
+              <button class="badge bl" style="cursor:pointer;font-size:11.5px;padding:3px 10px;background:var(--pris);">INFO</button>
+              <button class="badge bx" style="cursor:pointer;font-size:11.5px;padding:3px 10px;">DEBUG</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;flex:1;max-width:240px;">
+              <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+              <span style="font-size:13px;color:var(--t3);">Search logs…</span>
+            </div>
+            <select style="padding:5px 10px;border:1px solid var(--bdr);background:var(--sur2);color:var(--t2);border-radius:6px;font-size:13px;outline:none;cursor:pointer;">
+              <option>All services</option><option>api-gateway</option><option>auth-service</option><option>webhooks</option>
+            </select>
+            <div style="display:flex;align-items:center;gap:6px;margin-left:auto;">
+              <span style="width:7px;height:7px;border-radius:99px;background:var(--ok);animation:pulse 2s ease-in-out infinite;"></span>
+              <span style="font-size:12px;color:var(--ok);font-weight:500;">Live</span>
+            </div>
+          </div>
+          <div class="card" style="border-radius:0 0 10px 10px;overflow:hidden;">
+            <sc-for list="{{ logs }}" as="log" hint-placeholder-count="12">
+              <div style="display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--bdr);transition:background 80ms;" onMouseEnter="{{ log.hIn }}" onMouseLeave="{{ log.hOut }}">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--t3);flex-shrink:0;width:98px;">{{ log.ts }}</span>
+                <span class="badge {{ log.levelCls }}" style="font-size:10px;font-family:'JetBrains Mono',monospace;min-width:48px;justify-content:center;flex-shrink:0;">{{ log.level }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pri);flex-shrink:0;min-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ log.source }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ log.message }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div style="{{ pgSettings }}">
+        <div class="pw" style="max-width:880px;animation:slideup 180ms ease;">
+          <div style="margin-bottom:28px;"><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Settings</h1><p style="font-size:13px;color:var(--t3);">Configure workspace preferences, security policies, and integrations.</p></div>
+
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--bdr);">Workspace Identity</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div><label class="lbl">Workspace name</label><input class="inp" defaultValue="Acme Corp" /></div>
+              <div><label class="lbl">URL slug</label><input class="inp" defaultValue="acme-corp" /></div>
+              <div><label class="lbl">Website</label><input class="inp" type="url" defaultValue="https://acme.com" /></div>
+              <div><label class="lbl">Timezone</label>
+                <select class="inp" style="cursor:pointer;"><option>America/Los_Angeles (UTC−7)</option><option>America/New_York (UTC−4)</option><option>Europe/London (UTC+1)</option><option>Asia/Tokyo (UTC+9)</option></select>
+              </div>
+              <div style="grid-column:1/-1;"><label class="lbl">Description</label><textarea class="inp" style="height:72px;resize:vertical;line-height:1.6;">Enterprise SaaS platform trusted by 2,000+ companies worldwide.</textarea></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:20px;"><button class="btn bp">Save Changes</button><button class="btn bs">Cancel</button></div>
+          </div>
+
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--bdr);">Team &amp; Access</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div><label class="lbl">Default role for new members</label>
+                <select class="inp" style="cursor:pointer;"><option>Viewer</option><option>Developer</option><option>Analyst</option></select>
+              </div>
+              <div><label class="lbl">Allow public sign-ups</label>
+                <select class="inp" style="cursor:pointer;"><option>Disabled — invite only</option><option>Enabled — anyone can join</option></select>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:20px;"><button class="btn bp">Save Changes</button></div>
+          </div>
+
+          <div class="card" style="margin-bottom:16px;padding:24px;">
+            <div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:4px;padding-bottom:12px;border-bottom:1px solid var(--bdr);">Security Policies</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--bdr);">
+              <div><div style="font-size:13.5px;font-weight:500;color:var(--t1);">Require Two-Factor Authentication</div><div style="font-size:12.5px;color:var(--t3);margin-top:2px;">All members must enable 2FA to access the workspace</div></div>
+              <div style="width:36px;height:20px;background:var(--pri);border-radius:99px;cursor:pointer;position:relative;flex-shrink:0;">
+                <div style="width:16px;height:16px;background:#fff;border-radius:99px;position:absolute;top:2px;right:2px;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--bdr);">
+              <div><div style="font-size:13.5px;font-weight:500;color:var(--t1);">Session Timeout</div><div style="font-size:12.5px;color:var(--t3);margin-top:2px;">Automatically sign out inactive sessions</div></div>
+              <select class="inp" style="width:160px;cursor:pointer;"><option>After 8 hours</option><option>After 24 hours</option><option>After 7 days</option><option>Never</option></select>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;">
+              <div><div style="font-size:13.5px;font-weight:500;color:var(--t1);">IP Allowlist</div><div style="font-size:12.5px;color:var(--t3);margin-top:2px;">Restrict access to specific IP addresses or CIDR ranges</div></div>
+              <button class="btn bs" style="height:30px;padding:0 12px;font-size:12.5px;"><i data-lucide="plus"></i>Add IP Range</button>
+            </div>
+            <div style="display:flex;gap:8px;"><button class="btn bp">Save Policies</button></div>
+          </div>
+
+          <div class="card" style="padding:24px;border-color:rgba(239,68,68,.3);">
+            <div style="font-size:15px;font-weight:600;color:var(--err);margin-bottom:16px;">Danger Zone</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);">
+              <div><div style="font-size:13.5px;font-weight:500;color:var(--t1);">Export workspace data</div><div style="font-size:12.5px;color:var(--t3);">Download all workspace data as a ZIP archive</div></div>
+              <button class="btn bs" style="height:30px;padding:0 12px;font-size:12.5px;"><i data-lucide="download"></i>Export Data</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+              <div><div style="font-size:13.5px;font-weight:500;color:var(--err);">Delete workspace</div><div style="font-size:12.5px;color:var(--t3);">Permanently delete this workspace. This cannot be undone.</div></div>
+              <button class="btn bdr-btn" style="height:30px;padding:0 12px;font-size:12.5px;"><i data-lucide="trash-2"></i>Delete Workspace</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS -->
+      <div style="{{ pgTasks }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Tasks</h1><p style="font-size:13px;color:var(--t3);">A searchable, sortable list of all workspace tasks — the core data table view.</p></div>
+            <button class="btn bp" onClick="{{ openCreateTask }}"><i data-lucide="plus"></i>Add Task</button>
+          </div>
+          <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;padding:12px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:6px 12px;min-width:220px;max-width:280px;">
+              <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+              <span style="font-size:13px;color:var(--t3);">Filter tasks…</span>
+            </div>
+            <button class="btn bs" style="height:34px;"><i data-lucide="circle-dot"></i>Status</button>
+            <button class="btn bs" style="height:34px;"><i data-lucide="arrow-up-down"></i>Priority</button>
+            <button class="btn bs" style="height:34px;"><i data-lucide="tag"></i>Type</button>
+            <button class="btn bs" style="height:34px;margin-left:auto;"><i data-lucide="settings-2"></i>View</button>
+          </div>
+          <div style="border:1px solid var(--bdr);border-top:none;border-bottom:none;padding:0 16px;display:flex;align-items:center;gap:0;overflow-x:auto;background:var(--sur);">
+            <button data-task-tab="all" style="height:38px;padding:0 14px;font-size:12.5px;font-weight:600;color:var(--naf);border:none;background:transparent;cursor:pointer;border-bottom:2px solid var(--pri);white-space:nowrap;">All <span style="font-size:11px;background:var(--sur3);color:var(--t3);padding:1px 6px;border-radius:4px;margin-left:4px;">{{ taskCountAll }}</span></button>
+            <button data-task-tab="Backlog" style="height:38px;padding:0 14px;font-size:12.5px;font-weight:500;color:var(--t3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">Backlog <span style="font-size:11px;background:var(--sur3);color:var(--t3);padding:1px 6px;border-radius:4px;margin-left:4px;">{{ taskCountBacklog }}</span></button>
+            <button data-task-tab="Todo" style="height:38px;padding:0 14px;font-size:12.5px;font-weight:500;color:var(--t3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">Todo <span style="font-size:11px;background:var(--sur3);color:var(--t3);padding:1px 6px;border-radius:4px;margin-left:4px;">{{ taskCountTodo }}</span></button>
+            <button data-task-tab="In Progress" style="height:38px;padding:0 14px;font-size:12.5px;font-weight:500;color:var(--t3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">In Progress <span style="font-size:11px;background:var(--sur3);color:var(--t3);padding:1px 6px;border-radius:4px;margin-left:4px;">{{ taskCountInProgress }}</span></button>
+            <button data-task-tab="Done" style="height:38px;padding:0 14px;font-size:12.5px;font-weight:500;color:var(--t3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">Done <span style="font-size:11px;background:var(--sur3);color:var(--t3);padding:1px 6px;border-radius:4px;margin-left:4px;">{{ taskCountDone }}</span></button>
+            <button data-task-tab="Canceled" style="height:38px;padding:0 14px;font-size:12.5px;font-weight:500;color:var(--t3);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">Canceled <span style="font-size:11px;background:var(--sur3);color:var(--t3);padding:1px 6px;border-radius:4px;margin-left:4px;">{{ taskCountCanceled }}</span></button>
+          </div>
+          <div class="card" style="border-radius:0 0 10px 10px;overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr>
+                <th style="width:40px;"><input type="checkbox" style="accent-color:var(--pri);" /></th>
+                <th style="min-width:90px;">Task</th>
+                <th style="min-width:320px;">Title</th>
+                <th style="min-width:120px;">Status</th>
+                <th style="min-width:100px;">Priority</th>
+                <th style="width:48px;"></th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ filteredTasks }}" as="t" hint-placeholder-count="15">
+                  <tr>
+                    <td><input type="checkbox" style="accent-color:var(--pri);" /></td>
+                    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t3);">{{ t.id }}</td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span class="badge bx" style="font-size:10.5px;white-space:nowrap;flex-shrink:0;">{{ t.type }}</span>
+                        <span style="font-size:13.5px;color:var(--t1);font-weight:500;">{{ t.title }}</span>
+                      </div>
+                    </td>
+                    <td><span class="badge {{ t.statusCls }}" style="display:inline-flex;align-items:center;gap:5px;"><i data-lucide="{{ t.statusIcon }}" style="width:11px;height:11px;"></i>{{ t.statusLabel }}</span></td>
+                    <td><span class="badge {{ t.priCls }}" style="display:inline-flex;align-items:center;gap:5px;"><i data-lucide="{{ t.priIcon }}" style="width:11px;height:11px;"></i>{{ t.priority }}</span></td>
+                    <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--bdr);flex-wrap:wrap;gap:8px;">
+              <div style="font-size:12.5px;color:var(--t3);">0 of 20 row(s) selected</div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:12.5px;color:var(--t3);">Rows per page</span>
+                <select style="padding:4px 8px;border:1px solid var(--bdr);background:var(--sur2);color:var(--t2);border-radius:6px;font-size:12px;outline:none;cursor:pointer;"><option>15</option><option>20</option><option>30</option><option>50</option></select>
+                <span style="font-size:12.5px;color:var(--t3);">Page 1 of 2</span>
+                <div style="display:flex;gap:4px;">
+                  <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevrons-left" style="width:13px;height:13px;"></i></button>
+                  <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-left" style="width:13px;height:13px;"></i></button>
+                  <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></button>
+                  <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevrons-right" style="width:13px;height:13px;"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORGANIZATIONS -->
+      <div style="{{ pgOrganizations }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Organizations</h1><p style="font-size:13px;color:var(--t3);">Manage multi-tenant organizations and their workspace access.</p></div>
+            <button class="btn bp"><i data-lucide="plus"></i>New Organization</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;" class="grid-4c">
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Total Orgs</div><div class="sv">142</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Active</div><div class="sv" style="color:var(--ok);">138</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Enterprise Plan</div><div class="sv" style="color:var(--pri);">24</div></div>
+            <div class="card cp"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:8px;">Total Members</div><div class="sv">8,291</div></div>
+          </div>
+          <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:6px 12px;flex:1;max-width:280px;">
+              <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+              <span style="font-size:13px;color:var(--t3);">Search organizations…</span>
+            </div>
+            <button class="btn bs" style="height:34px;"><i data-lucide="sliders-horizontal"></i>Filter</button>
+            <button class="btn bs" style="height:34px;"><i data-lucide="download"></i>Export</button>
+            <span style="font-size:12.5px;color:var(--t3);padding-left:10px;border-left:1px solid var(--bdr);white-space:nowrap;">142 organizations</span>
+          </div>
+          <div class="card" style="border-radius:0 0 10px 10px;overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr><th>Organization</th><th>Plan</th><th>Members</th><th>Status</th><th>Admin</th><th>Created</th><th style="width:48px;"></th></tr></thead>
+              <tbody>
+                <sc-for list="{{ orgs }}" as="o" hint-placeholder-count="10">
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="{{ o.logoSt }}"><span style="color:#fff;font-size:11px;font-weight:700;">{{ o.initials }}</span></div>
+                        <div><div style="font-size:13.5px;font-weight:500;color:var(--t1);">{{ o.name }}</div><div style="font-size:12px;color:var(--t3);">{{ o.slug }}</div></div>
+                      </div>
+                    </td>
+                    <td><span class="badge {{ o.planCls }}">{{ o.plan }}</span></td>
+                    <td style="font-weight:600;color:var(--t1);">{{ o.members }}</td>
+                    <td><span class="badge {{ o.statusCls }}">{{ o.statusLabel }}</span></td>
+                    <td style="color:var(--t2);font-size:13px;">{{ o.admin }}</td>
+                    <td style="font-size:12.5px;color:var(--t3);">{{ o.created }}</td>
+                    <td><button class="ibtn"><i data-lucide="more-horizontal"></i></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--bdr);">
+              <div style="font-size:12.5px;color:var(--t3);">Showing 1–10 of 142 organizations</div>
+              <div style="display:flex;gap:4px;">
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-left" style="width:13px;height:13px;"></i></button>
+                <button style="width:28px;height:28px;background:var(--pri);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">1</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">2</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">3</button>
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div style="{{ pgProjects }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Projects</h1><p style="font-size:13px;color:var(--t3);">Track your team's projects, milestones, and delivery progress.</p></div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn bs"><i data-lucide="download"></i>Export</button>
+              <button class="btn bp"><i data-lucide="plus"></i>New Project</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+            <button class="btn bp" style="height:32px;padding:0 14px;font-size:12.5px;">All <span style="font-size:11px;background:rgba(255,255,255,.2);padding:1px 6px;border-radius:3px;margin-left:4px;">9</span></button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Active <span class="badge bg" style="margin-left:4px;font-size:10px;">6</span></button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Completed <span class="badge bl" style="margin-left:4px;font-size:10px;">2</span></button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Archived <span class="badge bx" style="margin-left:4px;font-size:10px;">1</span></button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-bottom:32px;">
+            <sc-for list="{{ projects }}" as="p" hint-placeholder-count="9">
+              <div class="card" style="padding:20px;transition:box-shadow 120ms,background 80ms;cursor:pointer;" onMouseEnter="{{ p.hIn }}" onMouseLeave="{{ p.hOut }}">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                  <div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                      <div style="width:10px;height:10px;border-radius:99px;background:{{ p.color }};flex-shrink:0;"></div>
+                      <div style="font-size:14px;font-weight:600;color:var(--t1);">{{ p.name }}</div>
+                    </div>
+                    <span class="badge {{ p.statusCls }}">{{ p.status }}</span>
+                  </div>
+                  <button class="ibtn" style="width:26px;height:26px;"><i data-lucide="more-horizontal" style="width:13px;height:13px;"></i></button>
+                </div>
+                <p style="font-size:12.5px;color:var(--t2);line-height:1.55;margin-bottom:16px;min-height:38px;">{{ p.desc }}</p>
+                <div style="margin-bottom:14px;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+                    <span style="font-size:12px;color:var(--t3);">Progress</span>
+                    <span style="font-size:12px;font-weight:600;color:var(--t1);">{{ p.progress }}%</span>
+                  </div>
+                  <div class="prog"><div class="progf" style="width:{{ p.progress }}%;background:{{ p.color }};"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--bdr);">
+                  <div style="display:flex;align-items:center;">
+                    <div style="width:22px;height:22px;border-radius:99px;background:{{ p.av1c }};border:2px solid var(--sur);display:flex;align-items:center;justify-content:center;"><span style="color:#fff;font-size:8px;font-weight:700;">{{ p.av1 }}</span></div>
+                    <div style="width:22px;height:22px;border-radius:99px;background:{{ p.av2c }};border:2px solid var(--sur);display:flex;align-items:center;justify-content:center;margin-left:-6px;"><span style="color:#fff;font-size:8px;font-weight:700;">{{ p.av2 }}</span></div>
+                    <div style="width:22px;height:22px;border-radius:99px;background:{{ p.av3c }};border:2px solid var(--sur);display:flex;align-items:center;justify-content:center;margin-left:-6px;"><span style="color:#fff;font-size:8px;font-weight:700;">{{ p.av3 }}</span></div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--t3);"><i data-lucide="check-square" style="width:12px;height:12px;"></i>{{ p.tasksDone }}/{{ p.tasks }}</div>
+                    <div style="font-size:12px;color:var(--t3);">{{ p.due }}</div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY -->
+      <div style="{{ pgActivity }}">
+        <div class="pw" style="max-width:760px;animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">Activity</h1><p style="font-size:13px;color:var(--t3);">Unified timeline of all workspace events and actions.</p></div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="display:flex;align-items:center;gap:5px;"><span style="width:6px;height:6px;border-radius:99px;background:var(--ok);animation:pulse 2s ease-in-out infinite;"></span><span style="font-size:12.5px;color:var(--ok);font-weight:500;">Live</span></div>
+              <button class="btn bs"><i data-lucide="refresh-cw"></i>Refresh</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
+            <button class="btn bp" style="height:32px;padding:0 14px;font-size:12.5px;">All Events</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Auth</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Users</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Projects</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">System</button>
+            <button class="btn bs" style="height:32px;padding:0 14px;font-size:12.5px;">Billing</button>
+          </div>
+          <div style="position:relative;padding-bottom:32px;">
+            <div style="position:absolute;left:17px;top:4px;bottom:0;width:1.5px;background:var(--bdr);"></div>
+            <sc-for list="{{ activityFeed }}" as="a" hint-placeholder-count="10">
+              <div>
+                <div style="{{ a.dateSepSt }}">
+                  <div style="display:flex;align-items:center;padding-left:44px;margin:4px 0 12px;">
+                    <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);">{{ a.dateLabel }}</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;">
+                  <div style="width:36px;height:36px;border-radius:99px;background:{{ a.iconBg }};border:2.5px solid var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;">
+                    <i data-lucide="{{ a.icon }}" style="width:14px;height:14px;color:{{ a.iconColor }};"></i>
+                  </div>
+                  <div class="card" style="flex:1;padding:12px 16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+                      <div style="font-size:13.5px;font-weight:600;color:var(--t1);">{{ a.title }}</div>
+                      <span style="font-size:11.5px;color:var(--t3);white-space:nowrap;padding-left:12px;">{{ a.time }}</span>
+                    </div>
+                    <div style="font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:8px;">{{ a.body }}</div>
+                    <span class="badge bx" style="font-size:11px;">{{ a.meta }}</span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAT -->
+      <div style="{{ pgChat }}">
+        <div style="display:flex;height:100%;overflow:hidden;">
+          <div style="width:300px;border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;background:var(--sur);">
+            <div style="padding:16px 16px 12px;border-bottom:1px solid var(--bdr);">
+              <div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:12px;">Direct Messages</div>
+              <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:7px 12px;">
+                <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+                <span style="font-size:13px;color:var(--t3);">Search conversations…</span>
+              </div>
+            </div>
+            <div style="flex:1;overflow-y:auto;">
+              <sc-for list="{{ chatContacts }}" as="c" hint-placeholder-count="8">
+                <div style="{{ c.itemSt }}" onClick="{{ c.onClick }}">
+                  <div style="position:relative;flex-shrink:0;">
+                    <div style="{{ c.avatarSt }}"><span style="color:#fff;font-size:11px;font-weight:700;">{{ c.initials }}</span></div>
+                    <span style="{{ c.onlineDot }}"></span>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
+                      <div style="font-size:13.5px;font-weight:600;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.name }}</div>
+                      <div style="font-size:11px;color:var(--t3);white-space:nowrap;padding-left:8px;">{{ c.time }}</div>
+                    </div>
+                    <div style="font-size:12.5px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.preview }}</div>
+                  </div>
+                  <div style="{{ c.unreadSt }}">{{ c.unread }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);">
+            <div style="padding:12px 20px;border-bottom:1px solid var(--bdr);background:var(--sur);display:flex;align-items:center;gap:12px;flex-shrink:0;">
+              <div style="{{ activeChatAvatarSt }}"><span style="color:#fff;font-size:11px;font-weight:700;">{{ activeChatInitials }}</span></div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:600;color:var(--t1);">{{ activeChatName }}</div>
+                <div style="display:flex;align-items:center;gap:5px;">
+                  <span style="{{ activeChatOnlineDot }}"></span>
+                  <span style="font-size:12px;color:var(--t3);">{{ activeChatStatus }}</span>
+                </div>
+              </div>
+              <button class="ibtn"><i data-lucide="phone"></i></button>
+              <button class="ibtn"><i data-lucide="video"></i></button>
+              <button class="ibtn"><i data-lucide="info"></i></button>
+              <button class="ibtn"><i data-lucide="more-horizontal"></i></button>
+            </div>
+            <div id="chat-feed" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ chatMessages }}" as="m" hint-placeholder-count="6">
+                <div style="{{ m.wrapSt }}">
+                  <div style="{{ m.avatarSt }}"><span style="color:#fff;font-size:9px;font-weight:700;">{{ m.initials }}</span></div>
+                  <div>
+                    <div style="{{ m.bubbleSt }}">{{ m.text }}</div>
+                    <div style="{{ m.timeSt }}">{{ m.time }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="padding:12px 16px;border-top:1px solid var(--bdr);background:var(--sur);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+              <button class="ibtn"><i data-lucide="paperclip"></i></button>
+              <div style="flex:1;background:var(--sur2);border:1.5px solid var(--bdr2);border-radius:99px;padding:8px 16px;">
+                <span style="font-size:13px;color:var(--t3);">Type a message…</span>
+              </div>
+              <button class="ibtn"><i data-lucide="smile"></i></button>
+              <button style="width:34px;height:34px;background:var(--pri);border:none;border-radius:99px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i data-lucide="send" style="width:14px;height:14px;color:#fff;"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVITE USER MODAL -->
+      <div style="{{ pgInvite }}">
+        <div style="position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:center;justify-content:center;" onClick="{{ closeInvite }}">
+          <div class="card" style="width:440px;max-width:calc(100vw - 32px);padding:28px;box-shadow:var(--shd);animation:dropin 150ms ease-out;" onClick="{{ stopProp }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+              <div style="font-size:17px;font-weight:700;color:var(--t1);">Invite Team Member</div>
+              <button class="ibtn" onClick="{{ closeInvite }}"><i data-lucide="x"></i></button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div><label class="lbl">Email address</label><input class="inp" type="email" placeholder="colleague@company.com" /></div>
+              <div><label class="lbl">Full name <span style="color:var(--t3);font-weight:400;">(optional)</span></label><input class="inp" placeholder="Jane Smith" /></div>
+              <div>
+                <label class="lbl">Role</label>
+                <select class="inp" style="cursor:pointer;"><option>Viewer — Read-only access</option><option>Developer — Code and API access</option><option>Analyst — Reports and analytics</option><option>Manager — Team and project management</option><option>Admin — Full workspace access</option></select>
+              </div>
+              <div>
+                <label class="lbl">Team</label>
+                <select class="inp" style="cursor:pointer;"><option>Engineering</option><option>Product</option><option>Analytics</option><option>DevOps</option><option>Growth</option></select>
+              </div>
+              <div style="background:var(--pris);border:1px solid rgba(30,142,200,.18);border-radius:6px;padding:11px 14px;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="info" style="width:14px;height:14px;color:var(--pri);flex-shrink:0;"></i>
+                <span style="font-size:13px;color:var(--t2);">An invitation email will be sent. It expires in 7 days.</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:24px;">
+              <button class="btn bp" style="flex:1;">Send Invitation</button>
+              <button class="btn bs" onClick="{{ closeInvite }}">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CREATE TASK MODAL -->
+      <div style="{{ pgCreateTask }}">
+        <div style="position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:center;justify-content:center;" onClick="{{ closeCreateTask }}">
+          <div class="card" style="width:500px;max-width:calc(100vw - 32px);padding:28px;box-shadow:var(--shd);animation:dropin 150ms ease-out;" onClick="{{ stopProp }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+              <div style="font-size:17px;font-weight:700;color:var(--t1);">Create Task</div>
+              <button class="ibtn" onClick="{{ closeCreateTask }}"><i data-lucide="x"></i></button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div><label class="lbl">Title</label><input class="inp" placeholder="Brief task description…" /></div>
+              <div><label class="lbl">Description <span style="color:var(--t3);font-weight:400;">(optional)</span></label><textarea class="inp" style="height:76px;resize:vertical;line-height:1.6;" placeholder="Add more context about this task…"></textarea></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div><label class="lbl">Status</label><select class="inp" style="cursor:pointer;"><option>Backlog</option><option>Todo</option><option selected="selected">In Progress</option><option>Done</option><option>Canceled</option></select></div>
+                <div><label class="lbl">Priority</label><select class="inp" style="cursor:pointer;"><option>Low</option><option selected="selected">Medium</option><option>High</option><option>Urgent</option></select></div>
+                <div><label class="lbl">Type</label><select class="inp" style="cursor:pointer;"><option>Bug</option><option selected="selected">Feature</option><option>Documentation</option><option>Enhancement</option><option>Task</option></select></div>
+                <div><label class="lbl">Assignee</label><select class="inp" style="cursor:pointer;"><option>Unassigned</option><option>Jordan Davis</option><option>Sarah Chen</option><option>Mark Rivera</option><option>Raj Kumar</option></select></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:24px;">
+              <button class="btn bp" style="flex:1;" onClick="{{ closeCreateTask }}">Create Task</button>
+              <button class="btn bs" onClick="{{ closeCreateTask }}">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STUB (all other pages) -->
+      <div style="{{ pgStub }}">
+        <div class="pw" style="animation:slideup 180ms ease;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+            <div><h1 style="font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--t1);margin-bottom:4px;">{{ pageTitle }}</h1><p style="font-size:13px;color:var(--t3);">Manage and configure {{ pageTitle }} for your workspace.</p></div>
+            <div style="display:flex;gap:8px;"><button class="btn bs"><i data-lucide="filter"></i>Filter</button><button class="btn bs"><i data-lucide="download"></i>Export</button><button class="btn bp"><i data-lucide="plus"></i>Add New</button></div>
+          </div>
+          <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;padding:12px 16px;display:flex;align-items:center;gap:10px;">
+            <div style="display:flex;align-items:center;gap:8px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:6px 12px;flex:1;max-width:280px;">
+              <i data-lucide="search" style="width:13px;height:13px;color:var(--t3);flex-shrink:0;"></i>
+              <span style="font-size:13px;color:var(--t3);">Search…</span>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <button class="ibtn"><i data-lucide="columns-3"></i></button>
+              <button class="ibtn"><i data-lucide="arrow-up-down"></i></button>
+            </div>
+          </div>
+          <div class="card" style="border-radius:0 0 10px 10px;">
+            <sc-for list="{{ stubRows }}" as="r" hint-placeholder-count="8">
+              <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--bdr);">
+                <div style="width:16px;height:16px;border-radius:3px;" class="sk"></div>
+                <div style="display:flex;align-items:center;gap:10px;flex:2;">
+                  <div style="width:28px;height:28px;border-radius:99px;" class="sk"></div>
+                  <div style="flex:1;"><div style="height:11px;width:65%;margin-bottom:5px;" class="sk"></div><div style="height:10px;width:45%;" class="sk"></div></div>
+                </div>
+                <div style="flex:1;"><div style="height:20px;width:60px;border-radius:99px;" class="sk"></div></div>
+                <div style="flex:1;"><div style="height:11px;width:55%;" class="sk"></div></div>
+                <div style="flex:1;"><div style="height:11px;width:50%;" class="sk"></div></div>
+                <div style="flex:1;"><div style="height:11px;width:55%;" class="sk"></div></div>
+                <div style="width:24px;height:24px;border-radius:6px;" class="sk"></div>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--bdr);">
+              <div style="font-size:12.5px;color:var(--t3);">Showing 1–20 of 248 results</div>
+              <div style="display:flex;gap:4px;">
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-left" style="width:13px;height:13px;"></i></button>
+                <button style="width:28px;height:28px;background:var(--pri);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">1</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">2</button>
+                <button class="ibtn" style="width:28px;height:28px;font-size:12px;color:var(--t2);">3</button>
+                <button class="ibtn" style="width:28px;height:28px;"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { collapsed: false, theme: 'dark', page: 'dashboard', cmdOpen: false, notifOpen: false, userOpen: false, mobileOpen: false, taskTab: 'all', inviteOpen: false, createTaskOpen: false, chatContact: 0 };
+
+  componentDidMount() {
+    document.querySelector('aside')?.addEventListener('click', e => {
+      const item = e.target.closest('[data-pg]');
+      if (item) this.setState({ page: item.dataset.pg, cmdOpen: false, notifOpen: false, userOpen: false, mobileOpen: false });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') this.setState({ cmdOpen: false, notifOpen: false, userOpen: false });
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); this._openCmd(); }
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#notif-btn') && !e.target.closest('#notif-dd') && this.state.notifOpen) this.setState({ notifOpen: false });
+      if (!e.target.closest('#user-btn') && !e.target.closest('#user-dd') && this.state.userOpen) this.setState({ userOpen: false });
+      const tab = e.target.closest('[data-task-tab]');
+      if (tab) this.setState({ taskTab: tab.dataset.taskTab });
+    });
+    this._icons(); this._mark(); this._markTaskTabs();
+  }
+
+  componentDidUpdate() { requestAnimationFrame(() => { this._icons(); this._mark(); this._markTaskTabs(); }); }
+
+  _icons() { if (window.lucide) window.lucide.createIcons(); }
+
+  _mark() {
+    document.querySelectorAll('#snav [data-pg]').forEach(el =>
+      el.classList.toggle('active', el.dataset.pg === this.state.page)
+    );
+  }
+
+  _openCmd() {
+    this.setState({ cmdOpen: true });
+    setTimeout(() => { document.getElementById('cmd-input')?.focus(); }, 80);
+  }
+
+  _area(data, id, vw, vh) {
+    vw = vw || 560; vh = vh || 152;
+    const px = 2, py = 8, max = Math.max(...data) * 1.15, n = data.length;
+    const pts = data.map((v, i) => ({
+      x: +(px + (i / (n-1)) * (vw - px*2)).toFixed(1),
+      y: +(py + (1 - v/max) * (vh - py - 4)).toFixed(1)
+    }));
+    const L = pts.map((p,i) => `${i===0?'M':'L'} ${p.x} ${p.y}`).join(' ');
+    const A = `${L} L ${pts[n-1].x} ${vh} L ${pts[0].x} ${vh} Z`;
+    const gid = `g${id}`;
+    return React.createElement('svg', { viewBox: `0 0 ${vw} ${vh}`, style: { width:'100%', height:'100%', display:'block', overflow:'visible' } },
+      React.createElement('defs', null,
+        React.createElement('linearGradient', { id: gid, x1:'0', y1:'0', x2:'0', y2:'1' },
+          React.createElement('stop', { offset:'0%', stopColor:'var(--pri)', stopOpacity:0.2 }),
+          React.createElement('stop', { offset:'100%', stopColor:'var(--pri)', stopOpacity:0 })
+        )
+      ),
+      ...[Math.round(vh*0.22), Math.round(vh*0.54), Math.round(vh*0.84)].map(y =>
+        React.createElement('line', { key:y, x1:0, y1:y, x2:vw, y2:y, stroke:'var(--bdr)', strokeWidth:1 })
+      ),
+      React.createElement('path', { d:A, fill:`url(#${gid})` }),
+      React.createElement('path', { d:L, fill:'none', stroke:'var(--pri)', strokeWidth:2, strokeLinejoin:'round', strokeLinecap:'round' }),
+      ...pts.map((p,i) => React.createElement('circle', { key:i, cx:p.x, cy:p.y, r:3, fill:'var(--pri)', stroke:'var(--sur)', strokeWidth:2 }))
+    );
+  }
+
+  _bars(data, vw, vh) {
+    vw = vw || 280; vh = vh || 130;
+    const px = 4, py = 8, max = Math.max(...data)*1.15, n = data.length;
+    const slot = (vw - px*2) / n, bw = slot * 0.62;
+    return React.createElement('svg', { viewBox:`0 0 ${vw} ${vh}`, style:{ width:'100%', height:'100%', display:'block', overflow:'visible' } },
+      ...[Math.round(vh*0.2), Math.round(vh*0.54), Math.round(vh*0.86)].map(y =>
+        React.createElement('line', { key:y, x1:0, y1:y, x2:vw, y2:y, stroke:'var(--bdr)', strokeWidth:1 })
+      ),
+      ...data.map((v,i) => {
+        const bh = ((v/max)*(vh-py*2));
+        return React.createElement('rect', { key:i, x:+(px+i*slot+(slot-bw)/2).toFixed(1), y:+(py+(vh-py*2-bh)).toFixed(1), width:+bw.toFixed(1), height:+bh.toFixed(1), rx:3, fill:'var(--pri)', opacity:0.85 });
+      })
+    );
+  }
+
+  _spark(data, color) {
+    const w=72, h=24, min=Math.min(...data), max=Math.max(...data), rng=max-min||1;
+    const pts = data.map((v,i) => `${((i/(data.length-1))*w).toFixed(1)},${((h-2)-((v-min)/rng)*(h-6)).toFixed(1)}`).join(' ');
+    return React.createElement('svg', { viewBox:`0 0 ${w} ${h}`, style:{ width:'72px', height:'24px', display:'block', flexShrink:0 } },
+      React.createElement('polyline', { points:pts, fill:'none', stroke:color, strokeWidth:1.5, strokeLinecap:'round', strokeLinejoin:'round' })
+    );
+  }
+
+  _donut(segs) {
+    const total = segs.reduce((s,d)=>s+d.v,0), sz=140, cx=70, cy=70, r=52, ir=35;
+    let a = -Math.PI/2;
+    return React.createElement('svg', { viewBox:`0 0 ${sz} ${sz}`, style:{ width:'140px', height:'140px', flexShrink:0 } },
+      ...segs.map((seg,i) => {
+        const da=(seg.v/total)*Math.PI*2, ea=a+da, lg=da>Math.PI?1:0;
+        const [c1x,c1y]=[cx+r*Math.cos(a), cy+r*Math.sin(a)];
+        const [c2x,c2y]=[cx+r*Math.cos(ea), cy+r*Math.sin(ea)];
+        const [i1x,i1y]=[cx+ir*Math.cos(a), cy+ir*Math.sin(a)];
+        const [i2x,i2y]=[cx+ir*Math.cos(ea), cy+ir*Math.sin(ea)];
+        const d=`M ${c1x.toFixed(1)} ${c1y.toFixed(1)} A ${r} ${r} 0 ${lg} 1 ${c2x.toFixed(1)} ${c2y.toFixed(1)} L ${i2x.toFixed(1)} ${i2y.toFixed(1)} A ${ir} ${ir} 0 ${lg} 0 ${i1x.toFixed(1)} ${i1y.toFixed(1)} Z`;
+        a=ea;
+        return React.createElement('path', { key:i, d, fill:seg.c, stroke:'var(--sur)', strokeWidth:2 });
+      })
+    );
+  }
+
+  _roles() {
+    return [
+      {name:'Super Admin',color:'#ef4444',description:'Full system access. Can manage all resources and settings.',members:2,perms:18,created:'Jan 1, 2024'},
+      {name:'Admin',color:'#1e8ec8',description:'Manage users, roles, teams, and workspace settings.',members:5,perms:14,created:'Jan 1, 2024'},
+      {name:'Manager',color:'#8b5cf6',description:'Manage projects and team members. Limited settings access.',members:8,perms:10,created:'Mar 15, 2024'},
+      {name:'Developer',color:'#22c55e',description:'Create and manage projects, API keys, and view logs.',members:18,perms:7,created:'Jan 1, 2024'},
+      {name:'Analyst',color:'#f59e0b',description:'Read-only access to analytics, reports, and audit logs.',members:6,perms:4,created:'Jun 7, 2024'},
+      {name:'Viewer',color:'#94a3b8',description:'Read-only access to projects and basic workspace info.',members:12,perms:2,created:'Aug 15, 2024'},
+    ].map(r => ({ ...r, dot: {width:'8px',height:'8px',borderRadius:'99px',background:r.color,flexShrink:0,display:'inline-block'} }));
+  }
+
+  _perms() {
+    const ok = 'var(--ok)', no = 'var(--bdr2)';
+    const p = (name, desc, a) => ({ name, desc, c0:a[0]?ok:no, c1:a[1]?ok:no, c2:a[2]?ok:no, c3:a[3]?ok:no, c4:a[4]?ok:no, c5:a[5]?ok:no });
+    return [
+      p('Invite users','Send workspace invitations',[1,1,1,0,0,0]),
+      p('Manage users','Edit and deactivate accounts',[1,1,0,0,0,0]),
+      p('Assign roles','Change member role assignments',[1,1,0,0,0,0]),
+      p('View all users','Browse user profiles and activity',[1,1,1,1,1,1]),
+      p('Create projects','Start new workspace projects',[1,1,1,1,0,0]),
+      p('Archive projects','Archive or delete projects',[1,1,1,0,0,0]),
+      p('View projects','Browse and read all projects',[1,1,1,1,1,1]),
+      p('Export data','Download reports and CSV exports',[1,1,1,0,1,0]),
+      p('View analytics','Access analytics dashboards',[1,1,1,1,1,0]),
+      p('View audit logs','Read the full audit trail',[1,1,1,0,1,0]),
+      p('Manage billing','Edit plans and payment methods',[1,1,0,0,0,0]),
+      p('View invoices','Access billing history',[1,1,1,0,0,0]),
+      p('Manage API keys','Create and revoke API keys',[1,1,0,1,0,0]),
+      p('View API keys','List existing keys (masked)',[1,1,1,1,0,0]),
+      p('Manage integrations','Connect and disconnect apps',[1,1,0,0,0,0]),
+      p('Edit settings','Workspace configuration',[1,1,0,0,0,0]),
+      p('View settings','Read workspace settings',[1,1,1,0,0,0]),
+      p('Manage sessions','Revoke any user session',[1,1,0,0,0,0]),
+    ];
+  }
+
+  _teams() {
+    return [
+      {name:'Engineering',desc:'Core product development and infrastructure.',members:12,lead:'Jordan Davis',projects:8,color:'#1e8ec8'},
+      {name:'Product',desc:'Product strategy, roadmap, and user research.',members:8,lead:'Mark Rivera',projects:5,color:'#8b5cf6'},
+      {name:'Analytics',desc:'Data science, reporting, and business intelligence.',members:6,lead:'Lena Müller',projects:4,color:'#f59e0b'},
+      {name:'Leadership',desc:'Executive team and company strategy.',members:4,lead:'Jordan Davis',projects:12,color:'#22c55e'},
+      {name:'DevOps',desc:'Infrastructure, CI/CD, and platform reliability.',members:4,lead:'Raj Kumar',projects:6,color:'#14b8a6'},
+      {name:'Growth',desc:'Marketing, sales, and customer success.',members:7,lead:'Amara Bello',projects:3,color:'#f97316'},
+    ].map(t => ({ ...t, initials: t.name.slice(0,2).toUpperCase(), initialsColor: t.color, ast: {width:'40px',height:'40px',background:`${t.color}20`,border:`1px solid ${t.color}40`,borderRadius:'10px',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0} }));
+  }
+
+  _logs() {
+    const c = l => l==='ERROR'?'br':l==='WARN'?'ba':l==='INFO'?'bl':'bx';
+    return [
+      {ts:'14:32:01.442',level:'INFO',source:'api-gateway',message:'POST /api/v2/users 201 Created 48ms'},
+      {ts:'14:31:58.891',level:'INFO',source:'auth-service',message:'User jordan@acme.com authenticated successfully'},
+      {ts:'14:31:55.203',level:'WARN',source:'rate-limiter',message:'Client 192.168.1.42 approaching rate limit: 85/100 req/min'},
+      {ts:'14:31:52.014',level:'INFO',source:'api-gateway',message:'GET /api/v2/projects 200 OK 22ms'},
+      {ts:'14:31:48.789',level:'ERROR',source:'email-service',message:'SMTP connection timeout after 30000ms — retrying in 60s'},
+      {ts:'14:31:45.332',level:'DEBUG',source:'cache-layer',message:'Cache HIT key user:sessions:JD-001 (TTL: 847s)'},
+      {ts:'14:31:42.109',level:'INFO',source:'webhooks',message:'Delivered user.invite to https://api.acme.com/hooks 200ms'},
+      {ts:'14:31:38.554',level:'ERROR',source:'webhooks',message:'Delivery failed to https://staging.acme.com/hooks: 503 Service Unavailable'},
+      {ts:'14:31:35.002',level:'INFO',source:'background-jobs',message:'Job backup:database:daily completed in 8m 32s (4.2 GB)'},
+      {ts:'14:31:31.777',level:'WARN',source:'api-gateway',message:'Deprecated endpoint /api/v1/users called by sk_live_****4a2f'},
+      {ts:'14:31:28.445',level:'DEBUG',source:'auth-service',message:'Token validated for USR-004 — expires in 3542s'},
+      {ts:'14:31:25.112',level:'INFO',source:'api-gateway',message:'DELETE /api/v2/sessions/SES-003 200 OK 15ms'},
+    ].map(l => ({ ...l, levelCls: c(l.level), hIn: e=>{e.currentTarget.style.background='var(--sur2)'}, hOut: e=>{e.currentTarget.style.background=''} }));
+  }
+
+  _notifications() {
+    const items = [
+      {title:'New user registered',body:'sarah.chen@acme.com accepted the invitation and joined as Developer.',time:'2 minutes ago',icon:'user-plus',iconColor:'var(--pri)',iconBg:'var(--pris)',accentColor:'var(--pri)',unread:true},
+      {title:'API key expiring soon',body:'Your Production API key expires in 3 days. Rotate it to avoid service disruption.',time:'1 hour ago',icon:'key-round',iconColor:'var(--warn)',iconBg:'var(--warns)',accentColor:'var(--warn)',unread:true},
+      {title:'System health alert',body:'CPU usage on web-server-03 has been above 85% for the past 10 minutes.',time:'3 hours ago',icon:'activity',iconColor:'var(--warn)',iconBg:'var(--warns)',accentColor:'var(--warn)',unread:true},
+      {title:'Project Atlas milestone reached',body:'3 of 5 milestones completed. The team is on track for the June 30 deadline.',time:'5 hours ago',icon:'folder-kanban',iconColor:'var(--ok)',iconBg:'var(--oks)',accentColor:'var(--ok)',unread:false},
+      {title:'Backup completed successfully',body:'Daily database backup finished. Size: 4.2 GB · Duration: 8m 32s.',time:'8 hours ago',icon:'database',iconColor:'var(--ok)',iconBg:'var(--oks)',accentColor:'var(--ok)',unread:false},
+      {title:'New login from unknown device',body:'A login was detected from Firefox / Ubuntu in Austin, TX. If this wasn\'t you, revoke the session.',time:'1 day ago',icon:'shield-alert',iconColor:'var(--err)',iconBg:'var(--errs)',accentColor:'var(--err)',unread:false},
+      {title:'Invoice INV-2026-06 paid',body:'$299.00 was charged to Visa ending 4242. Receipt sent to billing@acme.com.',time:'2 days ago',icon:'credit-card',iconColor:'var(--ok)',iconBg:'var(--oks)',accentColor:'var(--ok)',unread:false},
+      {title:'Webhook delivery failing',body:'staging.acme.com/hooks returned 503 three times in the last hour. Check the endpoint.',time:'3 days ago',icon:'webhook',iconColor:'var(--err)',iconBg:'var(--errs)',accentColor:'var(--err)',unread:false},
+    ];
+    return items.map(n => ({
+      ...n,
+      unreadDot: n.unread ? '' : 'display:none',
+      hoverIn:  e => { e.currentTarget.style.background='var(--sur2)'; },
+      hoverOut: e => { e.currentTarget.style.background=''; },
+    }));
+  }
+
+  _integrations() {
+    return [
+      {emoji:'💬',name:'Slack',category:'Messaging',description:'Send alerts, notifications, and daily summaries directly to your Slack channels.',status:'connected',statusCls:'bg',statusLabel:'Connected',btnCls:'bs',btnLabel:'Configure'},
+      {emoji:'📊',name:'Google Analytics',category:'Analytics',description:'Sync workspace events and user data with your Google Analytics 4 property.',status:'connected',statusCls:'bg',statusLabel:'Connected',btnCls:'bs',btnLabel:'Configure'},
+      {emoji:'🐙',name:'GitHub',category:'Version Control',description:'Link repositories, trigger deployments on push events, and track code activity.',status:'connected',statusCls:'bg',statusLabel:'Connected',btnCls:'bs',btnLabel:'Configure'},
+      {emoji:'📧',name:'SendGrid',category:'Email',description:'Route transactional emails through SendGrid with custom templates and tracking.',status:'connected',statusCls:'bg',statusLabel:'Connected',btnCls:'bs',btnLabel:'Configure'},
+      {emoji:'🎯',name:'Segment',category:'Data Pipeline',description:'Stream event data to Segment and route it to 300+ downstream destinations.',status:'connected',statusCls:'bg',statusLabel:'Connected',btnCls:'bs',btnLabel:'Configure'},
+      {emoji:'📅',name:'Google Calendar',category:'Productivity',description:'Sync team availability and schedule reminders for key project milestones.',status:'connected',statusCls:'bg',statusLabel:'Connected',btnCls:'bs',btnLabel:'Configure'},
+      {emoji:'🔔',name:'PagerDuty',category:'Incident Management',description:'Route critical alerts to on-call engineers and manage incident escalation.',status:'available',statusCls:'bx',statusLabel:'Available',btnCls:'bp',btnLabel:'Connect'},
+      {emoji:'📌',name:'Notion',category:'Documentation',description:'Auto-sync changelogs, meeting notes, and project docs to your Notion workspace.',status:'available',statusCls:'bx',statusLabel:'Available',btnCls:'bp',btnLabel:'Connect'},
+      {emoji:'🗂️',name:'Jira',category:'Project Management',description:'Sync issues, sprints, and epics for end-to-end project visibility.',status:'available',statusCls:'bx',statusLabel:'Available',btnCls:'bp',btnLabel:'Connect'},
+    ];
+  }
+
+  _auditLogs() {
+    return [
+      {ts:'Jun 28, 14:32:01',actor:'Jordan Davis',actorInitials:'JD',actorColor:'#1e8ec8',actionLabel:'Invited User',resource:'sarah.chen@acme.com',ip:'192.168.1.42',status:'success',actionCls:'bl'},
+      {ts:'Jun 28, 14:28:44',actor:'Sarah Chen',actorInitials:'SC',actorColor:'#8b5cf6',actionLabel:'Updated Project',resource:'Project Atlas',ip:'10.0.0.15',status:'success',actionCls:'bx'},
+      {ts:'Jun 28, 14:15:22',actor:'System',actorInitials:'SY',actorColor:'#6b7585',actionLabel:'API Key Rotated',resource:'prod-key-****4a2f',ip:'—',status:'success',actionCls:'bx'},
+      {ts:'Jun 28, 13:58:09',actor:'Unknown',actorInitials:'?',actorColor:'#ef4444',actionLabel:'Login Failed',resource:'admin@acme.com',ip:'203.55.14.108',status:'failure',actionCls:'br'},
+      {ts:'Jun 28, 13:45:33',actor:'Mark Rivera',actorInitials:'MR',actorColor:'#f59e0b',actionLabel:'Updated Role',resource:'Editor Role',ip:'172.16.0.8',status:'success',actionCls:'bx'},
+      {ts:'Jun 28, 13:31:17',actor:'Jordan Davis',actorInitials:'JD',actorColor:'#1e8ec8',actionLabel:'Changed Settings',resource:'Workspace Config',ip:'192.168.1.42',status:'success',actionCls:'bx'},
+      {ts:'Jun 28, 12:55:02',actor:'Raj Kumar',actorInitials:'RK',actorColor:'#14b8a6',actionLabel:'Deployment Created',resource:'api-v2.3.1',ip:'10.0.0.22',status:'success',actionCls:'bl'},
+      {ts:'Jun 28, 12:40:18',actor:'Unknown',actorInitials:'?',actorColor:'#ef4444',actionLabel:'Login Failed',resource:'raj.kumar@acme.com',ip:'185.220.101.33',status:'failure',actionCls:'br'},
+      {ts:'Jun 28, 11:22:45',actor:'Lena Müller',actorInitials:'LM',actorColor:'#a855f7',actionLabel:'Exported Report',resource:'Q2 Analytics',ip:'10.0.0.31',status:'success',actionCls:'bx'},
+      {ts:'Jun 28, 10:58:37',actor:'System',actorInitials:'SY',actorColor:'#6b7585',actionLabel:'Backup Completed',resource:'db-primary',ip:'—',status:'success',actionCls:'bg'},
+    ].map(l => ({ ...l, ast:{width:'28px',height:'28px',background:l.actorColor,borderRadius:'99px',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}, statusCls:l.status==='success'?'bg':'br' }));
+  }
+
+  _apiKeys() {
+    return [
+      {name:'Production API',masked:'sk_live_****4a2f',scopes:'read, write',created:'Jan 12, 2025',lastUsed:'2 min ago',expires:'Dec 31, 2026',status:'active'},
+      {name:'Staging Webhook',masked:'sk_test_****8c1e',scopes:'read',created:'Mar 8, 2025',lastUsed:'3 hr ago',expires:'Jun 30, 2026',status:'active'},
+      {name:'Analytics Export',masked:'sk_live_****2d9b',scopes:'read',created:'Nov 3, 2024',lastUsed:'2 days ago',expires:'Nov 3, 2026',status:'active'},
+      {name:'CI/CD Pipeline',masked:'sk_live_****7f3c',scopes:'read, write, deploy',created:'Aug 15, 2024',lastUsed:'18 min ago',expires:'Aug 15, 2025',status:'expiring'},
+      {name:'Legacy Mobile App',masked:'sk_live_****1a8d',scopes:'read',created:'Apr 2, 2023',lastUsed:'45 days ago',expires:'Expired',status:'expired'},
+      {name:'Partner Integration',masked:'sk_live_****5e2a',scopes:'read, webhooks',created:'Jun 20, 2025',lastUsed:'Never',expires:'Jun 20, 2027',status:'active'},
+    ].map(k => ({ ...k, statusCls:k.status==='active'?'bg':k.status==='expiring'?'ba':'br', statusLabel:k.status.charAt(0).toUpperCase()+k.status.slice(1) }));
+  }
+
+  _services() {
+    return [
+      {name:'API Gateway',status:'ok',uptime:'99.98%',latency:'48ms'},
+      {name:'Auth Service',status:'ok',uptime:'99.99%',latency:'22ms'},
+      {name:'Database',status:'ok',uptime:'99.95%',latency:'12ms'},
+      {name:'Cache Layer',status:'ok',uptime:'100%',latency:'3ms'},
+      {name:'Storage',status:'ok',uptime:'99.97%',latency:'85ms'},
+      {name:'Email Service',status:'ok',uptime:'99.90%',latency:'210ms'},
+      {name:'Webhooks',status:'warn',uptime:'98.84%',latency:'340ms'},
+      {name:'Search Engine',status:'ok',uptime:'99.82%',latency:'65ms'},
+      {name:'CDN',status:'ok',uptime:'100%',latency:'15ms'},
+      {name:'Background Jobs',status:'ok',uptime:'99.88%',latency:'—'},
+      {name:'Monitoring',status:'ok',uptime:'100%',latency:'—'},
+      {name:'Analytics DB',status:'ok',uptime:'99.93%',latency:'120ms'},
+    ].map(s => ({ ...s, statusColor:s.status==='ok'?'var(--ok)':s.status==='warn'?'var(--warn)':'var(--err)' }));
+  }
+
+  _sessions() {
+    return [
+      {id:'SES-001',browser:'Chrome 124',os:'macOS 14',location:'San Francisco, CA',ip:'192.168.1.42',lastActive:'Active now',current:true},
+      {id:'SES-002',browser:'Safari 17',os:'iPhone 15 Pro',location:'San Francisco, CA',ip:'192.168.1.43',lastActive:'2 hours ago',current:false},
+      {id:'SES-003',browser:'Firefox 125',os:'Ubuntu 22.04',location:'Austin, TX',ip:'72.14.58.220',lastActive:'1 day ago',current:false},
+      {id:'SES-004',browser:'Edge 124',os:'Windows 11',location:'New York, NY',ip:'98.45.12.88',lastActive:'3 days ago',current:false},
+      {id:'SES-005',browser:'Chrome 123',os:'Android 14',location:'Chicago, IL',ip:'65.32.19.7',lastActive:'1 week ago',current:false},
+    ].map(s => ({ ...s, icon:(s.os.includes('iPhone')||s.os.includes('Android'))?'smartphone':'monitor', currentBadgeSt:s.current?{}:{display:'none'}, revokeBtnSt:!s.current?{}:{display:'none'} }));
+  }
+
+  _loginHistory() {
+    return [
+      {ts:'Jun 28, 14:32',browser:'Chrome 124 / macOS',location:'San Francisco, CA',ip:'192.168.1.42',status:'success'},
+      {ts:'Jun 27, 09:15',browser:'Safari 17 / iPhone',location:'San Francisco, CA',ip:'192.168.1.43',status:'success'},
+      {ts:'Jun 26, 22:08',browser:'Unknown Browser',location:'Moscow, RU',ip:'185.220.101.33',status:'failure'},
+      {ts:'Jun 26, 18:44',browser:'Firefox 125 / Ubuntu',location:'Austin, TX',ip:'72.14.58.220',status:'success'},
+      {ts:'Jun 25, 11:30',browser:'Chrome 124 / macOS',location:'San Francisco, CA',ip:'192.168.1.42',status:'success'},
+    ].map(l => ({ ...l, statusCls:l.status==='success'?'bg':'br' }));
+  }
+
+  _users() {
+    return [
+      { id:'USR-001', initials:'SC', color:'#8b5cf6', name:'Sarah Chen',     email:'sarah.chen@acme.com',  role:'Developer', status:'active',   team:'Engineering',    joined:'Jan 12, 2025', lastActive:'2 min ago' },
+      { id:'USR-002', initials:'MR', color:'#f59e0b', name:'Mark Rivera',    email:'mark.rivera@acme.com', role:'Designer',  status:'active',   team:'Product',        joined:'Mar 8, 2025',  lastActive:'1 hr ago' },
+      { id:'USR-003', initials:'AK', color:'#22c55e', name:'Aiko Kobayashi', email:'aiko@acme.com',        role:'Manager',   status:'away',     team:'Leadership',     joined:'Nov 3, 2024',  lastActive:'3 hr ago' },
+      { id:'USR-004', initials:'JD', color:'#1e8ec8', name:'Jordan Davis',   email:'jordan@acme.com',      role:'Admin',     status:'active',   team:'Engineering',    joined:'Aug 15, 2024', lastActive:'Just now' },
+      { id:'USR-005', initials:'EP', color:'#ef4444', name:'Elena Petrova',  email:'elena.p@acme.com',     role:'Developer', status:'inactive', team:'Engineering',    joined:'Feb 20, 2025', lastActive:'2 days ago' },
+      { id:'USR-006', initials:'TN', color:'#0ea5e9', name:'Theo Nakamura',  email:'theo@acme.com',        role:'Developer', status:'active',   team:'Engineering',    joined:'Apr 1, 2025',  lastActive:'15 min ago' },
+      { id:'USR-007', initials:'LM', color:'#a855f7', name:'Lena Müller',    email:'lena.m@acme.com',      role:'Analyst',   status:'active',   team:'Analytics',      joined:'Jun 7, 2024',  lastActive:'45 min ago' },
+      { id:'USR-008', initials:'RK', color:'#14b8a6', name:'Raj Kumar',      email:'raj.k@acme.com',       role:'DevOps',    status:'active',   team:'Infrastructure', joined:'Jan 28, 2025', lastActive:'8 min ago' },
+      { id:'USR-009', initials:'AB', color:'#f97316', name:'Amara Bello',    email:'amara@acme.com',       role:'Designer',  status:'pending',  team:'Product',        joined:'Jun 20, 2025', lastActive:'Never' },
+      { id:'USR-010', initials:'CW', color:'#84cc16', name:'Chris Wang',     email:'chris.w@acme.com',     role:'Developer', status:'active',   team:'Engineering',    joined:'May 14, 2025', lastActive:'30 min ago' },
+    ].map(u => ({
+      ...u,
+      sc: u.status==='active'?'bg':u.status==='away'?'ba':u.status==='pending'?'bl':'bx',
+      sl: u.status.charAt(0).toUpperCase()+u.status.slice(1),
+      ast: { width:'32px', height:'32px', background:u.color, borderRadius:'99px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }
+    }));
+  }
+
+  _tasks() {
+    const statuses = ['Backlog','Todo','In Progress','Done','Canceled'];
+    const priorities = ['Low','Medium','High','Urgent'];
+    const types = ['Bug','Feature','Documentation','Enhancement','Task'];
+    const sIco = { Backlog:'circle-dashed', Todo:'circle', 'In Progress':'loader-circle', Done:'check-circle-2', Canceled:'x-circle' };
+    const sCls = { Backlog:'bx', Todo:'bx', 'In Progress':'bl', Done:'bg', Canceled:'br' };
+    const pCls = { Low:'bx', Medium:'ba', High:'br', Urgent:'br' };
+    const pIco = { Low:'arrow-down', Medium:'minus', High:'arrow-up', Urgent:'chevrons-up' };
+    const titles = [
+      'Fix authentication token expiry regression','Implement dark mode for mobile app',
+      'Write API docs for v2 endpoints','Add bulk export to CSV in user table',
+      'Resolve CORS issue on staging environment','Design onboarding flow for new users',
+      'Performance optimization for dashboard queries','Set up automated backup monitoring alerts',
+      'Migrate legacy endpoints to REST v2','Add multi-language support (i18n)',
+      'Implement rate limiting on public API','Create error boundary components',
+      'Upgrade Node.js 18 → 22 LTS','Add webhook retry with exponential backoff',
+      'Document permission matrix for all roles','Implement SSO with Google Workspace',
+      'Fix memory leak in background job processor','Add audit trail for billing events',
+      'Improve mobile responsiveness of sidebar','Add keyboard shortcut guide to help center',
+    ];
+    return titles.map((title, i) => {
+      const st = statuses[i % statuses.length];
+      const pri = priorities[i % priorities.length];
+      return { id:`TASK-${String(i+1).padStart(4,'0')}`, title, type:types[i % types.length],
+        statusLabel:st, statusCls:sCls[st], statusIcon:sIco[st],
+        priority:pri, priCls:pCls[pri], priIcon:pIco[pri] };
+    });
+  }
+
+  _orgs() {
+    const data = [
+      {name:'Stripe',slug:'stripe.acme.com',members:284,plan:'Enterprise',admin:'Tom Chen',created:'Jan 8, 2023',color:'#635bff',active:true},
+      {name:'Shopify',slug:'shopify.acme.com',members:142,plan:'Professional',admin:'Lena Park',created:'Mar 14, 2023',color:'#96bf48',active:true},
+      {name:'Linear',slug:'linear.acme.com',members:38,plan:'Professional',admin:'Alex Holm',created:'Jun 1, 2023',color:'#5e6ad2',active:true},
+      {name:'Vercel',slug:'vercel.acme.com',members:92,plan:'Enterprise',admin:'Isa Bae',created:'Aug 22, 2023',color:'#111',active:true},
+      {name:'Figma',slug:'figma.acme.com',members:66,plan:'Professional',admin:'Maya Chen',created:'Sep 12, 2023',color:'#f24e1e',active:true},
+      {name:'Notion',slug:'notion.acme.com',members:115,plan:'Enterprise',admin:'Tim Yu',created:'Oct 5, 2023',color:'#1b1b1f',active:true},
+      {name:'Airtable',slug:'airtable.acme.com',members:44,plan:'Standard',admin:'Cara Lima',created:'Nov 30, 2023',color:'#fcb400',active:true},
+      {name:'Intercom',slug:'intercom.acme.com',members:28,plan:'Standard',admin:'Jake Ross',created:'Feb 14, 2024',color:'#1f8dd6',active:false},
+      {name:'DataDog',slug:'datadog.acme.com',members:73,plan:'Enterprise',admin:'Nia Kraft',created:'Mar 20, 2024',color:'#632ca6',active:true},
+      {name:'Mixpanel',slug:'mixpanel.acme.com',members:19,plan:'Standard',admin:'Leo Diaz',created:'Apr 8, 2024',color:'#7856ff',active:true},
+    ];
+    return data.map(o => ({
+      ...o,
+      initials: o.name.slice(0,2).toUpperCase(),
+      logoSt: { width:'32px', height:'32px', background:o.color==='#111'||o.color==='#1b1b1f'?'#333':o.color, borderRadius:'8px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 },
+      planCls: o.plan==='Enterprise'?'bl':o.plan==='Professional'?'bg':'bx',
+      statusCls: o.active?'bg':'br',
+      statusLabel: o.active?'Active':'Suspended',
+    }));
+  }
+
+  _projects() {
+    const clr = { JD:'#1e8ec8',SC:'#8b5cf6',MR:'#f59e0b',RK:'#14b8a6',TN:'#0ea5e9',CW:'#84cc16',LM:'#a855f7',EP:'#ef4444',AK:'#22c55e' };
+    const data = [
+      {name:'Atlas',desc:'Core product redesign with new component library and unified design system.',progress:68,status:'Active',color:'#1e8ec8',tasks:24,tasksDone:16,due:'Jul 15',team:['JD','SC','MR']},
+      {name:'Orion API v2',desc:'Complete REST API rewrite with OpenAPI 3.1 docs, improved performance, and SDKs.',progress:45,status:'Active',color:'#8b5cf6',tasks:32,tasksDone:14,due:'Aug 1',team:['RK','TN','CW']},
+      {name:'Phoenix Auth',desc:'Unified authentication service with SSO, 2FA, passkeys, and session management.',progress:82,status:'Active',color:'#22c55e',tasks:18,tasksDone:15,due:'Jun 30',team:['JD','EP','SC']},
+      {name:'Nebula Analytics',desc:'Real-time analytics pipeline for event tracking and business intelligence.',progress:31,status:'Active',color:'#f59e0b',tasks:28,tasksDone:9,due:'Sep 15',team:['LM','MR','AK']},
+      {name:'Horizon Mobile',desc:'Native iOS and Android application with offline sync and push notifications.',progress:15,status:'Active',color:'#f97316',tasks:40,tasksDone:6,due:'Nov 1',team:['SC','MR','CW']},
+      {name:'Pulse Monitoring',desc:'Infrastructure monitoring with real-time alerts, on-call routing, and SLA tracking.',progress:93,status:'Active',color:'#14b8a6',tasks:15,tasksDone:14,due:'Jun 28',team:['RK','JD','TN']},
+      {name:'Docs Portal',desc:'Developer documentation portal with versioning, full-text search, and API explorer.',progress:100,status:'Completed',color:'#84cc16',tasks:20,tasksDone:20,due:'Done',team:['MR','SC','LM']},
+      {name:'Payments v3',desc:'New payment processing layer supporting 15 additional methods and currencies.',progress:100,status:'Completed',color:'#22c55e',tasks:22,tasksDone:22,due:'Done',team:['JD','RK','TN']},
+      {name:'Legacy CMS',desc:'Deprecated content management system — fully superseded by the Docs Portal.',progress:100,status:'Archived',color:'#6b7585',tasks:12,tasksDone:12,due:'—',team:['MR','SC','JD']},
+    ];
+    return data.map(p => {
+      const t = (p.team||[]).slice(0,3);
+      return { ...p,
+        statusCls: p.status==='Active'?'bg':p.status==='Completed'?'bl':'bx',
+        av1:t[0]||'', av1c:clr[t[0]]||'#6b7585',
+        av2:t[1]||'', av2c:clr[t[1]]||'#6b7585',
+        av3:t[2]||'', av3c:clr[t[2]]||'#6b7585',
+        hIn:  e=>{e.currentTarget.style.background='var(--sur2)';},
+        hOut: e=>{e.currentTarget.style.background='';},
+      };
+    });
+  }
+
+  _activityFeed() {
+    const items = [
+      {date:'today',time:'2m ago',icon:'user-plus',iconColor:'var(--pri)',iconBg:'var(--pris)',title:'User invited',body:'Jordan Davis invited sarah.chen@acme.com as Developer on the Engineering team.',meta:'Users'},
+      {date:'today',time:'18m ago',icon:'folder-kanban',iconColor:'#8b5cf6',iconBg:'rgba(139,92,246,.12)',title:'Project updated',body:'Mark Rivera completed 3 tasks on Project Atlas — 8 of 24 tasks remaining.',meta:'Projects'},
+      {date:'today',time:'1h ago',icon:'key-round',iconColor:'var(--warn)',iconBg:'var(--warns)',title:'API key rotated',body:'Production API key (sk_live_****4a2f) was rotated. New expiry: Dec 31, 2026.',meta:'API Keys'},
+      {date:'today',time:'3h ago',icon:'shield-alert',iconColor:'var(--err)',iconBg:'var(--errs)',title:'Failed login attempts',body:'5 consecutive failed login attempts from IP 192.168.2.44 — account temporarily locked.',meta:'Security'},
+      {date:'today',time:'5h ago',icon:'settings',iconColor:'var(--t2)',iconBg:'var(--sur3)',title:'Settings updated',body:'Jordan Davis enabled required 2FA for all workspace members.',meta:'Settings'},
+      {date:'yesterday',time:'8h ago',icon:'database',iconColor:'var(--ok)',iconBg:'var(--oks)',title:'Backup completed',body:'Daily database backup finished. Size: 4.2 GB · Duration: 8 minutes 32 seconds.',meta:'System'},
+      {date:'yesterday',time:'10h ago',icon:'credit-card',iconColor:'var(--ok)',iconBg:'var(--oks)',title:'Invoice paid',body:'Invoice INV-2026-06 for $299.00 was charged to Visa ending 4242. Receipt sent.',meta:'Billing'},
+      {date:'yesterday',time:'12h ago',icon:'users-2',iconColor:'var(--pri)',iconBg:'var(--pris)',title:'Team updated',body:'Raj Kumar added Theodore Nakamura and Elena Petrova to the DevOps team.',meta:'Teams'},
+      {date:'yesterday',time:'14h ago',icon:'activity',iconColor:'var(--warn)',iconBg:'var(--warns)',title:'Alert resolved',body:'CPU spike on web-server-03 returned to normal (42%). Total duration: 10 minutes.',meta:'Monitoring'},
+      {date:'Jun 26',time:'2 days ago',icon:'link-2',iconColor:'var(--pri)',iconBg:'var(--pris)',title:'Integration connected',body:'GitHub integration configured — repository sync enabled for 3 active repositories.',meta:'Integrations'},
+      {date:'Jun 26',time:'2 days ago',icon:'user-x',iconColor:'var(--err)',iconBg:'var(--errs)',title:'User deactivated',body:'tom.ford@acme.com was deactivated by Jordan Davis following 45 days of inactivity.',meta:'Users'},
+      {date:'Jun 25',time:'3 days ago',icon:'shield-check',iconColor:'var(--ok)',iconBg:'var(--oks)',title:'Security audit passed',body:'Automated security scan completed — 0 critical issues, 2 low-severity warnings resolved.',meta:'Security'},
+    ];
+    let lastDate = '';
+    return items.map(a => {
+      const show = a.date !== lastDate;
+      lastDate = a.date;
+      return { ...a,
+        dateLabel: a.date==='today'?'Today':a.date==='yesterday'?'Yesterday':a.date,
+        dateSepSt: show ? {} : {display:'none'},
+      };
+    });
+  }
+
+  _markTaskTabs() {
+    const { taskTab } = this.state;
+    document.querySelectorAll('[data-task-tab]').forEach(el => {
+      const active = el.dataset.taskTab === taskTab;
+      el.style.color = active ? 'var(--naf)' : 'var(--t3)';
+      el.style.borderBottomColor = active ? 'var(--pri)' : 'transparent';
+      el.style.fontWeight = active ? '600' : '500';
+    });
+  }
+
+  _chatContacts() {
+    return [
+      {name:'Sarah Chen',initials:'SC',color:'#8b5cf6',online:true,time:'2m ago',preview:"Thanks for the review, I'll push the fix shortly.",unread:3},
+      {name:'Mark Rivera',initials:'MR',color:'#f59e0b',online:true,time:'18m ago',preview:'The mockups are ready for your feedback.',unread:1},
+      {name:'Raj Kumar',initials:'RK',color:'#14b8a6',online:false,time:'1h ago',preview:'Deployment is scheduled for tonight at 2am.',unread:0},
+      {name:'Aiko Kobayashi',initials:'AK',color:'#22c55e',online:true,time:'2h ago',preview:'Can we sync before the standup?',unread:0},
+      {name:'Lena Müller',initials:'LM',color:'#a855f7',online:false,time:'3h ago',preview:"I've attached the Q2 report for review.",unread:0},
+      {name:'Theodore Nakamura',initials:'TN',color:'#0ea5e9',online:true,time:'5h ago',preview:'Fixed! Cache issue should be resolved now.',unread:0},
+      {name:'Amara Bello',initials:'AB',color:'#f97316',online:false,time:'1d ago',preview:"Here's the updated onboarding flow.",unread:0},
+      {name:'Chris Wang',initials:'CW',color:'#84cc16',online:true,time:'1d ago',preview:'PR is up for the auth refactor.',unread:0},
+    ];
+  }
+
+  _chatMessages(idx, contact) {
+    const convos = [
+      [
+        {from:'them',text:"Hey Jordan! Just pushed the auth fix you requested. Can you review when you get a chance?",time:'10:24 AM'},
+        {from:'me',text:'On it! Checking the PR now.',time:'10:26 AM'},
+        {from:'them',text:"I also fixed the token expiry regression — it was causing silent logouts after 2 hours.",time:'10:27 AM'},
+        {from:'me',text:"Nice catch! That's been bugging us for weeks. I'll test it in staging before approving.",time:'10:29 AM'},
+        {from:'them',text:'Sounds good. Let me know if you need anything else.',time:'10:31 AM'},
+        {from:'me',text:'Will do. Great work today! 👍',time:'10:32 AM'},
+        {from:'them',text:"Thanks for the review, I'll push the fix shortly.",time:'10:45 AM'},
+      ],
+      [
+        {from:'me',text:'Hey Mark, are the updated mockups ready for the onboarding flow?',time:'9:15 AM'},
+        {from:'them',text:'Almost there! Just finishing the mobile breakpoints.',time:'9:28 AM'},
+        {from:'them',text:'Done! Uploaded to Figma — check the "Onboarding v3" frame.',time:'10:02 AM'},
+        {from:'me',text:"These look great! The progress indicator on step 3 is much clearer now.",time:'10:14 AM'},
+        {from:'them',text:'The mockups are ready for your feedback.',time:'10:18 AM'},
+      ],
+    ];
+    const msgs = convos[idx] || convos[0];
+    const myC = '#1e8ec8', theirC = contact?.color || '#8b5cf6';
+    const myI = 'JD', theirI = contact?.initials || 'SC';
+    return msgs.map(m => ({
+      ...m,
+      initials: m.from === 'me' ? myI : theirI,
+      wrapSt: { display:'flex', alignItems:'flex-end', gap:'8px', flexDirection: m.from === 'me' ? 'row-reverse' : 'row' },
+      avatarSt: { width:'26px', height:'26px', borderRadius:'99px', background: m.from === 'me' ? myC : theirC, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 },
+      bubbleSt: { background: m.from === 'me' ? 'var(--pri)' : 'var(--sur)', border: m.from === 'me' ? 'none' : '1px solid var(--bdr)', borderRadius: m.from === 'me' ? '18px 18px 4px 18px' : '18px 18px 18px 4px', padding:'10px 14px', fontSize:'13.5px', color: m.from === 'me' ? '#fff' : 'var(--t1)', maxWidth:'360px', lineHeight:1.5 },
+      timeSt: { fontSize:'11px', color:'var(--t3)', marginTop:'4px', textAlign: m.from === 'me' ? 'right' : 'left' },
+    }));
+  }
+
+  renderVals() {
+    const { collapsed, theme, page, cmdOpen, notifOpen, userOpen, mobileOpen, taskTab, inviteOpen, createTaskOpen, chatContact } = this.state;
+
+    const TITLES = { dashboard:'Dashboard', users:'Users', roles:'Roles', permissions:'Permissions', teams:'Teams', organizations:'Organizations', projects:'Projects', activity:'Activity', analytics:'Analytics', 'audit-logs':'Audit Logs', logs:'System Logs', monitoring:'Monitoring', notifications:'Notifications', integrations:'Integrations', 'api-keys':'API Keys', settings:'Settings', billing:'Billing', security:'Security', sessions:'Sessions', profile:'Profile' };
+
+    const isDash     = page === 'dashboard';
+    const isUsers    = page === 'users';
+    const isAnalytics = page === 'analytics';
+    const isProfile  = page === 'profile';
+    const isBilling  = page === 'billing';
+    const isAuditLogs     = page === 'audit-logs';
+    const isApiKeys       = page === 'api-keys';
+    const isMonitoring    = page === 'monitoring';
+    const isSecurity      = page === 'security';
+    const isSessions      = page === 'sessions';
+    const isNotifications = page === 'notifications';
+    const isIntegrations  = page === 'integrations';
+    const isRoles         = page === 'roles';
+    const isPermissions   = page === 'permissions';
+    const isTeams         = page === 'teams';
+    const isLogs          = page === 'logs';
+    const isSettings      = page === 'settings';
+    const isTasks         = page === 'tasks';
+    const isOrganizations = page === 'organizations';
+    const isProjects      = page === 'projects';
+    const isActivity      = page === 'activity';
+    const isChat          = page === 'chat';
+    const isStub = !isDash && !isUsers && !isAnalytics && !isProfile && !isBilling && !isAuditLogs && !isApiKeys && !isMonitoring && !isSecurity && !isSessions && !isNotifications && !isIntegrations && !isRoles && !isPermissions && !isTeams && !isLogs && !isSettings && !isTasks && !isOrganizations && !isProjects && !isActivity && !isChat;
+
+    const sh  = (c) => ({ display: c ? 'block' : 'none' });
+    const shf = (c) => ({ display: c ? 'flex' : 'none' });
+
+    const goPage = p => () => this.setState({ page:p, cmdOpen:false, notifOpen:false, userOpen:false });
+
+    const cRev  = this._area([68,74,82,79,93,107,98,115,128,144,138,158], 'rv', 560, 152);
+    const cUG   = this._bars([320,415,382,490,447,522,585,614], 280, 130);
+    const sRev  = this._spark([95,102,98,112,128,142,158],   'var(--ok)');
+    const sUsers = this._spark([4200,4350,4580,4420,4680,4820,4920], 'var(--info)');
+    const sConv  = this._spark([2.8,3.1,2.9,3.15,3.1,3.38,3.24], 'var(--warn)');
+    const sApi   = this._spark([820,950,880,1020,960,1100,1240], 'var(--ok)');
+
+    const cTraffic = this._area([1200,1450,1320,1680,1560,1820,1720,1950,2100,1980,2250,2180,2400,2350,2600,2550,2700,2650,2900,2800,3100,3050,3200,3180,3400,3350,3600,3550,3800,3750],'tf',600,160);
+    const cEvents  = this._bars([85,72,98,112,104,130,145,138,120,115,95,88,105,122,135,128,142,155,148,132,118,108,95,98], 600, 96);
+
+    const donutSegs = [{v:42,c:'var(--pri)',label:'Direct',pct:42},{v:28,c:'#3c9fd6',label:'Organic',pct:28},{v:15,c:'#8b5cf6',label:'Referral',pct:15},{v:10,c:'#f59e0b',label:'Social',pct:10},{v:5,c:'#22c55e',label:'Email',pct:5}];
+    const cDonut = this._donut(donutSegs);
+
+    const invoices = [
+      {id:'INV-2026-06',date:'Jun 1, 2026',amount:'$299.00'},
+      {id:'INV-2026-05',date:'May 1, 2026',amount:'$299.00'},
+      {id:'INV-2026-04',date:'Apr 1, 2026',amount:'$299.00'},
+      {id:'INV-2026-03',date:'Mar 1, 2026',amount:'$299.00'},
+      {id:'INV-2026-02',date:'Feb 1, 2026',amount:'$299.00'},
+      {id:'INV-2026-01',date:'Jan 1, 2026',amount:'$299.00'},
+    ];
+    const topPages = [
+      {path:'/',views:'124,382',unique:'98,201',bounce:'28.4%',time:'5m 12s'},
+      {path:'/dashboard',views:'84,291',unique:'71,038',bounce:'14.2%',time:'8m 44s'},
+      {path:'/analytics',views:'52,108',unique:'41,294',bounce:'18.9%',time:'6m 22s'},
+      {path:'/users',views:'38,924',unique:'31,012',bounce:'22.1%',time:'4m 10s'},
+      {path:'/settings',views:'21,483',unique:'18,392',bounce:'31.8%',time:'3m 08s'},
+      {path:'/billing',views:'14,201',unique:'12,834',bounce:'35.2%',time:'2m 55s'},
+    ];
+
+    return {
+      theme,
+      themeIcon: theme==='dark'?'sun':'moon',
+      toggleTheme: () => this.setState(s => ({ theme: s.theme==='dark'?'light':'dark' })),
+
+      sbCls: `sidebar${collapsed?' coll':''}${mobileOpen?' mob-open':''}`,
+      sbIcon: collapsed ? 'panel-left-open' : 'panel-left-close',
+      toggleSb: () => {
+        if (window.innerWidth <= 768) this.setState(s => ({ mobileOpen: !s.mobileOpen }));
+        else this.setState(s => ({ collapsed: !s.collapsed }));
+      },
+      mobOvCls: mobileOpen ? 'act' : '',
+      closeMobile: () => this.setState({ mobileOpen: false }),
+
+      cmdOpen,
+      openCmd:  () => this._openCmd(),
+      closeCmd: () => this.setState({ cmdOpen:false }),
+      stopProp: e => e.stopPropagation(),
+
+      notifOpen, userOpen,
+      toggleNotif: () => this.setState(s => ({ notifOpen:!s.notifOpen, userOpen:false })),
+      toggleUser:  () => this.setState(s => ({ userOpen:!s.userOpen, notifOpen:false })),
+      wsIn:  e => { e.currentTarget.style.background='var(--sur2)'; },
+      wsOut: e => { e.currentTarget.style.background='transparent'; },
+      ubIn:  e => { e.currentTarget.style.background='var(--sur2)'; },
+      ubOut: e => { e.currentTarget.style.background='transparent'; },
+
+      pgCmd:       sh(cmdOpen),
+      pgNotif:     sh(notifOpen),
+      pgUser:      sh(userOpen),
+      pgBread:     { display: page!=='dashboard' ? 'inline-flex' : 'none', alignItems:'center' },
+      pgDash:      sh(isDash),
+      pgUsers:     sh(isUsers),
+      pgAnalytics: sh(isAnalytics),
+      pgProfile:   sh(isProfile),
+      pgBilling:   sh(isBilling),
+      pgStub:      sh(isStub),
+      pgAuditLogs:     sh(isAuditLogs),
+      pgApiKeys:       sh(isApiKeys),
+      pgMonitoring:    sh(isMonitoring),
+      pgSecurity:      sh(isSecurity),
+      pgSessions:      sh(isSessions),
+      pgNotifications: sh(isNotifications),
+      pgIntegrations:  sh(isIntegrations),
+      pgRoles:         sh(isRoles),
+      pgPermissions:   sh(isPermissions),
+      pgTeams:         sh(isTeams),
+      pgLogs:          sh(isLogs),
+      pgSettings:      sh(isSettings),
+      pgTasks:         sh(isTasks),
+      pgOrganizations: sh(isOrganizations),
+      pgProjects:      sh(isProjects),
+      pgActivity:      sh(isActivity),
+      pgChat:          isChat ? { display:'flex', height:'calc(100vh - 52px)', overflow:'hidden' } : { display:'none' },
+      pgInvite:        sh(inviteOpen),
+      pgCreateTask:    sh(createTaskOpen),
+      notifications:   this._notifications(),
+      integrations:    this._integrations(),
+      roles:           this._roles(),
+      perms:           this._perms(),
+      teams:           this._teams(),
+      logs:            this._logs(),
+
+      pageTitle: TITLES[page] || 'Page',
+      todayDate: new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' }),
+
+      cRev, cUG, sRev, sUsers, sConv, sApi,
+      cTraffic, cEvents, cDonut, donutLeg: donutSegs,
+      users: this._users(), invoices, topPages,
+      auditLogs: this._auditLogs(),
+      apiKeys: this._apiKeys(),
+      services: this._services(),
+      sessions: this._sessions(),
+      loginHistory: this._loginHistory(),
+      cLatency: this._area([42,38,45,51,48,44,52,49,46,43,47,55,62,58,48,44,41,46,52,50,47,44,48,46],'lat',600,140),
+      stubRows: Array.from({length:8},(_,i)=>({i})),
+      tasks:        (()=>{ const all=this._tasks(); const filtered=taskTab==='all'?all:all.filter(t=>t.statusLabel===taskTab); return { filteredTasks:filtered, tasks:all, taskCountAll:all.length, taskCountBacklog:all.filter(t=>t.statusLabel==='Backlog').length, taskCountTodo:all.filter(t=>t.statusLabel==='Todo').length, taskCountInProgress:all.filter(t=>t.statusLabel==='In Progress').length, taskCountDone:all.filter(t=>t.statusLabel==='Done').length, taskCountCanceled:all.filter(t=>t.statusLabel==='Canceled').length }; })().tasks,
+      filteredTasks: (()=>{ const all=this._tasks(); return taskTab==='all'?all:all.filter(t=>t.statusLabel===taskTab); })(),
+      taskCountAll: this._tasks().length,
+      taskCountBacklog: this._tasks().filter(t=>t.statusLabel==='Backlog').length,
+      taskCountTodo: this._tasks().filter(t=>t.statusLabel==='Todo').length,
+      taskCountInProgress: this._tasks().filter(t=>t.statusLabel==='In Progress').length,
+      taskCountDone: this._tasks().filter(t=>t.statusLabel==='Done').length,
+      taskCountCanceled: this._tasks().filter(t=>t.statusLabel==='Canceled').length,
+      orgs:         this._orgs(),
+      projects:     this._projects(),
+      activityFeed: this._activityFeed(),
+
+      goDashboard:     goPage('dashboard'),
+      goUsers:         goPage('users'),
+      goAnalytics:     goPage('analytics'),
+      goBilling:       goPage('billing'),
+      goSettings:      goPage('settings'),
+      goProfile:       goPage('profile'),
+      goNotifications: goPage('notifications'),
+      goTasks:         goPage('tasks'),
+      goProjects:      goPage('projects'),
+      goActivity:      goPage('activity'),
+      goChat:          goPage('chat'),
+      openInvite:      () => this.setState({ inviteOpen: true }),
+      closeInvite:     () => this.setState({ inviteOpen: false }),
+      openCreateTask:  () => this.setState({ createTaskOpen: true }),
+      closeCreateTask: () => this.setState({ createTaskOpen: false }),
+      chatContacts: (()=>{ const contacts=this._chatContacts(); return contacts.map((c,i)=>({ ...c, idx:i, itemSt:{ display:'flex', alignItems:'center', gap:'12px', padding:'12px 16px', cursor:'pointer', borderBottom:'1px solid var(--bdr)', background:i===chatContact?'var(--pris)':'transparent', borderLeft:i===chatContact?'3px solid var(--pri)':'3px solid transparent', transition:'background 80ms' }, avatarSt:{ width:'40px', height:'40px', borderRadius:'99px', background:c.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }, onlineDot:c.online?{ position:'absolute', bottom:'1px', right:'1px', width:'9px', height:'9px', borderRadius:'99px', background:'var(--ok)', border:'2px solid var(--sur)', display:'block' }:{ display:'none' }, unreadSt:c.unread>0?{ background:'var(--err)', color:'#fff', fontSize:'10px', fontWeight:'700', padding:'1px 7px', borderRadius:'99px', flexShrink:0 }:{ display:'none' }, onClick:()=>this.setState({ chatContact:i }) })); })(),
+      activeChatName: (()=>{ const c=this._chatContacts()[chatContact]||this._chatContacts()[0]; return c.name; })(),
+      activeChatInitials: (()=>{ const c=this._chatContacts()[chatContact]||this._chatContacts()[0]; return c.initials; })(),
+      activeChatAvatarSt: (()=>{ const c=this._chatContacts()[chatContact]||this._chatContacts()[0]; return { width:'38px', height:'38px', borderRadius:'99px', background:c.color, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }; })(),
+      activeChatOnlineDot: (()=>{ const c=this._chatContacts()[chatContact]||this._chatContacts()[0]; return { display:'inline-block', width:'7px', height:'7px', borderRadius:'99px', background:c.online?'var(--ok)':'var(--t3)', marginRight:'4px' }; })(),
+      activeChatStatus: (()=>{ const c=this._chatContacts()[chatContact]||this._chatContacts()[0]; return c.online?'Active now':`Last seen ${c.time}`; })(),
+      chatMessages: (()=>{ const c=this._chatContacts()[chatContact]||this._chatContacts()[0]; return this._chatMessages(chatContact,c); })(),
+    };
+  }
+}
+</script>
+</body>
+</html>

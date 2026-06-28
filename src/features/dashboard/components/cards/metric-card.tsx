@@ -1,13 +1,14 @@
 import { memo, type ReactNode } from 'react'
-import { TrendingDown, TrendingUp } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { Sparkline, type SparklineData } from '../charts/sparkline'
 import type { MetricCard as MetricCardType } from '../../types/dashboard'
 
 type MetricCardProps = Omit<MetricCardType, 'id' | 'icon'> & {
   className?: string
-  compact?: boolean
   icon?: ReactNode
+  sparklineData?: SparklineData[]
+  sparklineColor?: string
 }
 
 export const MetricCard = memo(function MetricCard({
@@ -15,20 +16,23 @@ export const MetricCard = memo(function MetricCard({
   value,
   trend,
   icon,
-  description,
   isLoading = false,
   error,
   className,
-  compact = false,
+  sparklineData,
+  sparklineColor,
 }: MetricCardProps) {
   if (error) {
     return (
-      <Card className={cn('border-destructive', className)}>
-        <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-          <CardTitle className='text-sm font-medium'>{title}</CardTitle>
+      <Card className={cn('border-red-500/50 bg-red-500/5', className)}>
+        <CardHeader className='pb-2'>
+          <div className='flex items-center justify-between'>
+            <p className='text-xs font-medium text-[var(--t2)]'>{title}</p>
+            {icon && <div className='h-4 w-4 text-[var(--t2)]'>{icon}</div>}
+          </div>
         </CardHeader>
         <CardContent>
-          <p className='text-sm text-destructive'>{error}</p>
+          <p className='text-xs text-red-500'>{error}</p>
         </CardContent>
       </Card>
     )
@@ -37,73 +41,67 @@ export const MetricCard = memo(function MetricCard({
   if (isLoading) {
     return (
       <Card className={className}>
-        <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-          <CardTitle className='text-sm font-medium'>{title}</CardTitle>
-          {icon && (
-            <div className='h-4 w-4 text-muted-foreground'>
-              {icon}
-            </div>
-          )}
+        <CardHeader className='pb-2'>
+          <div className='flex items-center justify-between'>
+            <p className='text-xs font-medium text-[var(--t2)]'>{title}</p>
+            {icon && <div className='h-4 w-4 text-[var(--t2)]'>{icon}</div>}
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className='h-8 animate-pulse rounded bg-muted' />
-          {!compact && <div className='mt-2 h-4 animate-pulse rounded bg-muted' />}
+        <CardContent className='space-y-3'>
+          <div className='h-7 w-24 animate-pulse rounded bg-[var(--sur2)]' />
+          <div className='h-6 w-full animate-pulse rounded bg-[var(--sur2)]' />
+          <div className='h-4 w-20 animate-pulse rounded bg-[var(--sur2)]' />
         </CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className={className}>
-      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-        <CardTitle className={cn(
-          'font-medium',
-          compact ? 'text-xs' : 'text-sm'
-        )}>
-          {title}
-        </CardTitle>
+    <Card className={cn('border border-[var(--bdr)] bg-[var(--sur)]', className)}>
+      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-3 pt-4 px-5'>
+        <p className='text-xs font-medium text-[var(--t2)]'>{title}</p>
         {icon && (
-          <div
-            className={cn(
-              'text-muted-foreground',
-              compact ? 'h-3 w-3' : 'h-4 w-4'
-            )}
-          >
+          <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--pris)]'>
             {icon}
           </div>
         )}
       </CardHeader>
-      <CardContent>
-        <div className={cn(
-          'font-bold',
-          compact ? 'text-lg' : 'text-2xl'
-        )}>
-          {value}
+      <CardContent className='px-5 pb-4 space-y-2'>
+        <div className='flex items-end justify-between gap-2'>
+          <div className='flex flex-col gap-1'>
+            <div className='text-[26px] font-bold text-[var(--t1)] tabular-nums'>{value}</div>
+            {trend && (
+              <div className='flex items-center gap-1'>
+                <span
+                  className={cn(
+                    'text-xs font-medium',
+                    trend.direction === 'up'
+                      ? 'text-[var(--ok)]'
+                      : trend.direction === 'down'
+                        ? 'text-[var(--err)]'
+                        : 'text-[var(--t3)]'
+                  )}
+                >
+                  {trend.direction === 'up'
+                    ? '↑ '
+                    : trend.direction === 'down'
+                      ? '↓ '
+                      : ''}{Math.abs(trend.value)}%
+                </span>
+              </div>
+            )}
+          </div>
+          {sparklineData && sparklineData.length > 0 && (
+            <Sparkline
+              data={sparklineData}
+              color={sparklineColor || 'var(--pri)'}
+              width={80}
+              height={28}
+            />
+          )}
         </div>
         {trend && (
-          <div className='mt-2 flex items-center gap-1'>
-            {trend.direction === 'up' ? (
-              <TrendingUp className='h-3 w-3 text-green-600' />
-            ) : trend.direction === 'down' ? (
-              <TrendingDown className='h-3 w-3 text-red-600' />
-            ) : null}
-            <p
-              className={cn(
-                'text-xs font-medium',
-                trend.direction === 'up'
-                  ? 'text-green-600'
-                  : trend.direction === 'down'
-                    ? 'text-red-600'
-                    : 'text-muted-foreground'
-              )}
-            >
-              {trend.direction !== 'neutral' ? `${trend.direction === 'up' ? '+' : '-'}` : ''}
-              {Math.abs(trend.value)}% {trend.label}
-            </p>
-          </div>
-        )}
-        {description && (
-          <p className='mt-2 text-xs text-muted-foreground'>{description}</p>
+          <p className='text-xs text-[var(--t3)]'>{trend.label}</p>
         )}
       </CardContent>
     </Card>

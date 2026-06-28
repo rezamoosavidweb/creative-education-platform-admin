@@ -1,5 +1,9 @@
 export type TrendDirection = 'up' | 'down' | 'neutral'
 
+export type SparklineData = {
+  value: number
+}
+
 export type MetricTrend = {
   value: number
   direction: TrendDirection
