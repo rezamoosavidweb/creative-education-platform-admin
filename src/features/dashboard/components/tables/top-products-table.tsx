@@ -29,40 +29,40 @@ function TopProductsTableContent({ data }: { data: Product[] }) {
     <div className='overflow-x-auto'>
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Product</TableHead>
-            <TableHead>SKU</TableHead>
-            <TableHead className='text-right'>Price</TableHead>
-            <TableHead className='text-right'>Sales</TableHead>
-            <TableHead className='text-right'>Revenue</TableHead>
-            <TableHead className='text-right'>Trend</TableHead>
+          <TableRow className='border-[var(--bdr)]'>
+            <TableHead className='text-[var(--t2)]'>Product</TableHead>
+            <TableHead className='text-[var(--t2)]'>SKU</TableHead>
+            <TableHead className='text-right text-[var(--t2)]'>Price</TableHead>
+            <TableHead className='text-right text-[var(--t2)]'>Sales</TableHead>
+            <TableHead className='text-right text-[var(--t2)]'>Revenue</TableHead>
+            <TableHead className='text-right text-[var(--t2)]'>Trend</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell className='font-medium'>{product.name}</TableCell>
-              <TableCell className='text-sm text-muted-foreground'>
+            <TableRow key={product.id} className='border-[var(--bdr)] hover:bg-[var(--sur2)]'>
+              <TableCell className='font-medium text-[var(--t1)]'>{product.name}</TableCell>
+              <TableCell className='text-sm text-[var(--t2)]'>
                 {product.sku}
               </TableCell>
-              <TableCell className='text-right'>
+              <TableCell className='text-right text-[var(--t1)]'>
                 ${product.price.toLocaleString()}
               </TableCell>
-              <TableCell className='text-right'>{product.sales.toLocaleString()}</TableCell>
-              <TableCell className='text-right'>
+              <TableCell className='text-right text-[var(--t1)]'>{product.sales.toLocaleString()}</TableCell>
+              <TableCell className='text-right text-[var(--t1)]'>
                 ${product.revenue.toLocaleString()}
               </TableCell>
               <TableCell className='text-right'>
                 <div className='flex items-center justify-end gap-1'>
                   {product.trend === 'up' ? (
-                    <TrendingUp className='h-4 w-4 text-green-600' />
+                    <TrendingUp className='h-4 w-4 text-[var(--ok)]' />
                   ) : (
-                    <TrendingDown className='h-4 w-4 text-red-600' />
+                    <TrendingDown className='h-4 w-4 text-[var(--err)]' />
                   )}
                   <span
                     className={cn(
                       'text-sm font-medium',
-                      product.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                      product.trend === 'up' ? 'text-[var(--ok)]' : 'text-[var(--err)]'
                     )}
                   >
                     {product.trend === 'up' ? '+' : '-'}12%
@@ -83,26 +83,28 @@ export const TopProductsTable = memo(function TopProductsTable({
   error,
 }: TopProductsTableProps) {
   return (
-    <Card>
+    <Card className='border-[var(--bdr)] bg-[var(--sur)]'>
       <CardHeader>
-        <CardTitle>Top Products</CardTitle>
-        <CardDescription>Your best performing products this month</CardDescription>
+        <CardTitle className='text-[var(--t1)]'>Top Products</CardTitle>
+        <CardDescription className='text-[var(--t2)]'>
+          Your best performing products this month
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {error ? (
-          <div className='flex items-center justify-center py-8 text-sm text-destructive'>
+          <div className='flex items-center justify-center py-8 text-sm text-[var(--err)]'>
             {error}
           </div>
         ) : isLoading ? (
           <div className='space-y-2'>
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className='h-10 animate-pulse rounded bg-muted' />
+              <div key={i} className='h-10 animate-pulse rounded bg-[var(--sur2)]' />
             ))}
           </div>
         ) : data.length > 0 ? (
           <TopProductsTableContent data={data} />
         ) : (
-          <div className='flex items-center justify-center py-8 text-sm text-muted-foreground'>
+          <div className='flex items-center justify-center py-8 text-sm text-[var(--t3)]'>
             No products available
           </div>
         )}

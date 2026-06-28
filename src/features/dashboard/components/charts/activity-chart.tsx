@@ -19,23 +19,23 @@ type ActivityChartProps = {
 
 function ActivityChartContent({ data }: { data: ActivityData[] }) {
   return (
-    <ResponsiveContainer width='100%' height={350}>
+    <ResponsiveContainer width='100%' height={340}>
       <BarChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray='3 3' stroke='hsl(var(--border))' />
+        <CartesianGrid strokeDasharray='3 3' stroke='var(--bdr)' />
         <XAxis
           dataKey='name'
-          stroke='hsl(var(--muted-foreground))'
+          stroke='var(--t3)'
           style={{ fontSize: '12px' }}
         />
-        <YAxis stroke='hsl(var(--muted-foreground))' />
+        <YAxis stroke='var(--t3)' />
         <Tooltip
           contentStyle={{
-            backgroundColor: 'hsl(var(--background))',
-            border: '1px solid hsl(var(--border))',
+            backgroundColor: 'var(--sur)',
+            border: '1px solid var(--bdr)',
             borderRadius: '0.5rem',
           }}
         />
-        <Bar dataKey='count' fill='hsl(var(--primary))' radius={[4, 4, 0, 0]} />
+        <Bar dataKey='count' fill='var(--info)' radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   )
@@ -47,24 +47,26 @@ export const ActivityChart = memo(function ActivityChart({
   error,
 }: ActivityChartProps) {
   return (
-    <Card>
+    <Card className='border-[var(--bdr)] bg-[var(--sur)]'>
       <CardHeader>
-        <CardTitle>Activity</CardTitle>
-        <CardDescription>Daily activity over the last 30 days</CardDescription>
+        <CardTitle className='text-[var(--t1)]'>New Users</CardTitle>
+        <CardDescription className='text-[var(--t2)]'>
+          Weekly signups — last 8 weeks
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {error ? (
-          <div className='flex items-center justify-center py-8 text-sm text-destructive'>
+          <div className='flex items-center justify-center py-8 text-sm text-[var(--err)]'>
             {error}
           </div>
         ) : isLoading ? (
           <div className='flex items-center justify-center py-8'>
-            <div className='h-64 w-full animate-pulse rounded bg-muted' />
+            <div className='h-64 w-full animate-pulse rounded bg-[var(--sur2)]' />
           </div>
         ) : data.length > 0 ? (
           <ActivityChartContent data={data} />
         ) : (
-          <div className='flex items-center justify-center py-8 text-sm text-muted-foreground'>
+          <div className='flex items-center justify-center py-8 text-sm text-[var(--t3)]'>
             No data available
           </div>
         )}

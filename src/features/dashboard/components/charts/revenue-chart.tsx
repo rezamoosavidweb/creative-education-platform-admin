@@ -19,25 +19,25 @@ type RevenueChartProps = {
 
 function RevenueChartContent({ data }: { data: RevenueData[] }) {
   return (
-    <ResponsiveContainer width='100%' height={350}>
+    <ResponsiveContainer width='100%' height={340}>
       <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
         <defs>
-          <linearGradient id='colorRevenue' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='5%' stopColor='hsl(var(--primary))' stopOpacity={0.8} />
-            <stop offset='95%' stopColor='hsl(var(--primary))' stopOpacity={0} />
-          </linearGradient>
-          <linearGradient id='colorCost' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='5%' stopColor='hsl(var(--secondary))' stopOpacity={0.8} />
-            <stop offset='95%' stopColor='hsl(var(--secondary))' stopOpacity={0} />
+          <linearGradient id='revenueGradient' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='5%' stopColor='var(--pri)' stopOpacity={0.35} />
+            <stop offset='95%' stopColor='var(--pri)' stopOpacity={0.02} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray='3 3' stroke='hsl(var(--border))' />
-        <XAxis dataKey='name' stroke='hsl(var(--muted-foreground))' />
-        <YAxis stroke='hsl(var(--muted-foreground))' />
+        <CartesianGrid strokeDasharray='3 3' stroke='var(--bdr)' />
+        <XAxis
+          dataKey='name'
+          stroke='var(--t3)'
+          style={{ fontSize: '12px' }}
+        />
+        <YAxis stroke='var(--t3)' />
         <Tooltip
           contentStyle={{
-            backgroundColor: 'hsl(var(--background))',
-            border: '1px solid hsl(var(--border))',
+            backgroundColor: 'var(--sur)',
+            border: '1px solid var(--bdr)',
             borderRadius: '0.5rem',
           }}
           formatter={(value) => `$${Number(value).toLocaleString()}`}
@@ -45,18 +45,10 @@ function RevenueChartContent({ data }: { data: RevenueData[] }) {
         <Area
           type='monotone'
           dataKey='revenue'
-          stroke='hsl(var(--primary))'
+          stroke='var(--pri)'
           fillOpacity={1}
-          fill='url(#colorRevenue)'
+          fill='url(#revenueGradient)'
           name='Revenue'
-        />
-        <Area
-          type='monotone'
-          dataKey='cost'
-          stroke='hsl(var(--secondary))'
-          fillOpacity={1}
-          fill='url(#colorCost)'
-          name='Cost'
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -69,24 +61,26 @@ export const RevenueChart = memo(function RevenueChart({
   error,
 }: RevenueChartProps) {
   return (
-    <Card>
+    <Card className='border-[var(--bdr)] bg-[var(--sur)]'>
       <CardHeader>
-        <CardTitle>Revenue</CardTitle>
-        <CardDescription>Monthly revenue and costs</CardDescription>
+        <CardTitle className='text-[var(--t1)]'>Revenue Overview</CardTitle>
+        <CardDescription className='text-[var(--t2)]'>
+          Monthly revenue — last 12 months
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {error ? (
-          <div className='flex items-center justify-center py-8 text-sm text-destructive'>
+          <div className='flex items-center justify-center py-8 text-sm text-[var(--err)]'>
             {error}
           </div>
         ) : isLoading ? (
           <div className='flex items-center justify-center py-8'>
-            <div className='h-64 w-full animate-pulse rounded bg-muted' />
+            <div className='h-64 w-full animate-pulse rounded bg-[var(--sur2)]' />
           </div>
         ) : data.length > 0 ? (
           <RevenueChartContent data={data} />
         ) : (
-          <div className='flex items-center justify-center py-8 text-sm text-muted-foreground'>
+          <div className='flex items-center justify-center py-8 text-sm text-[var(--t3)]'>
             No data available
           </div>
         )}
