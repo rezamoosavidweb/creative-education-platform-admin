@@ -1,93 +1,85 @@
-export type NotificationPreference = {
-  id: string
-  label: string
-  description: string
-  defaultOn: boolean
-}
+import { type NotificationCategory } from '../constants/notification-config'
 
-export type NotificationGroup = {
+export type NotificationItem = {
   id: string
+  category: NotificationCategory
   title: string
-  preferences: NotificationPreference[]
+  body: string
+  time: string
+  unread: boolean
+  mention?: boolean
+  system?: boolean
 }
 
-export const notificationGroups: NotificationGroup[] = [
+export const notifications: NotificationItem[] = [
   {
-    id: 'account',
-    title: 'Account',
-    preferences: [
-      {
-        id: 'member-activity',
-        label: 'Member activity',
-        description: 'When members join, leave, or change roles.',
-        defaultOn: true,
-      },
-      {
-        id: 'mentions',
-        label: 'Mentions',
-        description: 'When someone mentions you in a comment.',
-        defaultOn: true,
-      },
-    ],
+    id: 'n1',
+    category: 'user',
+    title: 'New user registered',
+    body: 'sarah.chen@acme.com joined the workspace.',
+    time: '2 minutes ago',
+    unread: true,
   },
   {
-    id: 'projects',
-    title: 'Projects & Tasks',
-    preferences: [
-      {
-        id: 'task-assigned',
-        label: 'Task assigned',
-        description: 'When a task is assigned to you.',
-        defaultOn: true,
-      },
-      {
-        id: 'due-reminders',
-        label: 'Due date reminders',
-        description: 'Reminders before a task is due.',
-        defaultOn: true,
-      },
-      {
-        id: 'project-status',
-        label: 'Project status changes',
-        description: 'When a project is completed or archived.',
-        defaultOn: false,
-      },
-    ],
+    id: 'n2',
+    category: 'api',
+    title: 'API key expiring soon',
+    body: 'Production key expires in 3 days.',
+    time: '1 hour ago',
+    unread: true,
+    system: true,
   },
   {
-    id: 'security',
-    title: 'Security',
-    preferences: [
-      {
-        id: 'new-signins',
-        label: 'New sign-ins',
-        description: 'When your account is accessed from a new device.',
-        defaultOn: true,
-      },
-      {
-        id: 'failed-logins',
-        label: 'Failed login attempts',
-        description: 'When a sign-in attempt is blocked.',
-        defaultOn: true,
-      },
-    ],
+    id: 'n3',
+    category: 'system',
+    title: 'System health alert',
+    body: 'CPU usage above 85% for 10 minutes.',
+    time: '3 hours ago',
+    unread: true,
+    system: true,
   },
   {
-    id: 'billing',
-    title: 'Billing',
-    preferences: [
-      {
-        id: 'invoices',
-        label: 'Invoices',
-        description: 'When a new invoice is issued or paid.',
-        defaultOn: true,
-      },
-      {
-        id: 'usage-limits',
-        label: 'Usage limits',
-        description: 'When you approach a plan limit.',
-        defaultOn: false,
-      },
-    ],
+    id: 'n4',
+    category: 'mention',
+    title: 'Mark Rivera mentioned you',
+    body: 'In Project Atlas: “can you review the updated API spec?”',
+    time: '5 hours ago',
+    unread: false,
+    mention: true,
+  },
+  {
+    id: 'n5',
+    category: 'billing',
+    title: 'Invoice paid',
+    body: 'INV-2026-06 · $299.00 was paid successfully.',
+    time: 'Yesterday',
+    unread: false,
+    system: true,
+  },
+  {
+    id: 'n6',
+    category: 'project',
+    title: 'Project “Phoenix Auth” completed',
+    body: 'All 18 tasks are done — nice work, team.',
+    time: 'Yesterday',
+    unread: false,
+  },
+  {
+    id: 'n7',
+    category: 'security',
+    title: 'New sign-in detected',
+    body: 'Chrome · macOS from San Francisco, US.',
+    time: '2 days ago',
+    unread: false,
+    system: true,
+  },
+  {
+    id: 'n8',
+    category: 'mention',
+    title: 'Aiko Kobayashi mentioned you',
+    body: 'In the standup thread: “let’s sync on the rollout plan.”',
+    time: '2 days ago',
+    unread: false,
+    mention: true,
   },
 ]

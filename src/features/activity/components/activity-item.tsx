@@ -33,12 +33,9 @@ export const ActivityItem = memo(function ActivityItem({
         <p className='mt-1 text-[13px] leading-relaxed text-[var(--t2)]'>
           {event.body}
         </p>
-        <div className='mt-2 flex items-center gap-2'>
-          <span className='inline-flex items-center rounded-full bg-[var(--sur3)] px-2 py-0.5 text-[11px] text-[var(--t2)]'>
-            {event.category}
-          </span>
-          <span className='text-[11.5px] text-[var(--t3)]'>by {event.actor}</span>
-        </div>
+        <span className='mt-2 inline-flex items-center rounded-full bg-[var(--sur3)] px-2 py-0.5 text-[11px] text-[var(--t2)]'>
+          {event.category} · {event.actor}
+        </span>
       </div>
     </div>
   )

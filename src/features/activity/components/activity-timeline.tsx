@@ -36,8 +36,8 @@ export const ActivityTimeline = memo(function ActivityTimeline({
 
       {groups.map((group) => (
         <div key={group.date}>
-          <div className='relative z-10 mt-2 mb-3'>
-            <span className='bg-[var(--bg)] pr-3 text-[12px] font-semibold tracking-[0.06em] text-[var(--t3)] uppercase'>
+          <div className='mt-1 mb-3 ps-11'>
+            <span className='text-[11px] font-semibold tracking-[0.08em] text-[var(--t3)] uppercase'>
               {group.date}
             </span>
           </div>
