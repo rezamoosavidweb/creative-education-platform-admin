@@ -1,11 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { Security } from '@/features/security'
 
 export const Route = createFileRoute('/_authenticated/security/')({
-  component: () => (
-    <PlaceholderPage
-      title='Security'
-      description='Passwords, two-factor authentication, and login history.'
-    />
-  ),
+  component: Security,
 })
