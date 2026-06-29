@@ -1,0 +1,66 @@
+import {
+  type LatencyPoint,
+  type MonitoringStat,
+  type Service,
+} from '../types/monitoring'
+
+export const monitoringStats: MonitoringStat[] = [
+  {
+    id: 'uptime',
+    label: 'Uptime (30d)',
+    value: '99.97%',
+    foot: '+0.02% vs last month',
+    footTone: 'ok',
+    footDirection: 'up',
+  },
+  {
+    id: 'latency',
+    label: 'Avg Latency (p50)',
+    value: '48ms',
+    foot: '−3ms vs last week',
+    footTone: 'ok',
+    footDirection: 'down',
+  },
+  {
+    id: 'error-rate',
+    label: 'Error Rate',
+    value: '0.04%',
+    foot: '−0.01% vs last week',
+    footTone: 'ok',
+    footDirection: 'down',
+  },
+  {
+    id: 'incidents',
+    label: 'Active Incidents',
+    value: '0',
+    valueTone: 'ok',
+    foot: 'No open incidents',
+    footTone: 'ok',
+  },
+]
+
+export const services: Service[] = [
+  { id: 'api-gateway', name: 'API Gateway', status: 'Operational', uptime: '99.98% uptime', latency: '48ms' },
+  { id: 'auth', name: 'Auth Service', status: 'Operational', uptime: '99.99% uptime', latency: '22ms' },
+  { id: 'db-primary', name: 'Database', status: 'Operational', uptime: '99.95% uptime', latency: '12ms' },
+  { id: 'cache', name: 'Cache Layer', status: 'Operational', uptime: '99.99% uptime', latency: '3ms' },
+  { id: 'storage', name: 'Storage', status: 'Operational', uptime: '99.87% uptime', latency: '85ms' },
+  { id: 'email', name: 'Email Service', status: 'Operational', uptime: '99.82% uptime', latency: '210ms' },
+  { id: 'webhooks', name: 'Webhook Queue', status: 'Operational', uptime: '99.92% uptime', latency: '61ms' },
+  { id: 'search', name: 'Search Index', status: 'Operational', uptime: '99.78% uptime', latency: '28ms' },
+  { id: 'cdn', name: 'CDN', status: 'Operational', uptime: '100% uptime', latency: '4ms' },
+  { id: 'scheduler', name: 'Scheduler', status: 'Operational', uptime: '99.96% uptime', latency: '—' },
+  { id: 'billing', name: 'Billing Service', status: 'Operational', uptime: '99.99% uptime', latency: '92ms' },
+  { id: 'file-store', name: 'File Storage', status: 'Degraded', uptime: '98.21% uptime', latency: '180ms' },
+]
+
+const HOUR_LABELS = [
+  '12am', '', '', '3am', '', '', '6am', '', '', '9am', '', '',
+  '12pm', '', '', '3pm', '', '', '6pm', '', '', '9pm', '', 'now',
+]
+
+// P50 latency over the last 24 hours, gently fluctuating around ~48ms.
+export const latencySeries: LatencyPoint[] = HOUR_LABELS.map((label, i) => ({
+  label,
+  latency: Math.round(42 + Math.sin(i / 2.5) * 6 + (i % 3) * 1.5),
+}))

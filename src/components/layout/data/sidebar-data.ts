@@ -1,41 +1,41 @@
 import {
-  Construction,
-  LayoutDashboard,
-  Monitor,
-  Bug,
-  ListTodo,
-  FileX,
-  HelpCircle,
-  Lock,
+  Activity,
+  BarChart3,
   Bell,
-  Package,
-  Palette,
-  ServerOff,
-  Settings,
-  Wrench,
-  UserCog,
-  UserX,
-  Users,
+  Building2,
+  CreditCard,
+  FolderKanban,
+  KeyRound,
+  LayoutDashboard,
+  ListTodo,
+  Lock,
   MessagesSquare,
+  Monitor,
+  Plug,
+  ScrollText,
+  Settings,
+  Shield,
   ShieldCheck,
+  Terminal,
+  UserCircle,
+  Users,
   AudioWaveform,
   Command,
   GalleryVerticalEnd,
 } from 'lucide-react'
-import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
   user: {
-    name: 'satnaing',
-    email: 'satnaingdev@gmail.com',
+    name: 'Jordan Davis',
+    email: 'jordan@acme.com',
     avatar: '/avatars/shadcn.jpg',
   },
   teams: [
     {
-      name: 'Shadcn Admin',
+      name: 'Acme Corp',
       logo: Command,
-      plan: 'Vite + ShadcnUI',
+      plan: 'Professional Plan',
     },
     {
       name: 'Acme Inc',
@@ -43,7 +43,7 @@ export const sidebarData: SidebarData = {
       plan: 'Enterprise',
     },
     {
-      name: 'Acme Corp.',
+      name: 'Acme Startup',
       logo: AudioWaveform,
       plan: 'Startup',
     },
@@ -60,144 +60,131 @@ export const sidebarData: SidebarData = {
         {
           title: 'Tasks',
           url: '/tasks',
+          badge: '20',
           icon: ListTodo,
         },
         {
-          title: 'Apps',
-          url: '/apps',
-          icon: Package,
-        },
-        {
-          title: 'Chats',
+          title: 'Chat',
           url: '/chats',
-          badge: '3',
+          badge: '4',
           icon: MessagesSquare,
         },
+      ],
+    },
+    {
+      title: 'People & Access',
+      items: [
         {
           title: 'Users',
           url: '/users',
+          badge: '2.4k',
           icon: Users,
         },
         {
-          title: 'Secured by Clerk',
-          icon: ClerkLogo,
-          items: [
-            {
-              title: 'Sign In',
-              url: '/clerk/sign-in',
-            },
-            {
-              title: 'Sign Up',
-              url: '/clerk/sign-up',
-            },
-            {
-              title: 'User Management',
-              url: '/clerk/user-management',
-            },
-          ],
+          title: 'Roles',
+          url: '/roles',
+          icon: ShieldCheck,
+        },
+        {
+          title: 'Permissions',
+          url: '/permissions',
+          icon: Lock,
+        },
+        {
+          title: 'Teams',
+          url: '/teams',
+          icon: UserCircle,
+        },
+        {
+          title: 'Organizations',
+          url: '/organizations',
+          icon: Building2,
         },
       ],
     },
     {
-      title: 'Pages',
+      title: 'Projects',
       items: [
         {
-          title: 'Auth',
-          icon: ShieldCheck,
-          items: [
-            {
-              title: 'Sign In',
-              url: '/sign-in',
-            },
-            {
-              title: 'Sign In (2 Col)',
-              url: '/sign-in-2',
-            },
-            {
-              title: 'Sign Up',
-              url: '/sign-up',
-            },
-            {
-              title: 'Forgot Password',
-              url: '/forgot-password',
-            },
-            {
-              title: 'OTP',
-              url: '/otp',
-            },
-          ],
+          title: 'Projects',
+          url: '/projects',
+          icon: FolderKanban,
         },
         {
-          title: 'Errors',
-          icon: Bug,
-          items: [
-            {
-              title: 'Unauthorized',
-              url: '/errors/unauthorized',
-              icon: Lock,
-            },
-            {
-              title: 'Forbidden',
-              url: '/errors/forbidden',
-              icon: UserX,
-            },
-            {
-              title: 'Not Found',
-              url: '/errors/not-found',
-              icon: FileX,
-            },
-            {
-              title: 'Internal Server Error',
-              url: '/errors/internal-server-error',
-              icon: ServerOff,
-            },
-            {
-              title: 'Maintenance Error',
-              url: '/errors/maintenance-error',
-              icon: Construction,
-            },
-          ],
+          title: 'Activity',
+          url: '/activity',
+          icon: Activity,
         },
       ],
     },
     {
-      title: 'Other',
+      title: 'Analytics & Logs',
+      items: [
+        {
+          title: 'Analytics',
+          url: '/analytics',
+          icon: BarChart3,
+        },
+        {
+          title: 'Audit Logs',
+          url: '/audit-logs',
+          icon: ScrollText,
+        },
+        {
+          title: 'Logs',
+          url: '/logs',
+          icon: Terminal,
+        },
+        {
+          title: 'Monitoring',
+          url: '/monitoring',
+          icon: Monitor,
+        },
+      ],
+    },
+    {
+      title: 'Configuration',
+      items: [
+        {
+          title: 'Notifications',
+          url: '/notifications',
+          badge: '3',
+          icon: Bell,
+        },
+        {
+          title: 'Integrations',
+          url: '/integrations',
+          icon: Plug,
+        },
+        {
+          title: 'API Keys',
+          url: '/api-keys',
+          icon: KeyRound,
+        },
+      ],
+    },
+    {
+      title: 'Settings',
       items: [
         {
           title: 'Settings',
+          url: '/settings',
           icon: Settings,
-          items: [
-            {
-              title: 'Profile',
-              url: '/settings',
-              icon: UserCog,
-            },
-            {
-              title: 'Account',
-              url: '/settings/account',
-              icon: Wrench,
-            },
-            {
-              title: 'Appearance',
-              url: '/settings/appearance',
-              icon: Palette,
-            },
-            {
-              title: 'Notifications',
-              url: '/settings/notifications',
-              icon: Bell,
-            },
-            {
-              title: 'Display',
-              url: '/settings/display',
-              icon: Monitor,
-            },
-          ],
         },
         {
-          title: 'Help Center',
-          url: '/help-center',
-          icon: HelpCircle,
+          title: 'Billing',
+          url: '/billing',
+          icon: CreditCard,
+        },
+        {
+          title: 'Security',
+          url: '/security',
+          icon: Shield,
+        },
+        {
+          title: 'Sessions',
+          url: '/sessions',
+          icon: KeyRound,
         },
       ],
     },
