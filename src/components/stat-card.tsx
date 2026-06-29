@@ -38,8 +38,13 @@ export const StatCard = memo(function StatCard({
     footDirection === 'up' ? '↑ ' : footDirection === 'down' ? '↓ ' : ''
 
   return (
-    <Card className={cn('border border-[var(--bdr)] bg-[var(--sur)]', className)}>
-      <CardContent className='space-y-3 px-5 py-5'>
+    <Card
+      className={cn(
+        'gap-0 border border-[var(--bdr)] bg-[var(--sur)] py-0',
+        className
+      )}
+    >
+      <CardContent className='space-y-2 px-5 py-5'>
         <p className='text-xs font-medium text-[var(--t2)]'>{label}</p>
         <div
           className={cn(

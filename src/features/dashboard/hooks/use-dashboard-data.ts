@@ -32,12 +32,6 @@ export function useDashboardData({
         enabled,
       },
       {
-        queryKey: ['dashboard', 'products', filters],
-        queryFn: () => dashboardService.getTopProducts(filters),
-        staleTime: 5 * 60 * 1000,
-        enabled,
-      },
-      {
         queryKey: ['dashboard', 'activities', filters],
         queryFn: () => dashboardService.getRecentActivities(filters),
         staleTime: 5 * 60 * 1000,
@@ -46,8 +40,7 @@ export function useDashboardData({
     ],
   })
 
-  const [statsQuery, revenueQuery, activityQuery, productsQuery, activitiesQuery] =
-    results
+  const [statsQuery, revenueQuery, activityQuery, activitiesQuery] = results
 
   const isLoading = results.some((q) => q.isLoading)
   const error = results.find((q) => q.error)?.error as Error | null
@@ -56,7 +49,6 @@ export function useDashboardData({
     stats: statsQuery.data ?? null,
     revenueData: revenueQuery.data ?? [],
     activityData: activityQuery.data ?? [],
-    topProducts: productsQuery.data ?? [],
     recentActivities: activitiesQuery.data ?? [],
     isLoading,
     error: error?.message ?? null,

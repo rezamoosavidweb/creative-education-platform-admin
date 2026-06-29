@@ -3,38 +3,37 @@ import type {
   DashboardStats,
   RevenueData,
   ActivityData,
-  Product,
   Activity,
   DashboardFilter,
 } from '../types/dashboard'
 
 // Mock data generator - in production, replace with API calls
 function generateMockStats(): DashboardStats {
-  const baseRevenue = 45231.89
   return {
-    totalRevenue: baseRevenue,
+    totalRevenue: 128420,
     revenue_trend: {
-      value: 20.1,
+      value: 12.4,
       direction: 'up',
-      label: 'from last month',
+      label: 'vs last month',
     },
-    activeUsers: 2350,
+    activeUsers: 24891,
     users_trend: {
-      value: 180.1,
+      value: 8.1,
       direction: 'up',
-      label: 'from last month',
+      label: 'vs last month',
     },
     conversion: 3.24,
     conversion_trend: {
-      value: 12.5,
+      value: 0.6,
       direction: 'up',
-      label: 'from last month',
+      label: 'vs last month',
     },
-    growth: 23.5,
+    // Represents API Requests (count) for the 4th KPI card.
+    growth: 1_240_000,
     growth_trend: {
-      value: 5.2,
+      value: 21.3,
       direction: 'up',
-      label: 'from last month',
+      label: 'vs last month',
     },
   }
 }
@@ -60,47 +59,6 @@ function generateMockActivityData(): ActivityData[] {
     }
   })
   return days
-}
-
-function generateMockProducts(): Product[] {
-  return [
-    {
-      id: '1',
-      name: 'Premium Plan',
-      sku: 'PREM-001',
-      price: 299,
-      sales: 1250,
-      revenue: 373750,
-      trend: 'up',
-    },
-    {
-      id: '2',
-      name: 'Enterprise Plan',
-      sku: 'ENT-001',
-      price: 999,
-      sales: 340,
-      revenue: 339660,
-      trend: 'up',
-    },
-    {
-      id: '3',
-      name: 'Starter Plan',
-      sku: 'START-001',
-      price: 99,
-      sales: 5230,
-      revenue: 517770,
-      trend: 'down',
-    },
-    {
-      id: '4',
-      name: 'Pro Plan',
-      sku: 'PRO-001',
-      price: 599,
-      sales: 890,
-      revenue: 533010,
-      trend: 'up',
-    },
-  ]
 }
 
 function generateMockActivities(): Activity[] {
@@ -157,11 +115,6 @@ export const dashboardService = {
   async getActivityData(_filters?: DashboardFilter): Promise<ActivityData[]> {
     await new Promise((resolve) => setTimeout(resolve, 500))
     return generateMockActivityData()
-  },
-
-  async getTopProducts(_filters?: DashboardFilter): Promise<Product[]> {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return generateMockProducts()
   },
 
   async getRecentActivities(

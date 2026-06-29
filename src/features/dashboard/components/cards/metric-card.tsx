@@ -7,6 +7,8 @@ import type { MetricCard as MetricCardType } from '../../types/dashboard'
 type MetricCardProps = Omit<MetricCardType, 'id' | 'icon'> & {
   className?: string
   icon?: ReactNode
+  iconColor?: string
+  iconBg?: string
   sparklineData?: SparklineData[]
   sparklineColor?: string
 }
@@ -16,6 +18,8 @@ export const MetricCard = memo(function MetricCard({
   value,
   trend,
   icon,
+  iconColor = 'var(--pri)',
+  iconBg = 'var(--pris)',
   isLoading = false,
   error,
   className,
@@ -57,11 +61,19 @@ export const MetricCard = memo(function MetricCard({
   }
 
   return (
-    <Card className={cn('border border-[var(--bdr)] bg-[var(--sur)]', className)}>
-      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-3 pt-4 px-5'>
+    <Card
+      className={cn(
+        'gap-0 border border-[var(--bdr)] bg-[var(--sur)] py-0',
+        className
+      )}
+    >
+      <CardHeader className='flex flex-row items-center justify-between space-y-0 px-5 pt-4 pb-3'>
         <p className='text-xs font-medium text-[var(--t2)]'>{title}</p>
         {icon && (
-          <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--pris)]'>
+          <div
+            className='flex h-8 w-8 items-center justify-center rounded-lg'
+            style={{ backgroundColor: iconBg, color: iconColor }}
+          >
             {icon}
           </div>
         )}

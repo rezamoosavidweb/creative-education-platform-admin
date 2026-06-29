@@ -48,16 +48,6 @@ export type ActivityData = ChartDataPoint & {
   count: number
 }
 
-export type Product = {
-  id: string
-  name: string
-  sku: string
-  price: number
-  sales: number
-  revenue: number
-  trend: TrendDirection
-}
-
 export type Activity = {
   id: string
   type: 'sale' | 'user_signup' | 'payment' | 'error'
@@ -78,14 +68,3 @@ export type DashboardFilter = {
   productCategory?: string
 }
 
-export type DashboardContextType = {
-  stats: DashboardStats | null
-  revenueData: RevenueData[]
-  activityData: ActivityData[]
-  topProducts: Product[]
-  recentActivities: Activity[]
-  isLoading: boolean
-  error: string | null
-  filters: DashboardFilter
-  setFilters: (filters: DashboardFilter) => void
-}
