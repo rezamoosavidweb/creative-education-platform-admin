@@ -61,12 +61,14 @@ export const sidebarData: SidebarData = {
           title: 'Tasks',
           url: '/tasks',
           badge: '20',
+          badgeVariant: 'primary',
           icon: ListTodo,
         },
         {
           title: 'Chat',
           url: '/chats',
           badge: '4',
+          badgeVariant: 'destructive',
           icon: MessagesSquare,
         },
       ],
@@ -78,6 +80,7 @@ export const sidebarData: SidebarData = {
           title: 'Users',
           url: '/users',
           badge: '2.4k',
+          badgeVariant: 'neutral',
           icon: Users,
         },
         {
@@ -149,6 +152,7 @@ export const sidebarData: SidebarData = {
           title: 'Notifications',
           url: '/notifications',
           badge: '3',
+          badgeVariant: 'destructive',
           icon: Bell,
         },
         {

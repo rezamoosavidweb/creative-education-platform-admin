@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 import {
+  type NavBadgeVariant,
   type NavCollapsible,
   type NavItem,
   type NavLink,
@@ -38,7 +39,9 @@ export function NavGroup({ title, items }: NavGroupProps) {
   const href = useLocation({ select: (location) => location.href })
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{title}</SidebarGroupLabel>
+      <SidebarGroupLabel className='text-[10.5px] font-semibold tracking-[0.08em] text-[var(--t3)] uppercase'>
+        {title}
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           const key = `${item.title}-${item.url}`
@@ -58,8 +61,23 @@ export function NavGroup({ title, items }: NavGroupProps) {
   )
 }
 
-function NavBadge({ children }: { children: ReactNode }) {
-  return <Badge className='rounded-full px-1 py-0 text-xs'>{children}</Badge>
+function NavBadge({
+  children,
+  variant = 'primary',
+}: {
+  children: ReactNode
+  variant?: NavBadgeVariant
+}) {
+  const variantClass: Record<NavBadgeVariant, string> = {
+    primary: 'bg-[var(--pri)] text-white border-transparent',
+    destructive: 'bg-[var(--err)] text-white border-transparent',
+    neutral: 'bg-[var(--sur3)] text-[var(--t2)] border-transparent',
+  }
+  return (
+    <Badge className={`rounded-full px-1.5 py-0 text-xs ${variantClass[variant]}`}>
+      {children}
+    </Badge>
+  )
 }
 
 function SidebarMenuLink({ item, href }: { item: NavLink; href: string }) {
@@ -74,7 +92,9 @@ function SidebarMenuLink({ item, href }: { item: NavLink; href: string }) {
         <Link to={item.url} onClick={() => setOpenMobile(false)}>
           {item.icon && <item.icon />}
           <span>{item.title}</span>
-          {item.badge && <NavBadge>{item.badge}</NavBadge>}
+          {item.badge && (
+            <NavBadge variant={item.badgeVariant}>{item.badge}</NavBadge>
+          )}
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
@@ -100,7 +120,9 @@ function SidebarMenuCollapsible({
           <SidebarMenuButton tooltip={item.title}>
             {item.icon && <item.icon />}
             <span>{item.title}</span>
-            {item.badge && <NavBadge>{item.badge}</NavBadge>}
+            {item.badge && (
+              <NavBadge variant={item.badgeVariant}>{item.badge}</NavBadge>
+            )}
             <ChevronRight className='ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180' />
           </SidebarMenuButton>
         </CollapsibleTrigger>
@@ -144,7 +166,9 @@ function SidebarMenuCollapsedDropdown({
           >
             {item.icon && <item.icon />}
             <span>{item.title}</span>
-            {item.badge && <NavBadge>{item.badge}</NavBadge>}
+            {item.badge && (
+              <NavBadge variant={item.badgeVariant}>{item.badge}</NavBadge>
+            )}
             <ChevronRight className='ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
           </SidebarMenuButton>
         </DropdownMenuTrigger>

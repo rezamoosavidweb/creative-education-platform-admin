@@ -41,7 +41,7 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
                 <activeTeam.logo className='size-4' />
               </div>
               <div className='grid flex-1 text-start text-sm leading-tight'>
-                <span className='truncate font-semibold'>
+                <span className='truncate font-semibold text-[var(--t1)]'>
                   {activeTeam.name}
                 </span>
                 <span className='truncate text-xs'>{activeTeam.plan}</span>

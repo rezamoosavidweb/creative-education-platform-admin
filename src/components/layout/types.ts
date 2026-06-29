@@ -12,9 +12,12 @@ type Team = {
   plan: string
 }
 
+type NavBadgeVariant = 'primary' | 'destructive' | 'neutral'
+
 type BaseNavItem = {
   title: string
   badge?: string
+  badgeVariant?: NavBadgeVariant
   icon?: React.ElementType
 }
 
@@ -41,4 +44,11 @@ type SidebarData = {
   navGroups: NavGroup[]
 }
 
-export type { SidebarData, NavGroup, NavItem, NavCollapsible, NavLink }
+export type {
+  SidebarData,
+  NavGroup,
+  NavItem,
+  NavCollapsible,
+  NavLink,
+  NavBadgeVariant,
+}
