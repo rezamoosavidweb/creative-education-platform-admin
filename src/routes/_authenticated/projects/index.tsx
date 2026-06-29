@@ -1,11 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { Projects } from '@/features/projects'
 
 export const Route = createFileRoute('/_authenticated/projects/')({
-  component: () => (
-    <PlaceholderPage
-      title='Projects'
-      description='Track active, completed, and archived workspace projects.'
-    />
-  ),
+  component: Projects,
 })
