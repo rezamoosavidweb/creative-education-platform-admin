@@ -23,7 +23,7 @@ export function AppSidebar() {
          /* if you want to use the normal app title instead of TeamSwitch dropdown */}
         {/* <AppTitle /> */}
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className='gap-0'>
         {sidebarData.navGroups.map((props) => (
           <NavGroup key={props.title} {...props} />
         ))}

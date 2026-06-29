@@ -1,11 +1,7 @@
 import { useState } from 'react'
-import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
 import { StatCard } from '@/components/stat-card'
-import { ThemeSwitch } from '@/components/theme-switch'
 import { EventsByHourChart } from './components/events-by-hour-chart'
 import { TimeRangeToggle } from './components/time-range-toggle'
 import { TopPagesTable } from './components/top-pages-table'
@@ -25,12 +21,7 @@ export function Analytics() {
 
   return (
     <>
-      <Header fixed>
-        <Search className='me-auto' />
-        <ThemeSwitch />
-        <ConfigDrawer />
-        <ProfileDropdown />
-      </Header>
+      <Header fixed />
 
       <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
         <div className='flex flex-wrap items-end justify-between gap-2'>
