@@ -1,7 +1,6 @@
+import { ChevronDown } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import useDialogState from '@/hooks/use-dialog-state'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,19 +20,34 @@ export function ProfileDropdown() {
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-            <Avatar className='h-8 w-8'>
-              <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-              <AvatarFallback>SN</AvatarFallback>
-            </Avatar>
-          </Button>
+          <button
+            type='button'
+            className='flex items-center gap-2 rounded-lg p-1 ps-1.5 transition-colors hover:bg-[var(--sur3)]'
+          >
+            <span
+              className='flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold text-white'
+              style={{
+                backgroundImage:
+                  'linear-gradient(135deg, var(--pri) 0%, #0ea5c8 100%)',
+              }}
+            >
+              JD
+            </span>
+            <span className='hidden text-start leading-tight sm:block'>
+              <span className='block text-[12.5px] font-semibold text-[var(--t1)]'>
+                Jordan Davis
+              </span>
+              <span className='block text-[11px] text-[var(--t3)]'>Admin</span>
+            </span>
+            <ChevronDown className='hidden h-3.5 w-3.5 text-[var(--t3)] sm:block' />
+          </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-56' align='end' forceMount>
           <DropdownMenuLabel className='font-normal'>
             <div className='flex flex-col gap-1.5'>
-              <p className='text-sm leading-none font-medium'>satnaing</p>
+              <p className='text-sm leading-none font-medium'>Jordan Davis</p>
               <p className='text-xs leading-none text-muted-foreground'>
-                satnaingdev@gmail.com
+                jordan@acme.com
               </p>
             </div>
           </DropdownMenuLabel>

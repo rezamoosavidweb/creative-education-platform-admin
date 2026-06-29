@@ -16,7 +16,7 @@ export const ChatContactList = memo(function ChatContactList({
   onSelect,
 }: ChatContactListProps) {
   return (
-    <div className='flex w-full flex-col border-e border-[var(--bdr)] sm:w-72 lg:w-80'>
+    <div className='flex w-full flex-col border-e border-[var(--bdr)] bg-[var(--sur)] sm:w-[300px]'>
       <div className='border-b border-[var(--bdr)] p-4'>
         <h2 className='mb-3 text-lg font-bold text-[var(--t1)]'>
           Direct Messages
@@ -55,7 +55,7 @@ export const ChatContactList = memo(function ChatContactList({
                   {getInitials(contact.name)}
                 </span>
                 {contact.online && (
-                  <span className='absolute -end-0.5 -bottom-0.5 h-[11px] w-[11px] rounded-full border-2 border-[var(--sb)] bg-[var(--ok)]' />
+                  <span className='absolute -end-0.5 -bottom-0.5 h-[11px] w-[11px] rounded-full border-2 border-[var(--sur)] bg-[var(--ok)]' />
                 )}
               </div>
               <div className='min-w-0 flex-1'>

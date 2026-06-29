@@ -32,9 +32,9 @@ export const ChatConversation = memo(function ChatConversation({
   messages,
 }: ChatConversationProps) {
   return (
-    <div className='flex flex-1 flex-col'>
+    <div className='flex flex-1 flex-col bg-[var(--bg)]'>
       {/* Header */}
-      <div className='flex items-center justify-between border-b border-[var(--bdr)] px-5 py-3'>
+      <div className='flex items-center justify-between border-b border-[var(--bdr)] bg-[var(--sur)] px-5 py-3'>
         <div className='flex items-center gap-3'>
           <div className='relative'>
             <span
@@ -44,7 +44,7 @@ export const ChatConversation = memo(function ChatConversation({
               {getInitials(contact.name)}
             </span>
             {contact.online && (
-              <span className='absolute -end-0.5 -bottom-0.5 h-[10px] w-[10px] rounded-full border-2 border-[var(--sb)] bg-[var(--ok)]' />
+              <span className='absolute -end-0.5 -bottom-0.5 h-[10px] w-[10px] rounded-full border-2 border-[var(--sur)] bg-[var(--ok)]' />
             )}
           </div>
           <div>
@@ -103,7 +103,7 @@ export const ChatConversation = memo(function ChatConversation({
       </div>
 
       {/* Compose */}
-      <div className='border-t border-[var(--bdr)] p-4'>
+      <div className='border-t border-[var(--bdr)] bg-[var(--sur)] p-4'>
         <form
           className='flex items-center gap-2'
           onSubmit={(event) => event.preventDefault()}
@@ -114,7 +114,7 @@ export const ChatConversation = memo(function ChatConversation({
           <input
             type='text'
             placeholder='Type a message...'
-            className='h-10 flex-1 rounded-full border border-[var(--bdr2)] bg-[var(--sur)] px-4 text-[13.5px] text-[var(--t1)] outline-none placeholder:text-[var(--t3)] focus:border-[var(--pri)]'
+            className='h-10 flex-1 rounded-full border-[1.5px] border-[var(--bdr2)] bg-[var(--sur2)] px-4 text-[13.5px] text-[var(--t1)] outline-none placeholder:text-[var(--t3)] focus:border-[var(--pri)]'
           />
           <ActionButton label='Emoji'>
             <Smile className='h-[18px] w-[18px]' />

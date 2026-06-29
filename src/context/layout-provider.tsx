@@ -9,8 +9,9 @@ const LAYOUT_COLLAPSIBLE_COOKIE_NAME = 'layout_collapsible'
 const LAYOUT_VARIANT_COOKIE_NAME = 'layout_variant'
 const LAYOUT_COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 days
 
-// Default values
-const DEFAULT_VARIANT = 'inset'
+// Default values — 'sidebar' (not 'inset') to match the design: a full-bleed
+// main area with a bordered sidebar, rather than a floating inset card.
+const DEFAULT_VARIANT = 'sidebar'
 const DEFAULT_COLLAPSIBLE = 'icon'
 
 type LayoutContextType = {
