@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Loader2, LogIn } from 'lucide-react'
@@ -7,6 +6,7 @@ import { toast } from 'sonner'
 import { IconFacebook, IconGithub } from '@/assets/brand-icons'
 import { getApiErrorMessage } from '@/lib/api'
 import { getSafeAuthRedirect, useLogin, type LoginRequest } from '@/lib/auth'
+import { useApiForm } from '@/lib/forms'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -42,7 +42,7 @@ export function UserAuthForm({
   const navigate = useNavigate()
   const loginMutation = useLogin()
 
-  const form = useForm<LoginRequest>({
+  const { form, handleApiSubmit } = useApiForm<LoginRequest>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
@@ -50,8 +50,10 @@ export function UserAuthForm({
     },
   })
 
-  function onSubmit(data: LoginRequest) {
-    toast.promise(loginMutation.mutateAsync(data), {
+  const onSubmit = handleApiSubmit((data) => {
+    const loginPromise = loginMutation.mutateAsync(data)
+
+    toast.promise(loginPromise, {
       loading: 'Signing in...',
       success: () => {
         const targetPath = getSafeAuthRedirect(redirectTo)
@@ -61,12 +63,14 @@ export function UserAuthForm({
       },
       error: getApiErrorMessage,
     })
-  }
+
+    return loginPromise
+  })
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className={cn('grid gap-3', className)}
         {...props}
       >

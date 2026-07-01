@@ -33,6 +33,8 @@ the UI.
 - Use `Header`, `Main`, layout/sidebar components, `StatCard`, `StatusPill`,
   `ConfirmDialog`, `SelectDropdown`, and `components/data-table/*` where they fit.
 - Use `react-hook-form` + `zod` + shadcn `Form` primitives for forms.
+- For backend-backed forms, use `src/lib/forms/` helpers with the existing form
+  primitives.
 - Use TanStack Query for server state; feature services go in
   `features/<domain>/services/`, hooks in `features/<domain>/hooks/`.
 
@@ -86,6 +88,10 @@ the UI.
   rendering lives in `components/data-table/server-data-table.tsx`. Reuse them
   before creating feature-specific loading, error, empty, cursor pagination, or
   server table components.
+- API form infrastructure lives in `src/lib/forms/`. Use `useApiForm`,
+  `applyApiValidationErrors`, `readApiValidationErrors`, and
+  `localizeApiFormMessage` for backend-backed forms; do not duplicate server
+  validation mapping or mutation submit handling in feature modules.
 
 ## Phase 0 Foundation
 

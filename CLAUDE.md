@@ -231,6 +231,12 @@ sorting, or filtering for backend lists.
 existing table primitives and server-table adapters. Use these before creating
 feature-specific loading, error, empty, cursor pagination, or server table UI.
 
+**Form foundation:** `src/lib/forms/` owns API form integration. Use
+`useApiForm`, `applyApiValidationErrors`, `readApiValidationErrors`, and
+`localizeApiFormMessage` to connect react-hook-form forms to backend validation
+and `ApiError` responses. Keep using shadcn `Form` primitives; do not create
+feature-local server error mappers or duplicate mutation submit handling.
+
 **Target pattern (build this, don't scatter fetch calls):**
 
 1. **Generated SDK / contract:** one generated OpenAPI source for DTOs, enums,
@@ -417,6 +423,8 @@ server-side when the endpoint supports it.
 `features/auth/sign-in/components/user-auth-form.tsx` and
 `features/settings/*/**-form.tsx`. For real writes, submit via a react-query
 `useMutation` calling a `services/` function (not the template's mock `sleep`).
+For backend-backed forms, prefer `useApiForm` from `src/lib/forms/` over raw
+`useForm` so server validation mapping and submit error handling stay consistent.
 
 ## Naming Conventions & Coding Rules
 
