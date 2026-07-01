@@ -70,6 +70,11 @@ export const sidebarData: SidebarData = {
           icon: Lock,
         },
         {
+          title: 'Verification',
+          url: '/identity-verification',
+          icon: ShieldCheck,
+        },
+        {
           title: 'Teams',
           url: '/teams',
           icon: UserCircle,

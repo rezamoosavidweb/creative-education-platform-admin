@@ -39,6 +39,7 @@ import { Route as AuthenticatedNotificationsIndexRouteImport } from './routes/_a
 import { Route as AuthenticatedMonitoringIndexRouteImport } from './routes/_authenticated/monitoring/index'
 import { Route as AuthenticatedLogsIndexRouteImport } from './routes/_authenticated/logs/index'
 import { Route as AuthenticatedIntegrationsIndexRouteImport } from './routes/_authenticated/integrations/index'
+import { Route as AuthenticatedIdentityVerificationIndexRouteImport } from './routes/_authenticated/identity-verification/index'
 import { Route as AuthenticatedHelpCenterIndexRouteImport } from './routes/_authenticated/help-center/index'
 import { Route as AuthenticatedChatsIndexRouteImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
@@ -214,6 +215,12 @@ const AuthenticatedIntegrationsIndexRoute =
     path: '/integrations/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedIdentityVerificationIndexRoute =
+  AuthenticatedIdentityVerificationIndexRouteImport.update({
+    id: '/identity-verification/',
+    path: '/identity-verification/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedHelpCenterIndexRoute =
   AuthenticatedHelpCenterIndexRouteImport.update({
     id: '/help-center/',
@@ -344,6 +351,7 @@ export interface FileRoutesByFullPath {
   '/billing/': typeof AuthenticatedBillingIndexRoute
   '/chats/': typeof AuthenticatedChatsIndexRoute
   '/help-center/': typeof AuthenticatedHelpCenterIndexRoute
+  '/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations/': typeof AuthenticatedIntegrationsIndexRoute
   '/logs/': typeof AuthenticatedLogsIndexRoute
   '/monitoring/': typeof AuthenticatedMonitoringIndexRoute
@@ -389,6 +397,7 @@ export interface FileRoutesByTo {
   '/billing': typeof AuthenticatedBillingIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
+  '/identity-verification': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations': typeof AuthenticatedIntegrationsIndexRoute
   '/logs': typeof AuthenticatedLogsIndexRoute
   '/monitoring': typeof AuthenticatedMonitoringIndexRoute
@@ -439,6 +448,7 @@ export interface FileRoutesById {
   '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
+  '/_authenticated/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/_authenticated/integrations/': typeof AuthenticatedIntegrationsIndexRoute
   '/_authenticated/logs/': typeof AuthenticatedLogsIndexRoute
   '/_authenticated/monitoring/': typeof AuthenticatedMonitoringIndexRoute
@@ -487,6 +497,7 @@ export interface FileRouteTypes {
     | '/billing/'
     | '/chats/'
     | '/help-center/'
+    | '/identity-verification/'
     | '/integrations/'
     | '/logs/'
     | '/monitoring/'
@@ -532,6 +543,7 @@ export interface FileRouteTypes {
     | '/billing'
     | '/chats'
     | '/help-center'
+    | '/identity-verification'
     | '/integrations'
     | '/logs'
     | '/monitoring'
@@ -581,6 +593,7 @@ export interface FileRouteTypes {
     | '/_authenticated/billing/'
     | '/_authenticated/chats/'
     | '/_authenticated/help-center/'
+    | '/_authenticated/identity-verification/'
     | '/_authenticated/integrations/'
     | '/_authenticated/logs/'
     | '/_authenticated/monitoring/'
@@ -824,6 +837,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIntegrationsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/identity-verification/': {
+      id: '/_authenticated/identity-verification/'
+      path: '/identity-verification'
+      fullPath: '/identity-verification/'
+      preLoaderRoute: typeof AuthenticatedIdentityVerificationIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/help-center/': {
       id: '/_authenticated/help-center/'
       path: '/help-center'
@@ -982,6 +1002,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
+  AuthenticatedIdentityVerificationIndexRoute: typeof AuthenticatedIdentityVerificationIndexRoute
   AuthenticatedIntegrationsIndexRoute: typeof AuthenticatedIntegrationsIndexRoute
   AuthenticatedLogsIndexRoute: typeof AuthenticatedLogsIndexRoute
   AuthenticatedMonitoringIndexRoute: typeof AuthenticatedMonitoringIndexRoute
@@ -1010,6 +1031,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
+  AuthenticatedIdentityVerificationIndexRoute:
+    AuthenticatedIdentityVerificationIndexRoute,
   AuthenticatedIntegrationsIndexRoute: AuthenticatedIntegrationsIndexRoute,
   AuthenticatedLogsIndexRoute: AuthenticatedLogsIndexRoute,
   AuthenticatedMonitoringIndexRoute: AuthenticatedMonitoringIndexRoute,
