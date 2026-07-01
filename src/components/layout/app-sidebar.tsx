@@ -2,6 +2,16 @@ import {
   filterNavGroupsByCapabilities,
   useCapabilities,
 } from '@/lib/capabilities'
+import {
+  getAuthUserAvatar,
+  getAuthUserDisplayName,
+  getAuthUserEmail,
+  getAuthUserInitials,
+  useCurrentOrganization,
+  useCurrentOrganizations,
+  useCurrentUser,
+  useSetCurrentOrganizationId,
+} from '@/lib/auth'
 import { useLayout } from '@/context/layout-provider'
 import {
   Sidebar,
@@ -20,15 +30,29 @@ import { TeamSwitcher } from './team-switcher'
 export function AppSidebar() {
   const { collapsible, variant } = useLayout()
   const capabilities = useCapabilities()
+  const user = useCurrentUser()
+  const organizations = useCurrentOrganizations()
+  const currentOrganization = useCurrentOrganization()
+  const setCurrentOrganizationId = useSetCurrentOrganizationId()
   const navGroups = filterNavGroupsByCapabilities(
     sidebarData.navGroups,
     capabilities
   )
+  const navUser = {
+    avatar: getAuthUserAvatar(user),
+    email: getAuthUserEmail(user),
+    initials: getAuthUserInitials(user),
+    name: getAuthUserDisplayName(user),
+  }
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
       <SidebarHeader className='gap-2'>
-        <TeamSwitcher teams={sidebarData.teams} />
+        <TeamSwitcher
+          currentOrganization={currentOrganization}
+          organizations={organizations}
+          onOrganizationChange={setCurrentOrganizationId}
+        />
         <SidebarSearch />
       </SidebarHeader>
       <SidebarContent className='gap-0'>
@@ -37,7 +61,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={sidebarData.user} />
+        <NavUser user={navUser} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

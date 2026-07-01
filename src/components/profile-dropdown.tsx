@@ -1,6 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronDown } from 'lucide-react'
-import { useCurrentUser } from '@/lib/auth'
+import {
+  getAuthUserDisplayName,
+  getAuthUserEmail,
+  getAuthUserInitials,
+  getAuthUserRoleLabel,
+  useCurrentUser,
+} from '@/lib/auth'
 import useDialogState from '@/hooks/use-dialog-state'
 import {
   DropdownMenu,
@@ -17,10 +23,10 @@ import { SignOutDialog } from '@/components/sign-out-dialog'
 export function ProfileDropdown() {
   const [open, setOpen] = useDialogState()
   const user = useCurrentUser()
-  const displayName = getDisplayName(user)
-  const email = user?.email ?? 'account'
-  const role = user?.role ?? 'User'
-  const initials = getInitials(displayName)
+  const displayName = getAuthUserDisplayName(user)
+  const email = getAuthUserEmail(user)
+  const role = getAuthUserRoleLabel(user)
+  const initials = getAuthUserInitials(user)
 
   return (
     <>
@@ -92,20 +98,4 @@ export function ProfileDropdown() {
       <SignOutDialog open={!!open} onOpenChange={setOpen} />
     </>
   )
-}
-
-function getDisplayName(user: ReturnType<typeof useCurrentUser>): string {
-  const name = [user?.firstName, user?.lastName].filter(Boolean).join(' ')
-  return name || user?.email || 'Account'
-}
-
-function getInitials(value: string): string {
-  const words = value.trim().split(/\s+/).filter(Boolean)
-  const initials = words
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase()
-
-  return initials || 'A'
 }

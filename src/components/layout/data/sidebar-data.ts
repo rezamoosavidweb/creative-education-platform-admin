@@ -19,35 +19,10 @@ import {
   Terminal,
   UserCircle,
   Users,
-  AudioWaveform,
-  Command,
-  GalleryVerticalEnd,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
-  user: {
-    name: 'Jordan Davis',
-    email: 'jordan@acme.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  teams: [
-    {
-      name: 'Acme Corp',
-      logo: Command,
-      plan: 'Professional Plan',
-    },
-    {
-      name: 'Acme Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Startup',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-  ],
   navGroups: [
     {
       title: 'General',

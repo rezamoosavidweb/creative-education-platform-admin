@@ -1,18 +1,6 @@
 import { type LinkProps } from '@tanstack/react-router'
 import type { CapabilityRequirement } from '@/lib/capabilities'
 
-type User = {
-  name: string
-  email: string
-  avatar: string
-}
-
-type Team = {
-  name: string
-  logo: React.ElementType
-  plan: string
-}
-
 type NavBadgeVariant = 'primary' | 'destructive' | 'neutral'
 
 type BaseNavItem = {
@@ -41,8 +29,6 @@ type NavGroup = {
 }
 
 type SidebarData = {
-  user: User
-  teams: Team[]
   navGroups: NavGroup[]
 }
 

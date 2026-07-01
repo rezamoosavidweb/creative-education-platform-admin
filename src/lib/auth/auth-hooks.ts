@@ -23,6 +23,14 @@ export function useCurrentOrganization(): AuthOrganization | null {
   })
 }
 
+export function useCurrentOrganizations(): AuthOrganization[] {
+  return useAuthStore((state) => state.auth.organizations)
+}
+
+export function useSetCurrentOrganizationId() {
+  return useAuthStore((state) => state.auth.setCurrentOrganizationId)
+}
+
 export function useCurrentCapabilities(): AuthCapability[] {
   return useAuthStore((state) => state.auth.capabilities)
 }

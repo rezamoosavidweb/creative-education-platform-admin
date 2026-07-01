@@ -1,8 +1,9 @@
 import { memo } from 'react'
 import { Download, Percent, Plus, TrendingUp, Users, Zap } from 'lucide-react'
+import { getAuthUserGreetingName, useCurrentUser } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
 import { MetricCard } from './cards'
-import { RevenueChart, ActivityChart } from './charts'
+import { ActivityChart, RevenueChart } from './charts'
 import { RecentActivityFeed } from './widgets/recent-activity-feed'
 import { SystemHealthCard } from './widgets/system-health-card'
 import { useDashboardData } from '../hooks/use-dashboard-data'
@@ -25,6 +26,8 @@ function generateSparklineData(): SparklineData[] {
 export const DashboardLayout = memo(function DashboardLayout() {
   const { stats, revenueData, activityData, recentActivities, isLoading, error } =
     useDashboardData()
+  const user = useCurrentUser()
+  const greetingName = getAuthUserGreetingName(user)
 
   const revenueSparkline = generateSparklineData()
   const usersSparkline = generateSparklineData()
@@ -37,10 +40,10 @@ export const DashboardLayout = memo(function DashboardLayout() {
       <div className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
         <div>
           <h1 className='text-2xl font-bold tracking-tight'>
-            Good morning, Jordan 👋
+            Good morning, {greetingName}
           </h1>
           <p className='mt-1 text-[var(--t2)]'>
-            {TODAY} · Here&apos;s what&apos;s happening in your workspace.
+            {TODAY} - Here&apos;s what&apos;s happening in your workspace.
           </p>
         </div>
         <div className='flex items-center gap-2'>

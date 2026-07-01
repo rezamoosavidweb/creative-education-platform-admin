@@ -19,12 +19,23 @@ export {
   useActiveSessions,
   useCurrentCapabilities,
   useCurrentOrganization,
+  useCurrentOrganizations,
   useCurrentUser,
   useIsAuthenticated,
   useLogin,
   useLogout,
   useRevokeSession,
+  useSetCurrentOrganizationId,
 } from './auth-hooks'
+export {
+  getAuthOrganizationPlanLabel,
+  getAuthUserAvatar,
+  getAuthUserDisplayName,
+  getAuthUserEmail,
+  getAuthUserGreetingName,
+  getAuthUserInitials,
+  getAuthUserRoleLabel,
+} from './current-user-display'
 export type {
   AuthCapability,
   AuthContext,
