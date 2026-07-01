@@ -1,194 +1,64 @@
-import { useEffect, useState } from 'react'
 import {
-  type SortingState,
-  type VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
-import { type NavigateFn, useTableUrlState } from '@/hooks/use-table-url-state'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
-import { roles } from '../data/data'
-import { type User } from '../data/schema'
-import { DataTableBulkActions } from './data-table-bulk-actions'
-import { usersColumns as columns } from './users-columns'
+  getPageServerTableMeta,
+  getServerTableStatus,
+  ServerDataTable,
+  useServerTableState,
+} from '@/components/data-table'
+import { type NavigateFn } from '@/hooks/use-table-url-state'
+import { useUsersList } from '../hooks/use-users-list'
+import { toUsersListQuery } from '../services/users-query'
+import { usersColumns } from './users-columns'
 
-type DataTableProps = {
-  data: User[]
+type UsersTableProps = {
   search: Record<string, unknown>
   navigate: NavigateFn
 }
 
-export function UsersTable({ data, search, navigate }: DataTableProps) {
-  // Local UI-only states
-  const [rowSelection, setRowSelection] = useState({})
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [sorting, setSorting] = useState<SortingState>([])
-
-  // Local state management for table (uncomment to use local-only state, not synced with URL)
-  // const [columnFilters, onColumnFiltersChange] = useState<ColumnFiltersState>([])
-  // const [pagination, onPaginationChange] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
-
-  // Synced with URL states (keys/defaults mirror users route search schema)
-  const {
-    columnFilters,
-    onColumnFiltersChange,
-    pagination,
-    onPaginationChange,
-    ensurePageInRange,
-  } = useTableUrlState({
-    search,
+export function UsersTable({ search, navigate }: UsersTableProps) {
+  const tableState = useServerTableState({
     navigate,
-    pagination: { defaultPage: 1, defaultPageSize: 10 },
-    globalFilter: { enabled: false },
-    columnFilters: [
-      // username per-column text filter
-      { columnId: 'username', searchKey: 'username', type: 'string' },
-      { columnId: 'status', searchKey: 'status', type: 'array' },
-      { columnId: 'role', searchKey: 'role', type: 'array' },
-    ],
-  })
-
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      sorting,
-      pagination,
-      rowSelection,
-      columnFilters,
-      columnVisibility,
+    pagination: {
+      defaultPage: 1,
+      defaultPageSize: 10,
+      pageKey: 'page',
+      pageSizeKey: 'take',
     },
-    enableRowSelection: true,
-    onPaginationChange,
-    onColumnFiltersChange,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnVisibilityChange: setColumnVisibility,
-    getPaginationRowModel: getPaginationRowModel(),
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+    search,
+    serverSearch: {
+      debounceMs: 300,
+      enabled: true,
+      key: 'q',
+    },
+    sorting: {
+      defaultSorting: [{ desc: true, id: 'createdAt' }],
+      directionKey: 'order',
+      fieldKey: 'sortBy',
+      serializeDirection: (desc) => (desc ? 'DESC' : 'ASC'),
+    },
   })
-
-  useEffect(() => {
-    ensurePageInRange(table.getPageCount())
-  }, [table, ensurePageInRange])
+  const usersQuery = useUsersList(toUsersListQuery(tableState.query))
+  const list = usersQuery.data
+  const rows = list?.items ?? []
 
   return (
-    <div
-      className={cn(
-        'max-sm:has-[div[role="toolbar"]]:mb-16', // Add margin bottom to the table on mobile when the toolbar is visible
-        'flex flex-1 flex-col gap-4'
-      )}
-    >
-      <DataTableToolbar
-        table={table}
-        searchPlaceholder='Filter users...'
-        searchKey='username'
-        filters={[
-          {
-            columnId: 'status',
-            title: 'Status',
-            options: [
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' },
-              { label: 'Invited', value: 'invited' },
-              { label: 'Suspended', value: 'suspended' },
-            ],
-          },
-          {
-            columnId: 'role',
-            title: 'Role',
-            options: roles.map((role) => ({ ...role })),
-          },
-        ]}
-      />
-      <div className='overflow-hidden rounded-md border bg-card'>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className='group/row'>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className={cn(
-                        'bg-muted',
-                        header.column.columnDef.meta?.className,
-                        header.column.columnDef.meta?.thClassName
-                      )}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className='group/row'
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn(
-                        'bg-card group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
-                        cell.column.columnDef.meta?.className,
-                        cell.column.columnDef.meta?.tdClassName
-                      )}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center'
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <DataTablePagination table={table} className='mt-auto' />
-      <DataTableBulkActions table={table} />
-    </div>
+    <ServerDataTable
+      columns={usersColumns}
+      data={rows}
+      emptyDescription='No users match the current search.'
+      emptyTitle='No users found'
+      getRowId={(row) => row.id}
+      meta={getPageServerTableMeta(list)}
+      state={tableState}
+      status={getServerTableStatus({
+        error: usersQuery.error,
+        isFetching: usersQuery.isFetching,
+        isLoading: usersQuery.isLoading,
+        itemCount: rows.length,
+        refetch: usersQuery.refetch,
+      })}
+      toolbar={{
+        searchPlaceholder: 'Search users...',
+      }}
+    />
   )
 }

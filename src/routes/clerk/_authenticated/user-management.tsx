@@ -16,20 +16,19 @@ import { Main } from '@/components/layout/main'
 import { LearnMore } from '@/components/learn-more'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import { UsersDialogs } from '@/features/users/components/users-dialogs'
-import { UsersPrimaryButtons } from '@/features/users/components/users-primary-buttons'
-import { UsersProvider } from '@/features/users/components/users-provider'
-import { UsersTable } from '@/features/users/components/users-table'
-import { users } from '@/features/users/data/users'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 export const Route = createFileRoute('/clerk/_authenticated/user-management')({
   component: UserManagement,
 })
 
 function UserManagement() {
-  const search = Route.useSearch()
-  const navigate = Route.useNavigate()
-
   const [opened, setOpened] = useState(true)
   const { isLoaded, isSignedIn } = useAuth()
 
@@ -46,7 +45,7 @@ function UserManagement() {
   }
 
   return (
-    <UsersProvider>
+    <>
       <Header fixed>
         <Search className='me-auto' />
         <ThemeSwitch />
@@ -85,13 +84,22 @@ function UserManagement() {
               </LearnMore>
             </div>
           </div>
-          <UsersPrimaryButtons />
         </div>
-        <UsersTable data={users} navigate={navigate} search={search} />
+        <Card>
+          <CardHeader>
+            <CardTitle>Backend user management</CardTitle>
+            <CardDescription>
+              The primary Users page is backed by the platform API.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild>
+              <Link to='/users'>Open Users</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </Main>
-
-      <UsersDialogs />
-    </UsersProvider>
+    </>
   )
 }
 
