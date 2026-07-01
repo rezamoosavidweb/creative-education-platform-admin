@@ -12,7 +12,7 @@ heavily restyled to the in-house **"Enterprise Admin"** design system
 
 **There is ONE app, not two.** Do not build a separate "Admin Panel" and
 "Instructor Panel". The same UI adapts to the authenticated user via
-**role + capability-based navigation** (a user can simultaneously be a learner,
+**capability-driven navigation** (a user can simultaneously be a learner,
 instructor, practitioner/musician, studio owner, org admin, and platform admin).
 
 **Backend is the source of truth** (`../api`). The frontend is a **thin client**:
@@ -20,12 +20,14 @@ business rules, permissions, and derivations live in the backend. Never
 re-implement backend logic here, and never invent a different business model.
 
 > **Current reality (read before planning any feature):** the app still runs on
-> the template's **mock data** and **mock auth**. There is **no HTTP/API layer,
-> no real login, and the sidebar is a static hard-coded list** whose pages
-> (Tasks, Chat, Projects, Teams, API Keys, …) map to the *template*, not to the
-> backend domains (Courses, Offerings, Orders, Jobs, Services, Events, Profiles,
-> …). Making this a real thin client over `../api` is the work; see
-> "Backend integration contract" and "Current state vs. target".
+> the template's **mock data** and **mock auth**. Generated OpenAPI TypeScript
+> types exist at `src/lib/api/schema.d.ts`, but there is **no runtime HTTP/API
+> client, no real login, no refresh-token handling, and the sidebar is a static
+> hard-coded list** whose pages (Tasks, Chat, Projects, Teams, API Keys, etc.)
+> mostly map to the *template*, not to backend domains (Courses, Offerings,
+> Orders, Jobs, Services, Events, Profiles, etc.). Making this a real thin
+> client over `../api` is the work; see "Backend integration contract" and
+> "Current state vs. target".
 
 ## Golden Rules (do / don't)
 
@@ -34,11 +36,13 @@ re-implement backend logic here, and never invent a different business model.
 - **Reuse before creating.** Search `src/components/` and `src/features/*/components`
   first. Only build a component when none fits, and build the smallest reusable one.
 - **Thin client.** Drive routing, menus, page visibility, and actions from backend
-  **capabilities + role**, not from hard-coded assumptions.
+  **capabilities** and authenticated context, not from hard-coded assumptions.
 - **Match surrounding code.** Mirror existing file names, folder shape, imports,
   and Tailwind/token usage. Minimize churn and duplication; avoid over-engineering.
-- **The API contract is `../api/openapi.json`.** Treat DTOs there as authoritative
-  request/response shapes. Do not hand-write types that drift from it.
+- **OpenAPI is the only API source of truth.** DTOs, enums, request bodies,
+  response bodies, API method signatures, and generated error types (when
+  available) must come from the single generated OpenAPI SDK/contract. Do not
+  hand-write API models or duplicate backend DTOs.
 
 ## Package Manager & Commands
 
@@ -65,6 +69,11 @@ pnpm lint && pnpm build && pnpm test && pnpm knip && pnpm format:check
 `pnpm build` runs `tsc -b`, so it is also the type-check gate. Browser tests need
 Chromium once: `pnpm test:browser:install`.
 
+Phase 0 must add a dedicated `typecheck` script before feature implementation so
+each increment can run typecheck, lint, build, runtime verification, and tests as
+separate gates. Keep using pnpm as the package manager even when task wording
+uses generic `npm run ...` phrasing.
+
 ## Tech Stack
 
 | Area | Choice |
@@ -77,7 +86,7 @@ Chromium once: `pnpm test:browser:install`.
 | Forms | **react-hook-form** + **zod v4** (`@hookform/resolvers`) |
 | UI kit | **shadcn/ui** (new-york style) on Radix + **Tailwind v4** |
 | Charts | **Recharts** · Icons: **lucide-react** (+ brand icons in `src/assets/brand-icons`) |
-| HTTP | **axios** (installed; only used today by error handling — no client yet) |
+| HTTP | **axios** (installed; only used today by error handling — no central client yet) |
 | Toasts | **sonner** · Dates: **date-fns** |
 | Auth (optional demo) | **Clerk** (`@clerk/react`) — a separate `routes/clerk/*` tree, not the primary path |
 | Tests | **Vitest** browser mode + Playwright/Chromium; `vitest-browser-react` |
@@ -110,7 +119,7 @@ src/
 ├── context/                 # App-wide providers (theme/font/direction/layout/search)
 ├── stores/                  # Zustand stores (auth-store.ts)
 ├── hooks/                   # Cross-feature hooks (use-table-url-state, use-dialog-state, use-mobile)
-├── lib/                     # utils (cn, sleep, pagination, initials), cookies, handle-server-error, avatar
+├── lib/                     # utils, cookies, errors, avatar, api/ (generated OpenAPI contract)
 ├── config/                  # fonts
 ├── styles/                  # index.css (Tailwind + base) + theme.css (design tokens)
 └── test-utils/              # Vitest helpers
@@ -119,8 +128,9 @@ src/
 **Two feature-structure variants exist.** Older template features (`users`,
 `tasks`) use `data/` (mock) + `data/schema.ts` (zod) + a `*-provider` + table +
 dialogs. Newer ones (`dashboard`) use the cleaner **`services/` + `hooks/` +
-`types/`** shape. **Prefer the `services/`+`hooks/` shape for new/real features**,
-with `services/` holding the axios+react-query calls to `../api`.
+`types/`** shape. **Prefer the `services/`+`hooks/` shape for new/real
+features**, but keep API access behind the shared infrastructure and generated
+OpenAPI SDK/contract. Business pages must never call axios directly.
 
 ### Feature boundaries
 
@@ -145,6 +155,9 @@ with `services/` holding the axios+react-query calls to `../api`.
   query errors (401 → reset auth + redirect to `/sign-in`; 500 → `/500`).
 - **Auth guarding is currently a no-op** (`_authenticated/route.tsx` renders the
   layout without checking auth). A real `beforeLoad` guard is part of the target.
+- Route metadata should carry `requiredCapabilities`. Keep `beforeLoad` tiny:
+  restore or verify auth state, then delegate capability checks to the same
+  shared authorization primitive used by menus and actions.
 
 ## State Management
 
@@ -159,31 +172,72 @@ with `services/` holding the axios+react-query calls to `../api`.
 
 ## API Layer
 
-**Current:** none. Only `lib/handle-server-error.ts` (axios error → toast) and
-`main.tsx`'s QueryCache 401/500 handling exist. Every feature imports local mock
-data from its `data/` folder.
+**Current:** generated OpenAPI types only. `src/lib/api/schema.d.ts` is produced
+by `pnpm generate:api-types` from `../api/openapi.json`; do not edit it by hand.
+There is still no central axios client, no generated runtime SDK, no real login,
+and no refresh-token handling. Only `lib/handle-server-error.ts` (axios error →
+toast) and `main.tsx`'s QueryCache 401/500 handling exist. Every feature still
+imports local mock data from its `data/` folder or a mock service.
 
 **Target pattern (build this, don't scatter fetch calls):**
 
-1. A single axios instance in `src/lib/` (e.g. `api-client.ts`): `baseURL` from
-   `import.meta.env.VITE_API_URL`, request interceptor attaching
-   `Authorization: Bearer <accessToken>` from the auth store, response
-   interceptor performing **refresh-token rotation** on 401 (`POST /auth/refresh`)
-   then retry, and surfacing errors through the existing `handleServerError`.
-2. **Types from the contract.** Generate/derive request/response types from
-   `../api/openapi.json` rather than hand-authoring divergent interfaces.
-3. Per-domain `features/<domain>/services/*.ts` with typed functions that call the
-   client; per-domain `hooks/*.ts` wrapping them in `useQuery`/`useMutation`.
-4. Keep the existing query defaults (retry/staleTime) from `main.tsx`.
+1. **Generated SDK / contract:** one generated OpenAPI source for DTOs, enums,
+   request bodies, response bodies, API method signatures, and generated error
+   types when available. Regenerate after intentional backend contract changes.
+2. **Infrastructure:** one axios-backed runtime layer with `baseURL` from
+   `import.meta.env.VITE_API_URL`, auth headers, request cancellation, upload /
+   download helpers, idempotency-key support, `X-Next-Cursor` exposure,
+   refresh-token rotation with retry, logout on invalid refresh, and global
+   error mapping.
+3. **Application hooks:** reusable React Query hooks and per-domain hooks call
+   the generated SDK through the infrastructure layer. Business pages and UI
+   components never call axios directly.
+4. Keep the existing query defaults (retry/staleTime) from `main.tsx` unless a
+   backend endpoint requires a narrower policy.
 
-Add `VITE_API_URL` to `.env.example` (currently it only holds
-`VITE_CLERK_PUBLISHABLE_KEY`).
+`VITE_API_URL` already exists in `.env.example`; keep it as the no-trailing-slash
+backend base URL. Put any deployment prefix/version in that env value rather than
+hard-coding it in feature services.
+
+### Phase 0 integration foundation
+
+Before any business page integration, build the shared infrastructure once:
+
+- OpenAPI is the only source of truth: the generated SDK/contract owns DTOs,
+  enums, request/response bodies, API methods, and error types whenever
+  available. Do not duplicate backend DTOs or hand-write API interfaces.
+- Keep the API layers explicit: generated SDK/contract -> infrastructure
+  (axios/interceptors/auth/error handling) -> application hooks.
+- Before implementing auth, inspect the backend authentication flow completely:
+  login, logout, refresh rotation, session restore, session revoke, multiple
+  active sessions, current user, current organization, and current capabilities.
+- One central API infrastructure layer with axios interceptors, request
+  cancellation, upload / download helpers, idempotency-key support,
+  refresh-token rotation, retry after refresh, logout on invalid refresh, global
+  error mapping, and `X-Next-Cursor` exposure.
+- Real auth foundation: login, logout, refresh, `/auth/me`, session restore,
+  session list/revoke, current user, current organization, and capability loading.
+- Reusable hooks only at this stage: current user, capabilities, `useCan`, API
+  access, server-list adapters, cursor pagination, and mutation helpers. Do not
+  add domain/business hooks until the relevant page phase.
+- Shared API components only when missing: capability gate, loading, error, empty,
+  cursor pagination, and mutation form wrappers. Compose existing UI primitives,
+  and commit a shared component only with at least one real usage.
+- Table/form adapters wrap existing DataTable and shadcn/react-hook-form patterns;
+  never replace or fork DataTable.
+- Sidebar stays visually and structurally intact; add capability-aware filtering
+  to the existing nav data/rendering.
+- `CapabilityGate` is the standard authorization primitive for pages, buttons,
+  menu items, and row actions. Do not duplicate permission logic.
+- Before building the API layer increment, inspect the generated SDK/contract and
+  reuse any existing generated functionality instead of wrapping everything again.
 
 ## Backend Integration Contract
 
 Base API `../api` (NestJS). Auth = **JWT RS256, access + refresh (Bearer)**.
 
-Key endpoints (see `../api/openapi.json` — 162 paths, tags: `admin, auth,
+Key endpoints (see `../api/openapi.json` — 162 paths, 194 operations, 179 schemas;
+tags: `admin, auth,
 commerce, community, directory, events, health, identity, learning, marketplace,
 media, notifications, organizations, posts, profiles, reference, reviews, search,
 users`):
@@ -203,7 +257,9 @@ users`):
 ### Capability & authorization model (drives the UI)
 
 - **Roles (`RoleType`) are infra-only:** `USER`, `ADMIN`. Never branch business
-  features on role — use capabilities.
+  features on role — use capabilities. Personas like Support, Moderator,
+  Finance, Instructor, Organization Admin, and Studio Admin are represented by
+  capability sets and/or org membership, not separate React apps or layouts.
 - **Capabilities** are namespaced `domain.action` keys (e.g. `course.publish`,
   `course.sell`, `service.sell`, `jobs.post`, `org.manage`, `payout.withdraw`,
   `identity.capability.read`), **deny-by-default**, GRANTED or DERIVED
@@ -214,6 +270,10 @@ users`):
   routes, and action buttons** on capability keys (and `RoleType.ADMIN` for
   platform-admin surfaces). Plain authenticated actions (enroll, comment, follow)
   need no capability.
+- **Backend reality:** the capability guard exists, but many current endpoints are
+  still role-gated with `@Auth([RoleType.USER, RoleType.ADMIN])` or
+  `@Auth([RoleType.ADMIN])`. The frontend should still be capability-driven; do
+  not infer business access from route availability alone.
 
 ## Component Library (shadcn/ui)
 
@@ -326,12 +386,12 @@ server-side when the endpoint supports it.
 
 | Concern | Current (template) | Target (thin client over `../api`) |
 |---|---|---|
-| Data | Mock `features/*/data/*.ts` + mock `services` (setTimeout) | axios + react-query against real endpoints |
+| Data | Mock `features/*/data/*.ts` + mock `services` (setTimeout) | Generated OpenAPI SDK + infrastructure + react-query against real endpoints |
 | Auth | Fake login (`user-auth-form` `sleep` + mock token) | `POST /auth/login`, Bearer + refresh rotation, real store |
 | Route guard | `_authenticated/route.tsx` renders unconditionally | `beforeLoad` auth guard + capability guards |
-| Navigation | Static `components/layout/data/sidebar-data.ts` | Generated from role + `/identity/me/capabilities` |
+| Navigation | Static `components/layout/data/sidebar-data.ts` | Filtered from backend capabilities via shared nav helpers |
 | Screens | Template pages (Tasks/Chat/Projects/Teams/API Keys/…) | Backend domains (Courses/Offerings/Orders/Jobs/Services/Events/Profiles/…) |
-| Types | Hand-written per feature | Derived from `../api/openapi.json` |
+| API contract | Type-only OpenAPI contract exists; feature data types are still mostly hand-written mocks | Single generated OpenAPI SDK/contract owns DTOs, enums, requests, responses, API methods, and available error types |
 
 When implementing: reuse the existing shell, components, tokens, table/form
 patterns; add the missing API/auth/capability plumbing; and replace template
