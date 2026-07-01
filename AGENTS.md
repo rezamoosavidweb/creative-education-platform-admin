@@ -82,6 +82,10 @@ the UI.
   Keep the existing DataTable primitives and use the server adapters for
   URL-synced pagination, filtering, sorting, debounced searching, PageDto/cursor
   metadata, manual TanStack Table options, status, and refresh wiring.
+- Shared API UI states live in `components/api/`, and generic server table
+  rendering lives in `components/data-table/server-data-table.tsx`. Reuse them
+  before creating feature-specific loading, error, empty, cursor pagination, or
+  server table components.
 
 ## Phase 0 Foundation
 

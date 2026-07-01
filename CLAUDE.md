@@ -225,6 +225,12 @@ PageDto/cursor metadata, manual TanStack Table options, loading/error/empty
 status, and refresh wiring. Do not re-enable client-side fake pagination,
 sorting, or filtering for backend lists.
 
+**Shared API components:** `components/api/` provides reusable `ApiLoading`,
+`ApiError`, `ApiEmpty`, and `CursorPagination` states. `ServerDataTable` in
+`components/data-table/server-data-table.tsx` composes those states with the
+existing table primitives and server-table adapters. Use these before creating
+feature-specific loading, error, empty, cursor pagination, or server table UI.
+
 **Target pattern (build this, don't scatter fetch calls):**
 
 1. **Generated SDK / contract:** one generated OpenAPI source for DTOs, enums,
@@ -271,6 +277,9 @@ Before any business page integration, build the shared infrastructure once:
 - Shared API components only when missing: capability gate, loading, error, empty,
   cursor pagination, and mutation form wrappers. Compose existing UI primitives,
   and commit a shared component only with at least one real usage.
+- Loading, error, empty, cursor pagination, and server-table rendering now live
+  in `components/api/` and `components/data-table/server-data-table.tsx`.
+  Reuse those instead of creating feature-specific variants.
 - Table/form adapters wrap existing DataTable and shadcn/react-hook-form patterns;
   never replace or fork DataTable.
 - Server-backed tables use `components/data-table/server-table` adapters with
