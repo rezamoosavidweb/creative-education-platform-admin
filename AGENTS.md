@@ -46,6 +46,9 @@ the UI.
   `pnpm generate:api-types`; never edit generated files by hand.
 - The current generated contract is type-only: it exposes `paths`,
   `operations`, and `components`, but no callable API methods.
+- Runtime backend calls go through `src/lib/api/`: use `apiRequest`,
+  `apiUpload`, `apiDownload`, generated type helpers, and `ApiError` mapping
+  from `@/lib/api`.
 - Keep three clear layers: generated SDK/contract -> infrastructure
   (axios/interceptors/auth/error handling) -> application hooks.
 - Business pages, buttons, menus, dialogs, and table actions must never call
@@ -54,7 +57,9 @@ the UI.
   reuse any generated functionality that overlaps with the planned layer.
 - `VITE_API_URL` is the backend base URL; keep prefixes/versioning in env config.
 - Auth uses RS256 JWT access + refresh tokens. Implement refresh rotation against
-  `POST /auth/refresh`; do not use refresh tokens as API bearer tokens.
+  `POST /auth/refresh`; do not use refresh tokens as API bearer tokens. The API
+  infrastructure exposes an auth retry handler hook for this, but does not
+  implement refresh itself.
 
 ## Phase 0 Foundation
 
@@ -65,9 +70,10 @@ Before business pages, build the integration foundation:
 - Before auth implementation, inspect the backend flow completely: login, logout,
   refresh rotation, session restore, session revoke, multiple active sessions,
   current user, current organization, and current capabilities.
+- Support request cancellation, uploads, downloads, idempotency keys,
+  `X-Next-Cursor`, and global API error mapping in the API infrastructure.
 - Support auth login/logout/refresh, `/auth/me`, session restore, session
-  list/revoke, capabilities, request cancellation, uploads, downloads,
-  idempotency keys, `X-Next-Cursor`, and global API error mapping.
+  list/revoke, and capabilities in the auth increment.
 - Add reusable hooks only: current user, capabilities, `useCan`, API access,
   server list adapters, cursor pagination, and mutation helpers.
 - Add shared API components only when missing, composing existing UI: capability

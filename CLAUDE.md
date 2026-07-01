@@ -21,8 +21,9 @@ re-implement backend logic here, and never invent a different business model.
 
 > **Current reality (read before planning any feature):** the app still runs on
 > the template's **mock data** and **mock auth**. Generated OpenAPI TypeScript
-> types exist at `src/lib/api/schema.d.ts`, but there is **no runtime HTTP/API
-> client, no real login, no refresh-token handling, and the sidebar is a static
+> types exist at `src/lib/api/schema.d.ts`, and the shared API infrastructure
+> exists at `src/lib/api/`, but there is **no real login, no refresh-token
+> handling, and the sidebar is a static
 > hard-coded list** whose pages (Tasks, Chat, Projects, Teams, API Keys, etc.)
 > mostly map to the *template*, not to backend domains (Courses, Offerings,
 > Orders, Jobs, Services, Events, Profiles, etc.). Making this a real thin
@@ -120,7 +121,7 @@ src/
 ├── context/                 # App-wide providers (theme/font/direction/layout/search)
 ├── stores/                  # Zustand stores (auth-store.ts)
 ├── hooks/                   # Cross-feature hooks (use-table-url-state, use-dialog-state, use-mobile)
-├── lib/                     # utils, cookies, errors, avatar, api/ (generated OpenAPI contract)
+├── lib/                     # utils, cookies, errors, avatar, api/ (generated OpenAPI contract + runtime infrastructure)
 ├── config/                  # fonts
 ├── styles/                  # index.css (Tailwind + base) + theme.css (design tokens)
 └── test-utils/              # Vitest helpers
@@ -173,14 +174,17 @@ OpenAPI SDK/contract. Business pages must never call axios directly.
 
 ## API Layer
 
-**Current:** generated OpenAPI contract types only. `src/lib/api/schema.d.ts` is
-produced by `pnpm generate:api-types` from `../api/openapi.json`; do not edit it
-by hand. The generated contract exposes `paths`, `operations`, and `components`
-for requests, responses, headers, and enums, but no callable API methods. There
-is still no central axios client, no real login, and no refresh-token handling.
-Only `lib/handle-server-error.ts` (axios error → toast) and `main.tsx`'s
-QueryCache 401/500 handling exist. Every feature still imports local mock data
-from its `data/` folder or a mock service.
+**Current:** the generated OpenAPI contract and runtime API infrastructure both
+live under `src/lib/api/`. `schema.d.ts` is produced by
+`pnpm generate:api-types` from `../api/openapi.json`; do not edit it by hand.
+The generated contract exposes `paths`, `operations`, and `components` for
+requests, responses, headers, and enums, but no callable API methods. Runtime
+calls must go through `apiRequest`, `apiUpload`, or `apiDownload` from
+`@/lib/api`, which provide the shared axios instance, interceptors,
+AbortController support, timeout/idempotency options, `X-Next-Cursor`
+extraction, and `ApiError` mapping. Authentication headers, refresh-token
+rotation, and real login are still pending; every feature still imports local
+mock data from its `data/` folder or a mock service until its business phase.
 
 **Target pattern (build this, don't scatter fetch calls):**
 
@@ -188,10 +192,10 @@ from its `data/` folder or a mock service.
    request bodies, response bodies, API method signatures, and generated error
    types when available. Regenerate after intentional backend contract changes.
 2. **Infrastructure:** one axios-backed runtime layer with `baseURL` from
-   `import.meta.env.VITE_API_URL`, auth headers, request cancellation, upload /
-   download helpers, idempotency-key support, `X-Next-Cursor` exposure,
-   refresh-token rotation with retry, logout on invalid refresh, and global
-   error mapping.
+   `import.meta.env.VITE_API_URL`, request cancellation, upload / download
+   helpers, idempotency-key support, `X-Next-Cursor` exposure, and global error
+   mapping. Auth owns token attachment, refresh-token rotation with retry, and
+   logout on invalid refresh through the shared retry hook.
 3. **Application hooks:** reusable React Query hooks and per-domain hooks call
    the generated SDK through the infrastructure layer. Business pages and UI
    components never call axios directly.
@@ -214,10 +218,10 @@ Before any business page integration, build the shared infrastructure once:
 - Before implementing auth, inspect the backend authentication flow completely:
   login, logout, refresh rotation, session restore, session revoke, multiple
   active sessions, current user, current organization, and current capabilities.
-- One central API infrastructure layer with axios interceptors, request
-  cancellation, upload / download helpers, idempotency-key support,
-  refresh-token rotation, retry after refresh, logout on invalid refresh, global
-  error mapping, and `X-Next-Cursor` exposure.
+- One central API infrastructure layer lives in `src/lib/api/` with axios
+  interceptors, request cancellation, upload / download helpers,
+  idempotency-key support, timeout support, retry only when the auth layer
+  registers it, global error mapping, and `X-Next-Cursor` exposure.
 - Real auth foundation: login, logout, refresh, `/auth/me`, session restore,
   session list/revoke, current user, current organization, and capability loading.
 - Reusable hooks only at this stage: current user, capabilities, `useCan`, API
