@@ -50,6 +50,7 @@ Use **pnpm**. (Node/Vite project — unrelated to the API's runtime.)
 
 ```bash
 pnpm dev            # Vite dev server
+pnpm typecheck      # TypeScript project references, no emit
 pnpm build          # tsc -b && vite build (type-check + production build)
 pnpm lint           # ESLint (flat config)
 pnpm format         # Prettier write · pnpm format:check to verify
@@ -69,10 +70,10 @@ pnpm lint && pnpm build && pnpm test && pnpm knip && pnpm format:check
 `pnpm build` runs `tsc -b`, so it is also the type-check gate. Browser tests need
 Chromium once: `pnpm test:browser:install`.
 
-Phase 0 must add a dedicated `typecheck` script before feature implementation so
-each increment can run typecheck, lint, build, runtime verification, and tests as
-separate gates. Keep using pnpm as the package manager even when task wording
-uses generic `npm run ...` phrasing.
+Use the dedicated `typecheck` script in every integration increment so typecheck,
+lint, build, runtime verification, and tests can run as separate gates. Keep
+using pnpm as the package manager even when task wording uses generic
+`npm run ...` phrasing.
 
 ## Tech Stack
 
@@ -172,12 +173,14 @@ OpenAPI SDK/contract. Business pages must never call axios directly.
 
 ## API Layer
 
-**Current:** generated OpenAPI types only. `src/lib/api/schema.d.ts` is produced
-by `pnpm generate:api-types` from `../api/openapi.json`; do not edit it by hand.
-There is still no central axios client, no generated runtime SDK, no real login,
-and no refresh-token handling. Only `lib/handle-server-error.ts` (axios error →
-toast) and `main.tsx`'s QueryCache 401/500 handling exist. Every feature still
-imports local mock data from its `data/` folder or a mock service.
+**Current:** generated OpenAPI contract types only. `src/lib/api/schema.d.ts` is
+produced by `pnpm generate:api-types` from `../api/openapi.json`; do not edit it
+by hand. The generated contract exposes `paths`, `operations`, and `components`
+for requests, responses, headers, and enums, but no callable API methods. There
+is still no central axios client, no real login, and no refresh-token handling.
+Only `lib/handle-server-error.ts` (axios error → toast) and `main.tsx`'s
+QueryCache 401/500 handling exist. Every feature still imports local mock data
+from its `data/` folder or a mock service.
 
 **Target pattern (build this, don't scatter fetch calls):**
 

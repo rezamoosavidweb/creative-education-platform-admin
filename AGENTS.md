@@ -44,6 +44,8 @@ the UI.
   available. Do not hand-write API models or duplicate backend DTOs.
 - Current generated contract file: `src/lib/api/schema.d.ts`. Regenerate with
   `pnpm generate:api-types`; never edit generated files by hand.
+- The current generated contract is type-only: it exposes `paths`,
+  `operations`, and `components`, but no callable API methods.
 - Keep three clear layers: generated SDK/contract -> infrastructure
   (axios/interceptors/auth/error handling) -> application hooks.
 - Business pages, buttons, menus, dialogs, and table actions must never call
@@ -73,7 +75,7 @@ Before business pages, build the integration foundation:
   Commit a shared component only with at least one real usage.
 - Adapt existing DataTable/form/navigation patterns; never replace or fork
   DataTable.
-- Add a dedicated `typecheck` script before feature work. The repo package
+- Use the dedicated `typecheck` script in each increment. The repo package
   manager remains pnpm even when task wording says `npm run ...`.
 
 ## RBAC And Navigation
@@ -105,6 +107,7 @@ Before business pages, build the integration foundation:
 
 ```bash
 pnpm dev
+pnpm typecheck
 pnpm build
 pnpm lint
 pnpm test
