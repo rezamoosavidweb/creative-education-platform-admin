@@ -1,9 +1,14 @@
+import { getRouteApi } from '@tanstack/react-router'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { SessionsList } from './components/sessions-list'
-import { sessions } from './data/sessions'
+
+const route = getRouteApi('/_authenticated/sessions/')
 
 export function Sessions() {
+  const search = route.useSearch()
+  const navigate = route.useNavigate()
+
   return (
     <>
       <Header fixed />
@@ -16,7 +21,7 @@ export function Sessions() {
           </p>
         </div>
 
-        <SessionsList sessions={sessions} />
+        <SessionsList search={search} navigate={navigate} />
       </Main>
     </>
   )
