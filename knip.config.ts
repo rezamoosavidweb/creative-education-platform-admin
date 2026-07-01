@@ -5,6 +5,8 @@ const config: KnipConfig = {
     'src/components/ui/**',
     'src/components/layout/app-title.tsx',
     'src/tanstack-table.d.ts',
+    // Generated from ../api/openapi.json via `pnpm generate:api-types`
+    'src/lib/api/schema.d.ts',
   ],
 }
 
