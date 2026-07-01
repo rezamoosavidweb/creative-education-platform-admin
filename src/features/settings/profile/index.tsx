@@ -1,5 +1,5 @@
+import { MyProfileCard } from '@/features/profiles/components/my-profile-card'
 import { ContentSection } from '../components/content-section'
-import { ProfileForm } from './profile-form'
 
 export function SettingsProfile() {
   return (
@@ -7,7 +7,7 @@ export function SettingsProfile() {
       title='Profile'
       desc='This is how others will see you on the site.'
     >
-      <ProfileForm />
+      <MyProfileCard />
     </ContentSection>
   )
 }
