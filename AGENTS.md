@@ -73,6 +73,11 @@ the UI.
   `useCapability`, `useCan`, `useHasAll`, `useHasAny`, route metadata helpers,
   route guard helpers, and sidebar filtering from there. Do not duplicate
   capability checks in feature code.
+- Shared React Query infrastructure lives in `src/lib/query/`. Use
+  `useServerQuery`, `useServerMutation`, `useServerList`, `useCursorList`,
+  `useInvalidate`, and `apiQueryKeys` for backend data. Do not duplicate
+  query-key, retry, cancellation, invalidation, optimistic-update, PageDto, or
+  cursor-list logic in feature modules.
 
 ## Phase 0 Foundation
 
@@ -90,7 +95,7 @@ Before business pages, build the integration foundation:
   `/organizations/mine` are provided by `src/lib/auth/`.
 - Add reusable hooks only: current user, capabilities, API access, server list
   adapters, cursor pagination, mutation helpers, and shared capability hooks in
-  `src/lib/capabilities/`.
+  `src/lib/capabilities/` and `src/lib/query/`.
 - Add shared API components only when missing, composing existing UI: capability
   gate, loading/error/empty states, cursor pagination, mutation form wrappers.
   Commit a shared component only with at least one real usage.

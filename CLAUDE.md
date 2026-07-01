@@ -24,7 +24,8 @@ re-implement backend logic here, and never invent a different business model.
 > Generated OpenAPI TypeScript types exist at `src/lib/api/schema.d.ts`, the
 > shared API infrastructure exists at `src/lib/api/`, the authentication
 > foundation exists at `src/lib/auth/`, and the capability authorization
-> foundation exists at `src/lib/capabilities/`. The sidebar is still a **static
+> foundation exists at `src/lib/capabilities/`. The shared React Query
+> foundation exists at `src/lib/query/`. The sidebar is still a **static
 > hard-coded list** whose pages (Tasks, Chat, Projects, Teams, API Keys, etc.)
 > mostly map to the *template*, not to backend domains (Courses, Offerings,
 > Orders, Jobs, Services, Events, Profiles, etc.). Making this a real thin
@@ -165,8 +166,12 @@ OpenAPI SDK/contract. Business pages must never call axios directly.
 ## State Management
 
 - **Server state → TanStack Query.** Query keys are arrays namespaced by domain
-  (`['dashboard','stats',filters]`). Wrap calls in a feature `services/` module
-  and expose them through a feature `hooks/` file.
+  (`['dashboard','stats',filters]`). Shared server-state primitives live in
+  `src/lib/query/`: use `useServerQuery`, `useServerMutation`, `useServerList`,
+  `useCursorList`, `useInvalidate`, and `apiQueryKeys` instead of duplicating
+  query-key, cancellation, retry, invalidation, or list-normalization logic in
+  feature modules. Wrap calls in a feature `services/` module and expose them
+  through a feature `hooks/` file.
 - **Auth → Zustand** (`stores/auth-store.ts`) behind `src/lib/auth/`: backend
   `UserDto`, `TokenPayloadDto` access/refresh tokens, capabilities,
   organizations, `currentOrganizationId`, and status. Persisted via the existing
@@ -204,6 +209,14 @@ authorization decisions. It provides `CapabilityProvider`, `CapabilityGate`,
 metadata helpers, route guard helpers, and sidebar filtering. Pages, buttons,
 menu items, and row actions should use these primitives with backend capability
 keys only. Do not recreate permission checks in features, stores, or route files.
+
+**Query foundation:** `src/lib/query/` owns reusable TanStack Query integration.
+It composes `src/lib/api/` with typed `ApiError` results, request cancellation
+via query abort signals, centralized query keys, shared stale-time and retry
+defaults, automatic invalidation for mutations, optional optimistic-update hooks,
+and PageDto/cursor list normalization. Business features should consume these
+hooks instead of calling `useQuery`, `useMutation`, or `apiRequest` directly for
+backend data.
 
 **Target pattern (build this, don't scatter fetch calls):**
 
