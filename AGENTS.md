@@ -60,6 +60,14 @@ the UI.
   `POST /auth/refresh`; do not use refresh tokens as API bearer tokens. The API
   infrastructure exposes an auth retry handler hook for this, but does not
   implement refresh itself.
+- Authentication infrastructure lives in `src/lib/auth/`. Use its services and
+  hooks (`initializeAuthentication`, `ensureAuthSession`, `useLogin`,
+  `useLogout`, `useCurrentUser`, `useCurrentOrganization`,
+  `useCurrentCapabilities`, `useIsAuthenticated`, `useCan`) instead of reading
+  or writing tokens from features.
+- Only the auth layer owns token storage, bearer attachment, the single-flight
+  refresh queue, logout, session restore, and auth state. Business features must
+  never manipulate access or refresh tokens directly.
 
 ## Phase 0 Foundation
 
@@ -72,8 +80,9 @@ Before business pages, build the integration foundation:
   current user, current organization, and current capabilities.
 - Support request cancellation, uploads, downloads, idempotency keys,
   `X-Next-Cursor`, and global API error mapping in the API infrastructure.
-- Support auth login/logout/refresh, `/auth/me`, session restore, session
-  list/revoke, and capabilities in the auth increment.
+- Auth login/logout/refresh, `/auth/me`, session restore, session list/revoke,
+  current user, current capabilities, and current organization selection from
+  `/organizations/mine` are provided by `src/lib/auth/`.
 - Add reusable hooks only: current user, capabilities, `useCan`, API access,
   server list adapters, cursor pagination, and mutation helpers.
 - Add shared API components only when missing, composing existing UI: capability

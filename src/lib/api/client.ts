@@ -21,13 +21,25 @@ type ApiRetryDecision = {
   retry: boolean
 }
 
-type ApiAuthRetryHandler = (error: ApiError) =>
-  | ApiRetryDecision
-  | Promise<ApiRetryDecision>
+type ApiAuthRetryHandler = (
+  error: ApiError
+) => ApiRetryDecision | Promise<ApiRetryDecision>
+
+type ApiAccessTokenProvider = () => string | null | undefined
 
 declare module 'axios' {
-  interface InternalAxiosRequestConfig {
+  interface AxiosRequestConfig {
+    _apiAuthHeaderManaged?: boolean
     _apiAuthRetryAttempted?: boolean
+    _apiSkipAuthHeader?: boolean
+    _apiSkipAuthRetry?: boolean
+  }
+
+  interface InternalAxiosRequestConfig {
+    _apiAuthHeaderManaged?: boolean
+    _apiAuthRetryAttempted?: boolean
+    _apiSkipAuthHeader?: boolean
+    _apiSkipAuthRetry?: boolean
   }
 }
 
@@ -35,6 +47,7 @@ const baseURL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') ?? ''
 const timeout = parseTimeout(import.meta.env.VITE_API_TIMEOUT_MS)
 
 let authRetryHandler: ApiAuthRetryHandler | null = null
+let accessTokenProvider: ApiAccessTokenProvider | null = null
 
 export const apiClient = axios.create({
   baseURL,
@@ -46,6 +59,17 @@ apiClient.interceptors.request.use((config) => {
 
   if (!headers.has('Accept')) {
     headers.set('Accept', 'application/json')
+  }
+
+  if (
+    !config._apiSkipAuthHeader &&
+    (!headers.has('Authorization') || config._apiAuthHeaderManaged)
+  ) {
+    const accessToken = accessTokenProvider?.()
+    if (accessToken) {
+      headers.set('Authorization', `Bearer ${accessToken}`)
+      config._apiAuthHeaderManaged = true
+    }
   }
 
   config.headers = headers
@@ -77,6 +101,12 @@ export function setApiAuthRetryHandler(
   authRetryHandler = handler
 }
 
+export function setApiAccessTokenProvider(
+  provider: ApiAccessTokenProvider | null
+): void {
+  accessTokenProvider = provider
+}
+
 export function createApiAbortController(): AbortController {
   return new AbortController()
 }
@@ -94,6 +124,8 @@ export async function apiRequest<
     params: 'query' in options ? options.query : undefined,
     responseType: options.responseType,
     signal: options.signal,
+    _apiSkipAuthHeader: options.skipAuthHeader,
+    _apiSkipAuthRetry: options.skipAuthRetry,
     timeout: options.timeoutMs,
     url: buildApiPath(
       options.path,
@@ -101,7 +133,7 @@ export async function apiRequest<
     ),
   })
 
-  return toApiResult(response)
+  return toApiResult<ApiResponseBody<Path, Method>>(response)
 }
 
 export async function apiUpload<
@@ -118,6 +150,8 @@ export async function apiUpload<
     method: options.method,
     params: 'query' in options ? options.query : undefined,
     signal: options.signal,
+    _apiSkipAuthHeader: options.skipAuthHeader,
+    _apiSkipAuthRetry: options.skipAuthRetry,
     timeout: options.timeoutMs,
     url: buildApiPath(
       options.path,
@@ -125,7 +159,7 @@ export async function apiUpload<
     ),
   })
 
-  return toApiResult(response)
+  return toApiResult<ApiResponseBody<Path, Method>>(response)
 }
 
 export async function apiDownload<
@@ -140,6 +174,8 @@ export async function apiDownload<
     params: 'query' in options ? options.query : undefined,
     responseType: 'blob',
     signal: options.signal,
+    _apiSkipAuthHeader: options.skipAuthHeader,
+    _apiSkipAuthRetry: options.skipAuthRetry,
     timeout: options.timeoutMs,
     url: buildApiPath(
       options.path,
@@ -147,7 +183,7 @@ export async function apiDownload<
     ),
   })
 
-  return toApiResult(response)
+  return toApiResult<Blob>(response)
 }
 
 function shouldAskAuthLayerForRetry(
@@ -159,6 +195,7 @@ function shouldAskAuthLayerForRetry(
     error instanceof AxiosError &&
     !!error.config &&
     !error.config._apiAuthRetryAttempted &&
+    !error.config._apiSkipAuthRetry &&
     apiError.status === 401
   )
 }
@@ -173,10 +210,7 @@ function buildHeaders(
   }
 }
 
-function buildApiPath(
-  path: ApiPath,
-  pathParams: unknown | undefined
-): string {
+function buildApiPath(path: ApiPath, pathParams: unknown | undefined): string {
   return String(path).replace(/\{([^}]+)\}/g, (_match, key: string) => {
     const value = readPathParam(pathParams, key)
     return encodeURIComponent(String(value))
@@ -222,9 +256,12 @@ function extractNextCursor(response: AxiosResponse): string | null {
 function parseTimeout(value: string | undefined): number {
   if (!value) return DEFAULT_API_TIMEOUT_MS
   const parsed = Number(value)
-  return Number.isFinite(parsed) && parsed > 0
-    ? parsed
-    : DEFAULT_API_TIMEOUT_MS
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_API_TIMEOUT_MS
 }
 
-export type { ApiAuthRetryHandler, ApiRetryDecision, ApiHttpMethod }
+export type {
+  ApiAccessTokenProvider,
+  ApiAuthRetryHandler,
+  ApiRetryDecision,
+  ApiHttpMethod,
+}

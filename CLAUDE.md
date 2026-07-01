@@ -20,10 +20,10 @@ business rules, permissions, and derivations live in the backend. Never
 re-implement backend logic here, and never invent a different business model.
 
 > **Current reality (read before planning any feature):** the app still runs on
-> the template's **mock data** and **mock auth**. Generated OpenAPI TypeScript
-> types exist at `src/lib/api/schema.d.ts`, and the shared API infrastructure
-> exists at `src/lib/api/`, but there is **no real login, no refresh-token
-> handling, and the sidebar is a static
+> the template's **mock feature data**, but real backend authentication is wired.
+> Generated OpenAPI TypeScript types exist at `src/lib/api/schema.d.ts`, the
+> shared API infrastructure exists at `src/lib/api/`, and the authentication
+> foundation exists at `src/lib/auth/`. The sidebar is still a **static
 > hard-coded list** whose pages (Tasks, Chat, Projects, Teams, API Keys, etc.)
 > mostly map to the *template*, not to backend domains (Courses, Offerings,
 > Orders, Jobs, Services, Events, Profiles, etc.). Making this a real thin
@@ -121,7 +121,7 @@ src/
 ├── context/                 # App-wide providers (theme/font/direction/layout/search)
 ├── stores/                  # Zustand stores (auth-store.ts)
 ├── hooks/                   # Cross-feature hooks (use-table-url-state, use-dialog-state, use-mobile)
-├── lib/                     # utils, cookies, errors, avatar, api/ (generated OpenAPI contract + runtime infrastructure)
+├── lib/                     # utils, cookies, errors, avatar, api/ and auth/ infrastructure
 ├── config/                  # fonts
 ├── styles/                  # index.css (Tailwind + base) + theme.css (design tokens)
 └── test-utils/              # Vitest helpers
@@ -166,9 +166,11 @@ OpenAPI SDK/contract. Business pages must never call axios directly.
 - **Server state → TanStack Query.** Query keys are arrays namespaced by domain
   (`['dashboard','stats',filters]`). Wrap calls in a feature `services/` module
   and expose them through a feature `hooks/` file.
-- **Auth → Zustand** (`stores/auth-store.ts`): `{ auth: { user, accessToken,
-  setUser, setAccessToken, resetAccessToken, reset } }`, persisted to a cookie.
-  ⚠️ Today it stores a **mock token**; the token key/name is a placeholder.
+- **Auth → Zustand** (`stores/auth-store.ts`) behind `src/lib/auth/`: backend
+  `UserDto`, `TokenPayloadDto` access/refresh tokens, capabilities,
+  organizations, `currentOrganizationId`, and status. Persisted via the existing
+  cookie helper. Business code must use `src/lib/auth` hooks/services and must
+  never manipulate tokens directly.
 - **UI/feature-local → React Context**: global providers in `context/`;
   per-feature dialog/selection state via a `*-provider.tsx` + `use<Feature>()` hook.
 
@@ -182,9 +184,19 @@ requests, responses, headers, and enums, but no callable API methods. Runtime
 calls must go through `apiRequest`, `apiUpload`, or `apiDownload` from
 `@/lib/api`, which provide the shared axios instance, interceptors,
 AbortController support, timeout/idempotency options, `X-Next-Cursor`
-extraction, and `ApiError` mapping. Authentication headers, refresh-token
-rotation, and real login are still pending; every feature still imports local
-mock data from its `data/` folder or a mock service until its business phase.
+extraction, auth-owned bearer attachment, auth-controlled retry, and `ApiError`
+mapping. Every business feature still imports local mock data from its `data/`
+folder or a mock service until its business phase.
+
+**Auth foundation:** `src/lib/auth/` owns login, logout, refresh-token rotation,
+session restore, current user, current capabilities, current organization
+selection from `/organizations/mine`, active-session list/revoke helpers, and the
+single-flight refresh queue. `main.tsx` calls `initializeAuthentication()` before
+queries run and wraps the router in `AuthRestoreGate`; `_authenticated/route.tsx`
+delegates protection to `ensureAuthSession()`. Use `useLogin`, `useLogout`,
+`useCurrentUser`, `useCurrentOrganization`, `useCurrentCapabilities`,
+`useIsAuthenticated`, and `useCan` instead of reading/writing tokens in feature
+code.
 
 **Target pattern (build this, don't scatter fetch calls):**
 
@@ -222,8 +234,9 @@ Before any business page integration, build the shared infrastructure once:
   interceptors, request cancellation, upload / download helpers,
   idempotency-key support, timeout support, retry only when the auth layer
   registers it, global error mapping, and `X-Next-Cursor` exposure.
-- Real auth foundation: login, logout, refresh, `/auth/me`, session restore,
-  session list/revoke, current user, current organization, and capability loading.
+- Real auth foundation lives in `src/lib/auth/`: login, logout, refresh,
+  `/auth/me`, session restore, session list/revoke, current user, current
+  organization, and capability loading.
 - Reusable hooks only at this stage: current user, capabilities, `useCan`, API
   access, server-list adapters, cursor pagination, and mutation helpers. Do not
   add domain/business hooks until the relevant page phase.
@@ -394,8 +407,8 @@ server-side when the endpoint supports it.
 | Concern | Current (template) | Target (thin client over `../api`) |
 |---|---|---|
 | Data | Mock `features/*/data/*.ts` + mock `services` (setTimeout) | Generated OpenAPI SDK + infrastructure + react-query against real endpoints |
-| Auth | Fake login (`user-auth-form` `sleep` + mock token) | `POST /auth/login`, Bearer + refresh rotation, real store |
-| Route guard | `_authenticated/route.tsx` renders unconditionally | `beforeLoad` auth guard + capability guards |
+| Auth | Real login/logout/refresh/restore foundation exists; no business pages integrated yet | Continue using `src/lib/auth`, add capability-driven feature integrations incrementally |
+| Route guard | `_authenticated/route.tsx` restores/verifies auth before rendering | Add capability metadata/guards in the capability-routing increment |
 | Navigation | Static `components/layout/data/sidebar-data.ts` | Filtered from backend capabilities via shared nav helpers |
 | Screens | Template pages (Tasks/Chat/Projects/Teams/API Keys/…) | Backend domains (Courses/Offerings/Orders/Jobs/Services/Events/Profiles/…) |
 | API contract | Type-only OpenAPI contract exists; feature data types are still mostly hand-written mocks | Single generated OpenAPI SDK/contract owns DTOs, enums, requests, responses, API methods, and available error types |

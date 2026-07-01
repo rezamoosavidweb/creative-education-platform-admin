@@ -8,8 +8,12 @@ import {
 } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { useAuthStore } from '@/stores/auth-store'
 import { isApiError } from '@/lib/api'
+import {
+  AuthRestoreGate,
+  clearAuthSession,
+  initializeAuthentication,
+} from '@/lib/auth'
 import { handleServerError } from '@/lib/handle-server-error'
 import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
@@ -18,6 +22,8 @@ import { ThemeProvider } from './context/theme-provider'
 import { routeTree } from './routeTree.gen'
 // Styles
 import './styles/index.css'
+
+initializeAuthentication()
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,10 +35,13 @@ const queryClient = new QueryClient({
         if (failureCount >= 0 && import.meta.env.DEV) return false
         if (failureCount > 3 && import.meta.env.PROD) return false
 
-        return !(
-          error instanceof AxiosError &&
-          [401, 403].includes(error.response?.status ?? 0)
-        )
+        const status = isApiError(error)
+          ? error.status
+          : error instanceof AxiosError
+            ? error.response?.status
+            : undefined
+
+        return ![401, 403].includes(status ?? 0)
       },
       refetchOnWindowFocus: import.meta.env.PROD,
       staleTime: 10 * 1000, // 10s
@@ -56,7 +65,7 @@ const queryClient = new QueryClient({
 
         if (status === 401) {
           toast.error('Session expired!')
-          useAuthStore.getState().auth.reset()
+          clearAuthSession()
           const redirect = `${router.history.location.href}`
           router.navigate({ to: '/sign-in', search: { redirect } })
         }
@@ -100,7 +109,9 @@ if (!rootElement.innerHTML) {
         <ThemeProvider>
           <FontProvider>
             <DirectionProvider>
-              <RouterProvider router={router} />
+              <AuthRestoreGate>
+                <RouterProvider router={router} />
+              </AuthRestoreGate>
             </DirectionProvider>
           </FontProvider>
         </ThemeProvider>

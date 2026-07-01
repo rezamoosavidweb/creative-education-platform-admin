@@ -1,5 +1,6 @@
-import { ChevronDown } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { ChevronDown } from 'lucide-react'
+import { useCurrentUser } from '@/lib/auth'
 import useDialogState from '@/hooks/use-dialog-state'
 import {
   DropdownMenu,
@@ -15,6 +16,11 @@ import { SignOutDialog } from '@/components/sign-out-dialog'
 
 export function ProfileDropdown() {
   const [open, setOpen] = useDialogState()
+  const user = useCurrentUser()
+  const displayName = getDisplayName(user)
+  const email = user?.email ?? 'account'
+  const role = user?.role ?? 'User'
+  const initials = getInitials(displayName)
 
   return (
     <>
@@ -31,13 +37,13 @@ export function ProfileDropdown() {
                   'linear-gradient(135deg, var(--pri) 0%, #0ea5c8 100%)',
               }}
             >
-              JD
+              {initials}
             </span>
             <span className='hidden text-start leading-tight sm:block'>
               <span className='block text-[12.5px] font-semibold text-[var(--t1)]'>
-                Jordan Davis
+                {displayName}
               </span>
-              <span className='block text-[11px] text-[var(--t3)]'>Admin</span>
+              <span className='block text-[11px] text-[var(--t3)]'>{role}</span>
             </span>
             <ChevronDown className='hidden h-3.5 w-3.5 text-[var(--t3)] sm:block' />
           </button>
@@ -45,9 +51,9 @@ export function ProfileDropdown() {
         <DropdownMenuContent className='w-56' align='end' forceMount>
           <DropdownMenuLabel className='font-normal'>
             <div className='flex flex-col gap-1.5'>
-              <p className='text-sm leading-none font-medium'>Jordan Davis</p>
+              <p className='text-sm leading-none font-medium'>{displayName}</p>
               <p className='text-xs leading-none text-muted-foreground'>
-                jordan@acme.com
+                {email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -86,4 +92,20 @@ export function ProfileDropdown() {
       <SignOutDialog open={!!open} onOpenChange={setOpen} />
     </>
   )
+}
+
+function getDisplayName(user: ReturnType<typeof useCurrentUser>): string {
+  const name = [user?.firstName, user?.lastName].filter(Boolean).join(' ')
+  return name || user?.email || 'Account'
+}
+
+function getInitials(value: string): string {
+  const words = value.trim().split(/\s+/).filter(Boolean)
+  const initials = words
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase()
+
+  return initials || 'A'
 }

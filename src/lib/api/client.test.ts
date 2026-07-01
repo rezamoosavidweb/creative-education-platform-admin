@@ -10,6 +10,7 @@ import {
   apiClient,
   apiRequest,
   createApiAbortController,
+  setApiAccessTokenProvider,
   setApiAuthRetryHandler,
 } from './client'
 import { ApiError } from './errors'
@@ -17,11 +18,13 @@ import { ApiError } from './errors'
 const originalAdapter = apiClient.defaults.adapter
 
 beforeEach(() => {
+  setApiAccessTokenProvider(null)
   setApiAuthRetryHandler(null)
 })
 
 afterEach(() => {
   apiClient.defaults.adapter = originalAdapter
+  setApiAccessTokenProvider(null)
   setApiAuthRetryHandler(null)
   vi.restoreAllMocks()
 })
@@ -72,6 +75,53 @@ describe('apiClient infrastructure', () => {
     expect(result.data.capabilities).toEqual(['course.publish'])
     expect(result.status).toBe(200)
     expect(result.nextCursor).toBe('cursor-2')
+  })
+
+  it('attaches bearer tokens from the auth layer unless skipped', async () => {
+    const seen: InternalAxiosRequestConfig[] = []
+    setApiAccessTokenProvider(() => 'access-token')
+    apiClient.defaults.adapter = createAdapter((config) => {
+      seen.push(config)
+      return createResponse(config, undefined)
+    })
+
+    await apiRequest({
+      path: '/auth/me',
+      method: 'get',
+    })
+    await apiRequest({
+      path: '/auth/refresh',
+      method: 'post',
+      body: { refreshToken: 'refresh-token' },
+      skipAuthHeader: true,
+      skipAuthRetry: true,
+    })
+
+    expect(AxiosHeaders.from(seen[0].headers).get('Authorization')).toBe(
+      'Bearer access-token'
+    )
+    expect(
+      AxiosHeaders.from(seen[1].headers).get('Authorization')
+    ).toBeUndefined()
+    expect(seen[1]._apiSkipAuthRetry).toBe(true)
+  })
+
+  it('derives path params from the OpenAPI path template when the operation omits them', async () => {
+    const seen: InternalAxiosRequestConfig[] = []
+    apiClient.defaults.adapter = createAdapter((config) => {
+      seen.push(config)
+      return createResponse(config, undefined)
+    })
+
+    await apiRequest({
+      path: '/auth/sessions/{id}',
+      method: 'delete',
+      pathParams: {
+        id: 'session 1',
+      },
+    })
+
+    expect(seen[0].url).toBe('/auth/sessions/session%201')
   })
 
   it('maps axios failures to ApiError', async () => {
@@ -131,6 +181,26 @@ describe('apiClient infrastructure', () => {
     expect(result.data.id).toBe('user-1')
     expect(calls).toBe(2)
     expect(retryHandler).toHaveBeenCalledOnce()
+  })
+
+  it('does not ask the auth layer for retry when skipAuthRetry is set', async () => {
+    const retryHandler = vi.fn(() => ({ retry: true }))
+    setApiAuthRetryHandler(retryHandler)
+
+    apiClient.defaults.adapter = createAdapter((config) => {
+      throw createAxiosError(config, 401, { title: 'Invalid refresh token' })
+    })
+
+    await expect(
+      apiRequest({
+        path: '/auth/refresh',
+        method: 'post',
+        body: { refreshToken: 'refresh-token' },
+        skipAuthRetry: true,
+      })
+    ).rejects.toBeInstanceOf(ApiError)
+
+    expect(retryHandler).not.toHaveBeenCalled()
   })
 })
 

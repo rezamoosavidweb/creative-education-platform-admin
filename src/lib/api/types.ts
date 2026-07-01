@@ -43,41 +43,34 @@ type OperationParameters<Operation> = Operation extends {
 export type ApiPathParams<
   Path extends ApiPath,
   Method extends ApiMethod<Path>,
-> = OperationParameters<ApiOperation<Path, Method>> extends {
-  path: infer Params
-}
-  ? Params
-  : never
+> =
+  OperationParameters<ApiOperation<Path, Method>> extends {
+    path: infer Params
+  }
+    ? Params
+    : PathTemplateParams<Path>
 
 export type ApiQueryParams<
   Path extends ApiPath,
   Method extends ApiMethod<Path>,
-> = OperationParameters<ApiOperation<Path, Method>> extends {
-  query?: infer Params
-}
-  ? Params
-  : never
+> =
+  OperationParameters<ApiOperation<Path, Method>> extends {
+    query?: infer Params
+  }
+    ? Params
+    : never
 
 export type ApiRequestBody<
   Path extends ApiPath,
   Method extends ApiMethod<Path>,
-> = ApiOperation<Path, Method> extends {
-  requestBody: { content: infer Content }
-}
-  ? JsonContent<Content>
-  : never
+> =
+  ApiOperation<Path, Method> extends {
+    requestBody: { content: infer Content }
+  }
+    ? JsonContent<Content>
+    : never
 
-type SuccessStatus =
-  | 200
-  | 201
-  | 202
-  | 203
-  | 204
-  | 205
-  | 206
-  | 207
-  | 208
-  | 226
+type SuccessStatus = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226
 
 type OperationResponses<Operation> = Operation extends {
   responses: infer Responses
@@ -120,24 +113,21 @@ export type ApiErrorBody<
   Method extends ApiMethod<Path>,
 > = ResponseBody<ErrorResponse<OperationResponses<ApiOperation<Path, Method>>>>
 
-type MaybePathParams<
-  Path extends ApiPath,
-  Method extends ApiMethod<Path>,
-> = [ApiPathParams<Path, Method>] extends [never]
+type MaybePathParams<Path extends ApiPath, Method extends ApiMethod<Path>> = [
+  ApiPathParams<Path, Method>,
+] extends [never]
   ? { pathParams?: never }
   : { pathParams: ApiPathParams<Path, Method> }
 
-type MaybeQueryParams<
-  Path extends ApiPath,
-  Method extends ApiMethod<Path>,
-> = [ApiQueryParams<Path, Method>] extends [never]
+type MaybeQueryParams<Path extends ApiPath, Method extends ApiMethod<Path>> = [
+  ApiQueryParams<Path, Method>,
+] extends [never]
   ? { query?: never }
   : { query?: ApiQueryParams<Path, Method> }
 
-type MaybeRequestBody<
-  Path extends ApiPath,
-  Method extends ApiMethod<Path>,
-> = [ApiRequestBody<Path, Method>] extends [never]
+type MaybeRequestBody<Path extends ApiPath, Method extends ApiMethod<Path>> = [
+  ApiRequestBody<Path, Method>,
+] extends [never]
   ? { body?: never }
   : { body: ApiRequestBody<Path, Method> }
 
@@ -152,6 +142,8 @@ export type ApiRequestOptions<
   signal?: AbortSignal
   timeoutMs?: number
   responseType?: AxiosRequestConfig['responseType']
+  skipAuthHeader?: boolean
+  skipAuthRetry?: boolean
 } & MaybePathParams<Path, Method> &
   MaybeQueryParams<Path, Method> &
   MaybeRequestBody<Path, Method>
@@ -162,3 +154,14 @@ export type ApiResult<Data> = {
   headers: Record<string, unknown>
   nextCursor: string | null
 }
+
+type PathTemplateParamKeys<Path extends string> =
+  Path extends `${string}{${infer Param}}${infer Rest}`
+    ? Param | PathTemplateParamKeys<Rest>
+    : never
+
+type PathTemplateParams<Path extends string> = [
+  PathTemplateParamKeys<Path>,
+] extends [never]
+  ? never
+  : Record<PathTemplateParamKeys<Path>, string | number>

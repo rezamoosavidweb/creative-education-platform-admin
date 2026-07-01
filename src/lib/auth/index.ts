@@ -1,0 +1,42 @@
+export { AuthRestoreGate } from './auth-restore-gate'
+export {
+  clearAuthSession,
+  ensureAuthSession,
+  getCurrentCapabilities,
+  getCurrentOrganizations,
+  getCurrentUser,
+  getSafeAuthRedirect,
+  initializeAuthentication,
+  listActiveSessions,
+  login,
+  logout,
+  refreshSession,
+  resetAuthRuntimeForTests,
+  restoreSession,
+  revokeSession,
+} from './auth-service'
+export {
+  useActiveSessions,
+  useCan,
+  useCurrentCapabilities,
+  useCurrentOrganization,
+  useCurrentUser,
+  useIsAuthenticated,
+  useLogin,
+  useLogout,
+  useRevokeSession,
+} from './auth-hooks'
+export type {
+  AuthCapability,
+  AuthContext,
+  AuthOrganization,
+  AuthSession,
+  AuthStatus,
+  AuthTokenPayload,
+  AuthTokens,
+  AuthUser,
+  LoginRequest,
+  LoginResponse,
+  RefreshRequest,
+  RefreshResponse,
+} from './types'
