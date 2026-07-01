@@ -1,4 +1,5 @@
 import { type LinkProps } from '@tanstack/react-router'
+import type { CapabilityRequirement } from '@/lib/capabilities'
 
 type User = {
   name: string
@@ -18,6 +19,7 @@ type BaseNavItem = {
   title: string
   badge?: string
   badgeVariant?: NavBadgeVariant
+  requiredCapabilities?: CapabilityRequirement
   icon?: React.ElementType
 }
 

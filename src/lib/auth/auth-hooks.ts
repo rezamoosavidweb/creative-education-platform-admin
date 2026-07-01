@@ -31,17 +31,6 @@ export function useIsAuthenticated(): boolean {
   return useAuthStore((state) => state.auth.status === 'authenticated')
 }
 
-export function useCan(
-  requiredCapabilities: AuthCapability | AuthCapability[]
-) {
-  const capabilities = useCurrentCapabilities()
-  const required = Array.isArray(requiredCapabilities)
-    ? requiredCapabilities
-    : [requiredCapabilities]
-
-  return required.every((capability) => capabilities.includes(capability))
-}
-
 export function useLogin() {
   const queryClient = useQueryClient()
 

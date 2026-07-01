@@ -91,6 +91,7 @@ export const sidebarData: SidebarData = {
         {
           title: 'Permissions',
           url: '/permissions',
+          requiredCapabilities: ['identity.capability.read'],
           icon: Lock,
         },
         {

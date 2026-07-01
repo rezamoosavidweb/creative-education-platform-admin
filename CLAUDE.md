@@ -22,8 +22,9 @@ re-implement backend logic here, and never invent a different business model.
 > **Current reality (read before planning any feature):** the app still runs on
 > the template's **mock feature data**, but real backend authentication is wired.
 > Generated OpenAPI TypeScript types exist at `src/lib/api/schema.d.ts`, the
-> shared API infrastructure exists at `src/lib/api/`, and the authentication
-> foundation exists at `src/lib/auth/`. The sidebar is still a **static
+> shared API infrastructure exists at `src/lib/api/`, the authentication
+> foundation exists at `src/lib/auth/`, and the capability authorization
+> foundation exists at `src/lib/capabilities/`. The sidebar is still a **static
 > hard-coded list** whose pages (Tasks, Chat, Projects, Teams, API Keys, etc.)
 > mostly map to the *template*, not to backend domains (Courses, Offerings,
 > Orders, Jobs, Services, Events, Profiles, etc.). Making this a real thin
@@ -155,11 +156,11 @@ OpenAPI SDK/contract. Business pages must never call axios directly.
   `route.useNavigate()`), which powers URL-synced tables.
 - `main.tsx` wires the `QueryClient` into router context and handles global
   query errors (401 → reset auth + redirect to `/sign-in`; 500 → `/500`).
-- **Auth guarding is currently a no-op** (`_authenticated/route.tsx` renders the
-  layout without checking auth). A real `beforeLoad` guard is part of the target.
-- Route metadata should carry `requiredCapabilities`. Keep `beforeLoad` tiny:
-  restore or verify auth state, then delegate capability checks to the same
-  shared authorization primitive used by menus and actions.
+- `_authenticated/route.tsx` restores/verifies auth via `ensureAuthSession()`
+  and delegates route authorization to `ensureCapabilityRouteAccess()`.
+- Route metadata should carry `requiredCapabilities` using backend capability
+  keys. Keep `beforeLoad` tiny: restore or verify auth state, then delegate
+  capability checks to `src/lib/capabilities`.
 
 ## State Management
 
@@ -194,9 +195,15 @@ selection from `/organizations/mine`, active-session list/revoke helpers, and th
 single-flight refresh queue. `main.tsx` calls `initializeAuthentication()` before
 queries run and wraps the router in `AuthRestoreGate`; `_authenticated/route.tsx`
 delegates protection to `ensureAuthSession()`. Use `useLogin`, `useLogout`,
-`useCurrentUser`, `useCurrentOrganization`, `useCurrentCapabilities`,
-`useIsAuthenticated`, and `useCan` instead of reading/writing tokens in feature
-code.
+`useCurrentUser`, `useCurrentOrganization`, `useCurrentCapabilities`, and
+`useIsAuthenticated` instead of reading/writing tokens in feature code.
+
+**Capability foundation:** `src/lib/capabilities/` owns all frontend
+authorization decisions. It provides `CapabilityProvider`, `CapabilityGate`,
+`useCapabilities`, `useCapability`, `useCan`, `useHasAll`, `useHasAny`, route
+metadata helpers, route guard helpers, and sidebar filtering. Pages, buttons,
+menu items, and row actions should use these primitives with backend capability
+keys only. Do not recreate permission checks in features, stores, or route files.
 
 **Target pattern (build this, don't scatter fetch calls):**
 
@@ -237,9 +244,10 @@ Before any business page integration, build the shared infrastructure once:
 - Real auth foundation lives in `src/lib/auth/`: login, logout, refresh,
   `/auth/me`, session restore, session list/revoke, current user, current
   organization, and capability loading.
-- Reusable hooks only at this stage: current user, capabilities, `useCan`, API
-  access, server-list adapters, cursor pagination, and mutation helpers. Do not
-  add domain/business hooks until the relevant page phase.
+- Reusable hooks only at this stage: current user, capabilities, API access,
+  server-list adapters, cursor pagination, and mutation helpers. Capability
+  hooks live in `src/lib/capabilities/`. Do not add domain/business hooks until
+  the relevant page phase.
 - Shared API components only when missing: capability gate, loading, error, empty,
   cursor pagination, and mutation form wrappers. Compose existing UI primitives,
   and commit a shared component only with at least one real usage.
@@ -248,7 +256,8 @@ Before any business page integration, build the shared infrastructure once:
 - Sidebar stays visually and structurally intact; add capability-aware filtering
   to the existing nav data/rendering.
 - `CapabilityGate` is the standard authorization primitive for pages, buttons,
-  menu items, and row actions. Do not duplicate permission logic.
+  menu items, and row actions. Route guards and sidebar filtering use the same
+  capability helpers. Do not duplicate permission logic.
 - Before building the API layer increment, inspect the generated SDK/contract and
   reuse any existing generated functionality instead of wrapping everything again.
 
@@ -285,11 +294,11 @@ users`):
   `identity.capability.read`), **deny-by-default**, GRANTED or DERIVED
   (e.g. verified instructor ⇒ `course.publish`). See
   `../api/architecture/09-capability-authorization-model.md`.
-- **Frontend usage:** fetch `/identity/me/capabilities` once after login (cache in
-  react-query / expose via a `useCapabilities()` hook), then gate **sidebar items,
-  routes, and action buttons** on capability keys (and `RoleType.ADMIN` for
-  platform-admin surfaces). Plain authenticated actions (enroll, comment, follow)
-  need no capability.
+- **Frontend usage:** fetch `/identity/me/capabilities` after login/restore and
+  expose it through auth state plus `src/lib/capabilities` hooks. Gate
+  **sidebar items, routes, menu items, and action buttons** on backend
+  capability keys. Plain authenticated actions (enroll, comment, follow) need no
+  capability.
 - **Backend reality:** the capability guard exists, but many current endpoints are
   still role-gated with `@Auth([RoleType.USER, RoleType.ADMIN])` or
   `@Auth([RoleType.ADMIN])`. The frontend should still be capability-driven; do
@@ -408,8 +417,8 @@ server-side when the endpoint supports it.
 |---|---|---|
 | Data | Mock `features/*/data/*.ts` + mock `services` (setTimeout) | Generated OpenAPI SDK + infrastructure + react-query against real endpoints |
 | Auth | Real login/logout/refresh/restore foundation exists; no business pages integrated yet | Continue using `src/lib/auth`, add capability-driven feature integrations incrementally |
-| Route guard | `_authenticated/route.tsx` restores/verifies auth before rendering | Add capability metadata/guards in the capability-routing increment |
-| Navigation | Static `components/layout/data/sidebar-data.ts` | Filtered from backend capabilities via shared nav helpers |
+| Route guard | `_authenticated/route.tsx` restores/verifies auth and enforces route `requiredCapabilities` | Continue declaring route capability metadata as business routes are integrated |
+| Navigation | Static template `components/layout/data/sidebar-data.ts` with capability filtering where exact backend keys are known | Replace template entries with backend-domain entries incrementally, filtered through shared nav helpers |
 | Screens | Template pages (Tasks/Chat/Projects/Teams/API Keys/…) | Backend domains (Courses/Offerings/Orders/Jobs/Services/Events/Profiles/…) |
 | API contract | Type-only OpenAPI contract exists; feature data types are still mostly hand-written mocks | Single generated OpenAPI SDK/contract owns DTOs, enums, requests, responses, API methods, and available error types |
 

@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
+import { CapabilityGate } from '@/lib/capabilities'
 import {
   Collapsible,
   CollapsibleContent,
@@ -47,14 +48,33 @@ export function NavGroup({ title, items }: NavGroupProps) {
           const key = `${item.title}-${item.url}`
 
           if (!item.items)
-            return <SidebarMenuLink key={key} item={item} href={href} />
+            return (
+              <CapabilityGate
+                key={key}
+                requiredCapabilities={item.requiredCapabilities}
+              >
+                <SidebarMenuLink item={item} href={href} />
+              </CapabilityGate>
+            )
 
           if (state === 'collapsed' && !isMobile)
             return (
-              <SidebarMenuCollapsedDropdown key={key} item={item} href={href} />
+              <CapabilityGate
+                key={key}
+                requiredCapabilities={item.requiredCapabilities}
+              >
+                <SidebarMenuCollapsedDropdown item={item} href={href} />
+              </CapabilityGate>
             )
 
-          return <SidebarMenuCollapsible key={key} item={item} href={href} />
+          return (
+            <CapabilityGate
+              key={key}
+              requiredCapabilities={item.requiredCapabilities}
+            >
+              <SidebarMenuCollapsible item={item} href={href} />
+            </CapabilityGate>
+          )
         })}
       </SidebarMenu>
     </SidebarGroup>
@@ -74,7 +94,9 @@ function NavBadge({
     neutral: 'bg-[var(--sur3)] text-[var(--t2)] border-transparent',
   }
   return (
-    <Badge className={`rounded-full px-1.5 py-0 text-xs ${variantClass[variant]}`}>
+    <Badge
+      className={`rounded-full px-1.5 py-0 text-xs ${variantClass[variant]}`}
+    >
       {children}
     </Badge>
   )
@@ -130,18 +152,23 @@ function SidebarMenuCollapsible({
         <CollapsibleContent className='CollapsibleContent'>
           <SidebarMenuSub>
             {item.items.map((subItem) => (
-              <SidebarMenuSubItem key={subItem.title}>
-                <SidebarMenuSubButton
-                  asChild
-                  isActive={checkIsActive(href, subItem)}
-                >
-                  <Link to={subItem.url} onClick={() => setOpenMobile(false)}>
-                    {subItem.icon && <subItem.icon />}
-                    <span>{subItem.title}</span>
-                    {subItem.badge && <NavBadge>{subItem.badge}</NavBadge>}
-                  </Link>
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
+              <CapabilityGate
+                key={subItem.title}
+                requiredCapabilities={subItem.requiredCapabilities}
+              >
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton
+                    asChild
+                    isActive={checkIsActive(href, subItem)}
+                  >
+                    <Link to={subItem.url} onClick={() => setOpenMobile(false)}>
+                      {subItem.icon && <subItem.icon />}
+                      <span>{subItem.title}</span>
+                      {subItem.badge && <NavBadge>{subItem.badge}</NavBadge>}
+                    </Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              </CapabilityGate>
             ))}
           </SidebarMenuSub>
         </CollapsibleContent>
@@ -179,18 +206,23 @@ function SidebarMenuCollapsedDropdown({
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {item.items.map((sub) => (
-            <DropdownMenuItem key={`${sub.title}-${sub.url}`} asChild>
-              <Link
-                to={sub.url}
-                className={`${checkIsActive(href, sub) ? 'bg-secondary' : ''}`}
-              >
-                {sub.icon && <sub.icon />}
-                <span className='max-w-52 text-wrap'>{sub.title}</span>
-                {sub.badge && (
-                  <span className='ms-auto text-xs'>{sub.badge}</span>
-                )}
-              </Link>
-            </DropdownMenuItem>
+            <CapabilityGate
+              key={`${sub.title}-${sub.url}`}
+              requiredCapabilities={sub.requiredCapabilities}
+            >
+              <DropdownMenuItem asChild>
+                <Link
+                  to={sub.url}
+                  className={`${checkIsActive(href, sub) ? 'bg-secondary' : ''}`}
+                >
+                  {sub.icon && <sub.icon />}
+                  <span className='max-w-52 text-wrap'>{sub.title}</span>
+                  {sub.badge && (
+                    <span className='ms-auto text-xs'>{sub.badge}</span>
+                  )}
+                </Link>
+              </DropdownMenuItem>
+            </CapabilityGate>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

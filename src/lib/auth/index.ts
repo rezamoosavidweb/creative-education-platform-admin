@@ -17,7 +17,6 @@ export {
 } from './auth-service'
 export {
   useActiveSessions,
-  useCan,
   useCurrentCapabilities,
   useCurrentOrganization,
   useCurrentUser,

@@ -1,9 +1,10 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { ensureAuthSession } from '@/lib/auth'
+import { ensureCapabilityRouteAccess } from '@/lib/capabilities'
 import { AuthenticatedLayout } from '@/components/layout/authenticated-layout'
 
 export const Route = createFileRoute('/_authenticated')({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, matches }) => {
     const isAuthenticated = await ensureAuthSession()
 
     if (!isAuthenticated) {
@@ -12,6 +13,8 @@ export const Route = createFileRoute('/_authenticated')({
         search: { redirect: location.href },
       })
     }
+
+    ensureCapabilityRouteAccess(matches)
   },
   component: AuthenticatedLayout,
 })

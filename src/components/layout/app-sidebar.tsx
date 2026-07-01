@@ -1,3 +1,7 @@
+import {
+  filterNavGroupsByCapabilities,
+  useCapabilities,
+} from '@/lib/capabilities'
 import { useLayout } from '@/context/layout-provider'
 import {
   Sidebar,
@@ -15,6 +19,12 @@ import { TeamSwitcher } from './team-switcher'
 
 export function AppSidebar() {
   const { collapsible, variant } = useLayout()
+  const capabilities = useCapabilities()
+  const navGroups = filterNavGroupsByCapabilities(
+    sidebarData.navGroups,
+    capabilities
+  )
+
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
       <SidebarHeader className='gap-2'>
@@ -22,7 +32,7 @@ export function AppSidebar() {
         <SidebarSearch />
       </SidebarHeader>
       <SidebarContent className='gap-0'>
-        {sidebarData.navGroups.map((props) => (
+        {navGroups.map((props) => (
           <NavGroup key={props.title} {...props} />
         ))}
       </SidebarContent>

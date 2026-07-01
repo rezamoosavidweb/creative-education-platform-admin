@@ -63,11 +63,16 @@ the UI.
 - Authentication infrastructure lives in `src/lib/auth/`. Use its services and
   hooks (`initializeAuthentication`, `ensureAuthSession`, `useLogin`,
   `useLogout`, `useCurrentUser`, `useCurrentOrganization`,
-  `useCurrentCapabilities`, `useIsAuthenticated`, `useCan`) instead of reading
-  or writing tokens from features.
+  `useCurrentCapabilities`, `useIsAuthenticated`) instead of reading or writing
+  tokens from features.
 - Only the auth layer owns token storage, bearer attachment, the single-flight
   refresh queue, logout, session restore, and auth state. Business features must
   never manipulate access or refresh tokens directly.
+- Capability authorization infrastructure lives in `src/lib/capabilities/`.
+  Use `CapabilityGate`, `CapabilityProvider`, `useCapabilities`,
+  `useCapability`, `useCan`, `useHasAll`, `useHasAny`, route metadata helpers,
+  route guard helpers, and sidebar filtering from there. Do not duplicate
+  capability checks in feature code.
 
 ## Phase 0 Foundation
 
@@ -83,8 +88,9 @@ Before business pages, build the integration foundation:
 - Auth login/logout/refresh, `/auth/me`, session restore, session list/revoke,
   current user, current capabilities, and current organization selection from
   `/organizations/mine` are provided by `src/lib/auth/`.
-- Add reusable hooks only: current user, capabilities, `useCan`, API access,
-  server list adapters, cursor pagination, and mutation helpers.
+- Add reusable hooks only: current user, capabilities, API access, server list
+  adapters, cursor pagination, mutation helpers, and shared capability hooks in
+  `src/lib/capabilities/`.
 - Add shared API components only when missing, composing existing UI: capability
   gate, loading/error/empty states, cursor pagination, mutation form wrappers.
   Commit a shared component only with at least one real usage.
@@ -101,13 +107,13 @@ Before business pages, build the integration foundation:
 - `CapabilityGate` is the standard authorization primitive. Do not duplicate
   permission logic.
 - Route metadata should contain `requiredCapabilities`; keep route `beforeLoad`
-  guards very small.
+  guards very small and delegate to `ensureCapabilityRouteAccess()`.
 - Backend `RoleType` currently has `USER` and `ADMIN`; personas are capability
   sets and org/profile state, not separate layouts.
-- Fetch `/identity/me/capabilities` after login and expose it through a reusable
-  hook/provider. Gate UI with capability keys such as `course.publish`,
-  `course.sell`, `service.sell`, `jobs.post`, `org.manage`, `payout.withdraw`,
-  and `identity.capability.read`.
+- Fetch `/identity/me/capabilities` after login/restore and expose it through
+  auth state plus `src/lib/capabilities/`. Gate UI with capability keys such as
+  `course.publish`, `course.sell`, `service.sell`, `jobs.post`, `org.manage`,
+  `payout.withdraw`, and `identity.capability.read`.
 
 ## Backend Notes
 
