@@ -218,6 +218,13 @@ and PageDto/cursor list normalization. Business features should consume these
 hooks instead of calling `useQuery`, `useMutation`, or `apiRequest` directly for
 backend data.
 
+**Server table foundation:** keep the existing `components/data-table/*`
+primitives. Server-backed tables should use `components/data-table/server-table`
+adapters for URL-synced pagination, filtering, sorting, debounced searching,
+PageDto/cursor metadata, manual TanStack Table options, loading/error/empty
+status, and refresh wiring. Do not re-enable client-side fake pagination,
+sorting, or filtering for backend lists.
+
 **Target pattern (build this, don't scatter fetch calls):**
 
 1. **Generated SDK / contract:** one generated OpenAPI source for DTOs, enums,
@@ -266,6 +273,9 @@ Before any business page integration, build the shared infrastructure once:
   and commit a shared component only with at least one real usage.
 - Table/form adapters wrap existing DataTable and shadcn/react-hook-form patterns;
   never replace or fork DataTable.
+- Server-backed tables use `components/data-table/server-table` adapters with
+  manual pagination/filtering/sorting and metadata from PageDto or cursor
+  responses. Do not duplicate server table URL/query mapping per feature.
 - Sidebar stays visually and structurally intact; add capability-aware filtering
   to the existing nav data/rendering.
 - `CapabilityGate` is the standard authorization primitive for pages, buttons,

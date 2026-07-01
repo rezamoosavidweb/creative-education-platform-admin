@@ -78,6 +78,10 @@ the UI.
   `useInvalidate`, and `apiQueryKeys` for backend data. Do not duplicate
   query-key, retry, cancellation, invalidation, optimistic-update, PageDto, or
   cursor-list logic in feature modules.
+- Server table infrastructure lives in `components/data-table/server-table`.
+  Keep the existing DataTable primitives and use the server adapters for
+  URL-synced pagination, filtering, sorting, debounced searching, PageDto/cursor
+  metadata, manual TanStack Table options, status, and refresh wiring.
 
 ## Phase 0 Foundation
 
@@ -101,6 +105,8 @@ Before business pages, build the integration foundation:
   Commit a shared component only with at least one real usage.
 - Adapt existing DataTable/form/navigation patterns; never replace or fork
   DataTable.
+- Server-backed tables must use manual pagination/filtering/sorting adapters;
+  do not implement client-side fake pagination for backend lists.
 - Use the dedicated `typecheck` script in each increment. The repo package
   manager remains pnpm even when task wording says `npm run ...`.
 
