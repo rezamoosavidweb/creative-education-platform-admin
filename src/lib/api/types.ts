@@ -43,12 +43,10 @@ type OperationParameters<Operation> = Operation extends {
 export type ApiPathParams<
   Path extends ApiPath,
   Method extends ApiMethod<Path>,
-> =
-  OperationParameters<ApiOperation<Path, Method>> extends {
-    path: infer Params
-  }
-    ? Params
-    : PathTemplateParams<Path>
+> = MergePathParams<
+  PathTemplateParams<Path>,
+  OperationPathParams<ApiOperation<Path, Method>>
+>
 
 export type ApiQueryParams<
   Path extends ApiPath,
@@ -165,3 +163,18 @@ type PathTemplateParams<Path extends string> = [
 ] extends [never]
   ? never
   : Record<PathTemplateParamKeys<Path>, string | number>
+
+type OperationPathParams<Operation> =
+  OperationParameters<Operation> extends {
+    path?: infer Params
+  }
+    ? NonNullable<Params>
+    : never
+
+type MergePathParams<TemplateParams, OperationParams> = [
+  TemplateParams,
+] extends [never]
+  ? OperationParams
+  : [OperationParams] extends [never]
+    ? TemplateParams
+    : TemplateParams & OperationParams

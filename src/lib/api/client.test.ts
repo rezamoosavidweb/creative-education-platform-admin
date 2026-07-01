@@ -124,6 +124,27 @@ describe('apiClient infrastructure', () => {
     expect(seen[0].url).toBe('/auth/sessions/session%201')
   })
 
+  it('merges operation and path-template params for generated capability routes', async () => {
+    const seen: InternalAxiosRequestConfig[] = []
+    apiClient.defaults.adapter = createAdapter((config) => {
+      seen.push(config)
+      return createResponse(config, { capabilities: [] })
+    })
+
+    await apiRequest({
+      path: '/identity/users/{userId}/capabilities/{capability}',
+      method: 'delete',
+      pathParams: {
+        userId: 'user 1',
+        capability: 'course.publish',
+      },
+    })
+
+    expect(seen[0].url).toBe(
+      '/identity/users/user%201/capabilities/course.publish'
+    )
+  })
+
   it('maps axios failures to ApiError', async () => {
     apiClient.defaults.adapter = createAdapter((config) => {
       throw createAxiosError(config, 422, { title: 'Validation failed' })
