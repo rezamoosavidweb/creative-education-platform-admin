@@ -32,6 +32,7 @@ import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedSessionsIndexRouteImport } from './routes/_authenticated/sessions/index'
 import { Route as AuthenticatedSecurityIndexRouteImport } from './routes/_authenticated/security/index'
 import { Route as AuthenticatedRolesIndexRouteImport } from './routes/_authenticated/roles/index'
+import { Route as AuthenticatedReferenceIndexRouteImport } from './routes/_authenticated/reference/index'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
 import { Route as AuthenticatedProfilesIndexRouteImport } from './routes/_authenticated/profiles/index'
 import { Route as AuthenticatedPermissionsIndexRouteImport } from './routes/_authenticated/permissions/index'
@@ -175,6 +176,12 @@ const AuthenticatedRolesIndexRoute = AuthenticatedRolesIndexRouteImport.update({
   path: '/roles/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReferenceIndexRoute =
+  AuthenticatedReferenceIndexRouteImport.update({
+    id: '/reference/',
+    path: '/reference/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProjectsIndexRoute =
   AuthenticatedProjectsIndexRouteImport.update({
     id: '/projects/',
@@ -367,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/permissions/': typeof AuthenticatedPermissionsIndexRoute
   '/profiles/': typeof AuthenticatedProfilesIndexRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
+  '/reference/': typeof AuthenticatedReferenceIndexRoute
   '/roles/': typeof AuthenticatedRolesIndexRoute
   '/security/': typeof AuthenticatedSecurityIndexRoute
   '/sessions/': typeof AuthenticatedSessionsIndexRoute
@@ -414,6 +422,7 @@ export interface FileRoutesByTo {
   '/permissions': typeof AuthenticatedPermissionsIndexRoute
   '/profiles': typeof AuthenticatedProfilesIndexRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
+  '/reference': typeof AuthenticatedReferenceIndexRoute
   '/roles': typeof AuthenticatedRolesIndexRoute
   '/security': typeof AuthenticatedSecurityIndexRoute
   '/sessions': typeof AuthenticatedSessionsIndexRoute
@@ -466,6 +475,7 @@ export interface FileRoutesById {
   '/_authenticated/permissions/': typeof AuthenticatedPermissionsIndexRoute
   '/_authenticated/profiles/': typeof AuthenticatedProfilesIndexRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
+  '/_authenticated/reference/': typeof AuthenticatedReferenceIndexRoute
   '/_authenticated/roles/': typeof AuthenticatedRolesIndexRoute
   '/_authenticated/security/': typeof AuthenticatedSecurityIndexRoute
   '/_authenticated/sessions/': typeof AuthenticatedSessionsIndexRoute
@@ -516,6 +526,7 @@ export interface FileRouteTypes {
     | '/permissions/'
     | '/profiles/'
     | '/projects/'
+    | '/reference/'
     | '/roles/'
     | '/security/'
     | '/sessions/'
@@ -563,6 +574,7 @@ export interface FileRouteTypes {
     | '/permissions'
     | '/profiles'
     | '/projects'
+    | '/reference'
     | '/roles'
     | '/security'
     | '/sessions'
@@ -614,6 +626,7 @@ export interface FileRouteTypes {
     | '/_authenticated/permissions/'
     | '/_authenticated/profiles/'
     | '/_authenticated/projects/'
+    | '/_authenticated/reference/'
     | '/_authenticated/roles/'
     | '/_authenticated/security/'
     | '/_authenticated/sessions/'
@@ -799,6 +812,13 @@ declare module '@tanstack/react-router' {
       path: '/roles'
       fullPath: '/roles/'
       preLoaderRoute: typeof AuthenticatedRolesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reference/': {
+      id: '/_authenticated/reference/'
+      path: '/reference'
+      fullPath: '/reference/'
+      preLoaderRoute: typeof AuthenticatedReferenceIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/projects/': {
@@ -1031,6 +1051,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPermissionsIndexRoute: typeof AuthenticatedPermissionsIndexRoute
   AuthenticatedProfilesIndexRoute: typeof AuthenticatedProfilesIndexRoute
   AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
+  AuthenticatedReferenceIndexRoute: typeof AuthenticatedReferenceIndexRoute
   AuthenticatedRolesIndexRoute: typeof AuthenticatedRolesIndexRoute
   AuthenticatedSecurityIndexRoute: typeof AuthenticatedSecurityIndexRoute
   AuthenticatedSessionsIndexRoute: typeof AuthenticatedSessionsIndexRoute
@@ -1062,6 +1083,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPermissionsIndexRoute: AuthenticatedPermissionsIndexRoute,
   AuthenticatedProfilesIndexRoute: AuthenticatedProfilesIndexRoute,
   AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
+  AuthenticatedReferenceIndexRoute: AuthenticatedReferenceIndexRoute,
   AuthenticatedRolesIndexRoute: AuthenticatedRolesIndexRoute,
   AuthenticatedSecurityIndexRoute: AuthenticatedSecurityIndexRoute,
   AuthenticatedSessionsIndexRoute: AuthenticatedSessionsIndexRoute,

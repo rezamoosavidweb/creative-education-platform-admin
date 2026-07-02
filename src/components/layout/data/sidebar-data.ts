@@ -2,6 +2,7 @@ import {
   Activity,
   BarChart3,
   Bell,
+  BookOpenText,
   Building2,
   CreditCard,
   FolderKanban,
@@ -140,6 +141,11 @@ export const sidebarData: SidebarData = {
           badge: '3',
           badgeVariant: 'destructive',
           icon: Bell,
+        },
+        {
+          title: 'Reference',
+          url: '/reference',
+          icon: BookOpenText,
         },
         {
           title: 'Integrations',
