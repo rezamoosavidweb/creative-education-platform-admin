@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, Loader2, Save, Send, ShieldOff } from 'lucide-react'
 import { toast } from 'sonner'
-import { getApiErrorMessage } from '@/lib/api'
+import { getApiErrorMessage, isApiError } from '@/lib/api'
 import { useApiForm } from '@/lib/forms'
 import { useInvalidate } from '@/lib/query'
 import { Button } from '@/components/ui/button'
@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { ApiError, ApiLoading } from '@/components/api'
+import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
 import { StatusPill } from '@/components/status-pill'
 import { useChangeHandle } from '../hooks/use-change-handle'
 import { useMyProfile } from '../hooks/use-my-profile'
@@ -57,6 +57,7 @@ export function MyProfileCard() {
   const unpublishMutation = useUnpublishProfile()
   const invalidate = useInvalidate()
   const profile = profileQuery.data?.data
+  const missingProfile = isMissingProfile(profileQuery.error)
   const profileForm = useApiForm<UpdateProfileRequest>({
     values: {
       bio: profile?.bio ?? '',
@@ -150,10 +151,16 @@ export function MyProfileCard() {
         </CardHeader>
         <CardContent className='space-y-6'>
           {profileQuery.isLoading && <ApiLoading label='Loading profile...' />}
-          {profileQuery.error && (
+          {profileQuery.error && !missingProfile && (
             <ApiError
               error={profileQuery.error}
               onRetry={profileQuery.refetch}
+            />
+          )}
+          {!profileQuery.isLoading && missingProfile && (
+            <ApiEmpty
+              description='Create a persona profile before publishing a public profile.'
+              title='No current profile'
             />
           )}
           {profile && (
@@ -384,4 +391,8 @@ function getRootServerMessage(error: unknown): string | null {
   if (!error || typeof error !== 'object') return null
   const server = (error as { server?: { message?: unknown } }).server
   return typeof server?.message === 'string' ? server.message : null
+}
+
+function isMissingProfile(error: unknown): boolean {
+  return isApiError(error) && error.status === 404
 }
