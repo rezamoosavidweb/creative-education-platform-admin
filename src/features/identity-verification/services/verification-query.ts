@@ -1,3 +1,4 @@
+import type { AuthCapability } from '@/lib/auth'
 import type { PillTone } from '@/components/status-pill'
 import type { ServerTableMeta } from '@/components/data-table'
 import type {
@@ -5,6 +6,9 @@ import type {
   VerificationQueueResponse,
   VerificationStatus,
 } from '../types'
+
+export const PROFILE_VERIFICATION_REVIEW_CAPABILITY =
+  'profiles.verification.review' satisfies AuthCapability
 
 export function getVerificationQueueItems(
   raw: VerificationQueueResponse | undefined

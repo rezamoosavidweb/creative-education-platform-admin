@@ -135,6 +135,9 @@ Before business pages, build the integration foundation:
   auth state plus `src/lib/capabilities/`. Gate UI with capability keys such as
   `course.publish`, `course.sell`, `service.sell`, `jobs.post`, `org.manage`,
   `payout.withdraw`, and `identity.capability.read`.
+- Identity Verification administration is gated by
+  `profiles.verification.review`; use that backend key for route metadata,
+  sidebar visibility, and approve/reject row actions.
 
 ## Backend Notes
 

@@ -22,6 +22,7 @@ import {
   getVerificationQueueItems,
   getVerificationQueueMeta,
   getVerificationStatusTone,
+  PROFILE_VERIFICATION_REVIEW_CAPABILITY,
 } from '../services/verification-query'
 import type { ProfileVerification } from '../types'
 import { RejectVerificationDialog } from './reject-verification-dialog'
@@ -228,7 +229,9 @@ function createVerificationColumns({
           >
             <Eye className='size-4' />
           </Button>
-          <CapabilityGate>
+          <CapabilityGate
+            requiredCapabilities={PROFILE_VERIFICATION_REVIEW_CAPABILITY}
+          >
             <Button
               type='button'
               variant='ghost'

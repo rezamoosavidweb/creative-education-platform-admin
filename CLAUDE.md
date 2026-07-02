@@ -341,6 +341,10 @@ users`):
   still role-gated with `@Auth([RoleType.USER, RoleType.ADMIN])` or
   `@Auth([RoleType.ADMIN])`. The frontend should still be capability-driven; do
   not infer business access from route availability alone.
+- **Identity Verification admin access:** queue, approve, and reject are gated by
+  the backend capability `profiles.verification.review`. Use this same key for
+  route metadata, sidebar visibility, and verification row actions; do not add
+  role-only frontend checks for this area.
 
 ## Component Library (shadcn/ui)
 

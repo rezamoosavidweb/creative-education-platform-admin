@@ -3,6 +3,7 @@ import {
   getVerificationQueueItems,
   getVerificationQueueMeta,
   getVerificationStatusTone,
+  PROFILE_VERIFICATION_REVIEW_CAPABILITY,
 } from './verification-query'
 import type { ProfileVerification } from '../types'
 
@@ -18,6 +19,12 @@ const verification: ProfileVerification = {
 }
 
 describe('verification query helpers', () => {
+  it('uses the backend profile verification review capability', () => {
+    expect(PROFILE_VERIFICATION_REVIEW_CAPABILITY).toBe(
+      'profiles.verification.review'
+    )
+  })
+
   it('reads queue items from the generated backend array response', () => {
     expect(getVerificationQueueItems([verification])).toEqual([verification])
     expect(getVerificationQueueItems(undefined)).toEqual([])

@@ -78,6 +78,7 @@ export const sidebarData: SidebarData = {
         {
           title: 'Verification',
           url: '/identity-verification',
+          requiredCapabilities: ['profiles.verification.review'],
           icon: ShieldCheck,
         },
         {

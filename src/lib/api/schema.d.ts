@@ -5826,6 +5826,13 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Missing profiles.verification.review */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     ProfileVerificationController_approve: {
@@ -5847,6 +5854,13 @@ export interface operations {
             };
             /** @description Unauthorized */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing profiles.verification.review */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5877,6 +5891,13 @@ export interface operations {
             };
             /** @description Unauthorized */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing profiles.verification.review */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
