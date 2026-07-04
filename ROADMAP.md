@@ -67,6 +67,8 @@ root standards docs.
       reputation rollups, and owner edit/remove workflows.
 - [x] Media module added for uploads, public asset lookup, raw access, and
       owner delete workflows.
+- [x] Search module added for global faceted search, autocomplete, term
+      suggestions, facets, and cursor pagination.
 
 ## In Progress
 
@@ -109,6 +111,8 @@ module passes checks or has documented blockers.
       slice.
 - [x] Media module backend-backed upload, lookup, raw access, and owner delete
       slice.
+- [x] Search module backend-backed global search, suggestions, facets, and
+      pagination slice.
 
 ## Known Technical Debt
 
@@ -150,9 +154,8 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include search, notification
-  administration, revenue, coupons, and deeper learning workflows. Implement
-  each as its own
+- Backend-supported future candidates include notification administration,
+  revenue, coupons, and deeper learning workflows. Implement each as its own
   generated-contract-backed module.
 - Courses is scoped to current-user authoring plus public catalog visibility;
   no global course moderation contract exists. Course sections, lessons,
@@ -172,6 +175,9 @@ module passes checks or has documented blockers.
 - Media is scoped to upload, public lookup by UUID, raw asset access, and
   owner-only delete. No current-user library/listing, search, folders, signed
   playback URL creation, global moderation, or pagination contracts exist yet.
+- Search is scoped to backend faceted search, autocomplete, term suggestions,
+  and cursor pagination. Local response normalization exists because generated
+  nested search arrays currently come through as singular DTO types.
 
 ## Required Module Completion Checklist
 

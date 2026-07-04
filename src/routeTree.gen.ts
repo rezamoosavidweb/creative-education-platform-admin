@@ -31,6 +31,7 @@ import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedSessionsIndexRouteImport } from './routes/_authenticated/sessions/index'
 import { Route as AuthenticatedSecurityIndexRouteImport } from './routes/_authenticated/security/index'
+import { Route as AuthenticatedSearchIndexRouteImport } from './routes/_authenticated/search/index'
 import { Route as AuthenticatedRolesIndexRouteImport } from './routes/_authenticated/roles/index'
 import { Route as AuthenticatedReviewsIndexRouteImport } from './routes/_authenticated/reviews/index'
 import { Route as AuthenticatedReferenceIndexRouteImport } from './routes/_authenticated/reference/index'
@@ -174,6 +175,12 @@ const AuthenticatedSecurityIndexRoute =
   AuthenticatedSecurityIndexRouteImport.update({
     id: '/security/',
     path: '/security/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSearchIndexRoute =
+  AuthenticatedSearchIndexRouteImport.update({
+    id: '/search/',
+    path: '/search/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedRolesIndexRoute = AuthenticatedRolesIndexRouteImport.update({
@@ -415,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/reference/': typeof AuthenticatedReferenceIndexRoute
   '/reviews/': typeof AuthenticatedReviewsIndexRoute
   '/roles/': typeof AuthenticatedRolesIndexRoute
+  '/search/': typeof AuthenticatedSearchIndexRoute
   '/security/': typeof AuthenticatedSecurityIndexRoute
   '/sessions/': typeof AuthenticatedSessionsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -468,6 +476,7 @@ export interface FileRoutesByTo {
   '/reference': typeof AuthenticatedReferenceIndexRoute
   '/reviews': typeof AuthenticatedReviewsIndexRoute
   '/roles': typeof AuthenticatedRolesIndexRoute
+  '/search': typeof AuthenticatedSearchIndexRoute
   '/security': typeof AuthenticatedSecurityIndexRoute
   '/sessions': typeof AuthenticatedSessionsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
@@ -526,6 +535,7 @@ export interface FileRoutesById {
   '/_authenticated/reference/': typeof AuthenticatedReferenceIndexRoute
   '/_authenticated/reviews/': typeof AuthenticatedReviewsIndexRoute
   '/_authenticated/roles/': typeof AuthenticatedRolesIndexRoute
+  '/_authenticated/search/': typeof AuthenticatedSearchIndexRoute
   '/_authenticated/security/': typeof AuthenticatedSecurityIndexRoute
   '/_authenticated/sessions/': typeof AuthenticatedSessionsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -582,6 +592,7 @@ export interface FileRouteTypes {
     | '/reference/'
     | '/reviews/'
     | '/roles/'
+    | '/search/'
     | '/security/'
     | '/sessions/'
     | '/settings/'
@@ -635,6 +646,7 @@ export interface FileRouteTypes {
     | '/reference'
     | '/reviews'
     | '/roles'
+    | '/search'
     | '/security'
     | '/sessions'
     | '/settings'
@@ -692,6 +704,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reference/'
     | '/_authenticated/reviews/'
     | '/_authenticated/roles/'
+    | '/_authenticated/search/'
     | '/_authenticated/security/'
     | '/_authenticated/sessions/'
     | '/_authenticated/settings/'
@@ -869,6 +882,13 @@ declare module '@tanstack/react-router' {
       path: '/security'
       fullPath: '/security/'
       preLoaderRoute: typeof AuthenticatedSecurityIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/search/': {
+      id: '/_authenticated/search/'
+      path: '/search'
+      fullPath: '/search/'
+      preLoaderRoute: typeof AuthenticatedSearchIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/roles/': {
@@ -1157,6 +1177,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedReferenceIndexRoute: typeof AuthenticatedReferenceIndexRoute
   AuthenticatedReviewsIndexRoute: typeof AuthenticatedReviewsIndexRoute
   AuthenticatedRolesIndexRoute: typeof AuthenticatedRolesIndexRoute
+  AuthenticatedSearchIndexRoute: typeof AuthenticatedSearchIndexRoute
   AuthenticatedSecurityIndexRoute: typeof AuthenticatedSecurityIndexRoute
   AuthenticatedSessionsIndexRoute: typeof AuthenticatedSessionsIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
@@ -1194,6 +1215,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReferenceIndexRoute: AuthenticatedReferenceIndexRoute,
   AuthenticatedReviewsIndexRoute: AuthenticatedReviewsIndexRoute,
   AuthenticatedRolesIndexRoute: AuthenticatedRolesIndexRoute,
+  AuthenticatedSearchIndexRoute: AuthenticatedSearchIndexRoute,
   AuthenticatedSecurityIndexRoute: AuthenticatedSecurityIndexRoute,
   AuthenticatedSessionsIndexRoute: AuthenticatedSessionsIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,

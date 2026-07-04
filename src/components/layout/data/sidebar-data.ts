@@ -10,6 +10,7 @@ import {
   KeyRound,
   LayoutDashboard,
   Lock,
+  Search,
   Settings,
   ShieldCheck,
   Star,
@@ -92,6 +93,16 @@ export const sidebarData: SidebarData = {
           title: 'Media',
           url: '/media',
           icon: Image,
+        },
+      ],
+    },
+    {
+      title: 'Discovery',
+      items: [
+        {
+          title: 'Search',
+          url: '/search',
+          icon: Search,
         },
       ],
     },
