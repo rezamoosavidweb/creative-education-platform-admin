@@ -1,11 +1,20 @@
-import { CheckCheck, Settings } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useServerQuery } from '@/lib/query'
+import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { NotificationList } from './components/notification-list'
-import { notifications } from './data/notifications'
+import { getNotifications } from './services/notifications-query'
 
 export function Notifications() {
+  const notificationsQuery = useServerQuery({
+    request: {
+      method: 'get',
+      path: '/notifications/mine',
+      query: { limit: 20 },
+    },
+  })
+  const notifications = getNotifications(notificationsQuery.data)
+
   return (
     <>
       <Header fixed />
@@ -18,22 +27,33 @@ export function Notifications() {
                 Notifications
               </h2>
               <p className='text-muted-foreground'>
-                Stay up to date with your workspace activity.
+                Review backend notifications delivered to your account.
               </p>
-            </div>
-            <div className='flex gap-2'>
-              <Button variant='outline'>
-                <CheckCheck className='h-4 w-4' />
-                Mark all read
-              </Button>
-              <Button variant='outline'>
-                <Settings className='h-4 w-4' />
-                Preferences
-              </Button>
             </div>
           </div>
 
-          <NotificationList items={notifications} />
+          {notificationsQuery.isLoading && (
+            <ApiLoading label='Loading notifications...' />
+          )}
+          {notificationsQuery.isError && (
+            <ApiError
+              error={notificationsQuery.error}
+              onRetry={() => void notificationsQuery.refetch()}
+            />
+          )}
+          {!notificationsQuery.isLoading &&
+            !notificationsQuery.isError &&
+            notifications.length === 0 && (
+              <ApiEmpty
+                title='No notifications'
+                description='The backend returned no inbox notifications.'
+              />
+            )}
+          {!notificationsQuery.isLoading &&
+            !notificationsQuery.isError &&
+            notifications.length > 0 && (
+              <NotificationList items={notifications} />
+            )}
         </div>
       </Main>
     </>

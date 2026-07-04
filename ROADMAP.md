@@ -53,6 +53,8 @@ root standards docs.
       backend analytics contract exists.
 - [x] Billing module migrated from mock plan/invoice UI to current-user commerce
       order, subscription, and payout contracts.
+- [x] Notifications module migrated from mock inbox data to current-user backend
+      notification inbox contracts.
 
 ## In Progress
 
@@ -84,7 +86,7 @@ module passes checks or has documented blockers.
 - [x] Audit logs module compliance audit.
 - [x] Analytics module compliance audit.
 - [x] Billing module compliance audit.
-- [ ] Notifications module compliance audit.
+- [x] Notifications module compliance audit.
 - [ ] Projects/tasks/template modules: decide keep, rename, or remove based on
       backend domain fit.
 
@@ -116,6 +118,9 @@ module passes checks or has documented blockers.
 - Billing is current-user commerce history through `/orders/mine`,
   `/subscriptions/mine`, and `/payouts/mine`; no invoice, plan, usage, or global
   billing admin endpoints are currently exposed.
+- Notifications inbox uses `/notifications/mine`. Mark-read/dismiss actions are
+  not exposed by the backend; notification templates, send, and delivery admin
+  operations should be separate capability-gated modules.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
