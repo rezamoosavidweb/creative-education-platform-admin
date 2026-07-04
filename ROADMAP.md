@@ -65,6 +65,8 @@ root standards docs.
       and current-user contracts.
 - [x] Reviews module added for current-user reviews, subject review lookup,
       reputation rollups, and owner edit/remove workflows.
+- [x] Media module added for uploads, public asset lookup, raw access, and
+      owner delete workflows.
 
 ## In Progress
 
@@ -104,6 +106,8 @@ module passes checks or has documented blockers.
 - [x] Marketplace module backend-backed service, job, application, and contract
       slice.
 - [x] Reviews module backend-backed current-user review and subject reputation
+      slice.
+- [x] Media module backend-backed upload, lookup, raw access, and owner delete
       slice.
 
 ## Known Technical Debt
@@ -146,7 +150,7 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include media, search, notification
+- Backend-supported future candidates include search, notification
   administration, revenue, coupons, and deeper learning workflows. Implement
   each as its own
   generated-contract-backed module.
@@ -165,6 +169,9 @@ module passes checks or has documented blockers.
 - Reviews is scoped to current-user reviews, published reviews by explicit
   subject type/UUID, and subject reputation rollups. No global moderation,
   reported-review queue, subject search, or pagination contracts exist yet.
+- Media is scoped to upload, public lookup by UUID, raw asset access, and
+  owner-only delete. No current-user library/listing, search, folders, signed
+  playback URL creation, global moderation, or pagination contracts exist yet.
 
 ## Required Module Completion Checklist
 
