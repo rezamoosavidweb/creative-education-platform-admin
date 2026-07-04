@@ -51,6 +51,8 @@ root standards docs.
       contract exists.
 - [x] Analytics module audited; mock product analytics removed because no
       backend analytics contract exists.
+- [x] Billing module migrated from mock plan/invoice UI to current-user commerce
+      order, subscription, and payout contracts.
 
 ## In Progress
 
@@ -81,7 +83,7 @@ module passes checks or has documented blockers.
 - [x] Reference catalogs module compliance audit.
 - [x] Audit logs module compliance audit.
 - [x] Analytics module compliance audit.
-- [ ] Billing module compliance audit.
+- [x] Billing module compliance audit.
 - [ ] Notifications module compliance audit.
 - [ ] Projects/tasks/template modules: decide keep, rename, or remove based on
       backend domain fit.
@@ -111,6 +113,9 @@ module passes checks or has documented blockers.
 - Product analytics is blocked by missing backend analytics endpoints. The
   Prometheus `/metrics` scrape endpoint is operational infrastructure, not an
   Admin analytics contract.
+- Billing is current-user commerce history through `/orders/mine`,
+  `/subscriptions/mine`, and `/payouts/mine`; no invoice, plan, usage, or global
+  billing admin endpoints are currently exposed.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
