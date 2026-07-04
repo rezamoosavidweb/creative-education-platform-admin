@@ -63,6 +63,8 @@ root standards docs.
       lifecycle actions, attendee lookup, and creation workflows.
 - [x] Marketplace module added for service listings, open jobs, applications,
       and current-user contracts.
+- [x] Reviews module added for current-user reviews, subject review lookup,
+      reputation rollups, and owner edit/remove workflows.
 
 ## In Progress
 
@@ -100,6 +102,8 @@ module passes checks or has documented blockers.
 - [x] Courses module initial backend-backed slice.
 - [x] Events module backend-backed discovery, organizer, RSVP, and venue slice.
 - [x] Marketplace module backend-backed service, job, application, and contract
+      slice.
+- [x] Reviews module backend-backed current-user review and subject reputation
       slice.
 
 ## Known Technical Debt
@@ -142,9 +146,9 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include reviews, media, search,
-  notification administration, revenue, coupons, and deeper learning workflows.
-  Implement each as its own
+- Backend-supported future candidates include media, search, notification
+  administration, revenue, coupons, and deeper learning workflows. Implement
+  each as its own
   generated-contract-backed module.
 - Courses is scoped to current-user authoring plus public catalog visibility;
   no global course moderation contract exists. Course sections, lessons,
@@ -158,6 +162,9 @@ module passes checks or has documented blockers.
   review by job ID, and current-user contracts. No current-user posted jobs
   listing, marketplace update/delete, global moderation, or pagination
   contracts exist yet.
+- Reviews is scoped to current-user reviews, published reviews by explicit
+  subject type/UUID, and subject reputation rollups. No global moderation,
+  reported-review queue, subject search, or pagination contracts exist yet.
 
 ## Required Module Completion Checklist
 

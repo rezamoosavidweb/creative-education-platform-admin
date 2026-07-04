@@ -11,6 +11,7 @@ import {
   Lock,
   Settings,
   ShieldCheck,
+  Star,
   UserCircle,
   Users,
 } from 'lucide-react'
@@ -80,6 +81,11 @@ export const sidebarData: SidebarData = {
           title: 'Marketplace',
           url: '/marketplace',
           icon: Briefcase,
+        },
+        {
+          title: 'Reviews',
+          url: '/reviews',
+          icon: Star,
         },
       ],
     },
