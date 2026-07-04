@@ -13,7 +13,6 @@ import {
   MessagesSquare,
   Monitor,
   Plug,
-  ScrollText,
   Settings,
   Shield,
   ShieldCheck,
@@ -116,11 +115,6 @@ export const sidebarData: SidebarData = {
           title: 'Analytics',
           url: '/analytics',
           icon: BarChart3,
-        },
-        {
-          title: 'Audit Logs',
-          url: '/audit-logs',
-          icon: ScrollText,
         },
         {
           title: 'Logs',

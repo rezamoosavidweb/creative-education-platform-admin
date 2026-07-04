@@ -1,9 +1,7 @@
-import { Download } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { FileSearch } from 'lucide-react'
+import { ApiEmpty } from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { AuditLogsTable } from './components/audit-logs-table'
-import { auditLogs } from './data/audit-logs'
 
 export function AuditLogs() {
   return (
@@ -11,20 +9,20 @@ export function AuditLogs() {
       <Header fixed />
 
       <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
-        <div className='flex flex-wrap items-end justify-between gap-2'>
-          <div>
-            <h2 className='text-2xl font-bold tracking-tight'>Audit Logs</h2>
-            <p className='text-muted-foreground'>
-              Security-relevant events and administrative changes.
-            </p>
-          </div>
-          <Button variant='outline'>
-            <Download className='h-4 w-4' />
-            Export
-          </Button>
+        <div>
+          <h2 className='text-2xl font-bold tracking-tight'>Audit Logs</h2>
+          <p className='text-muted-foreground'>
+            Backend audit events are currently emitted to structured logs only.
+          </p>
         </div>
 
-        <AuditLogsTable logs={auditLogs} />
+        <div className='rounded-md border bg-[var(--sur)] p-6'>
+          <FileSearch className='mx-auto mb-3 size-8 text-muted-foreground' />
+          <ApiEmpty
+            title='No audit log API available'
+            description='The backend does not expose a supported audit-log listing or export endpoint yet.'
+          />
+        </div>
       </Main>
     </>
   )

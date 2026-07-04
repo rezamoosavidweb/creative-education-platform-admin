@@ -47,6 +47,8 @@ root standards docs.
 - [x] Sessions module audited against current-user auth-session contracts.
 - [x] Reference catalogs module audited against active read-only taxonomy
       contracts.
+- [x] Audit logs module audited; mock data removed because no backend listing
+      contract exists.
 
 ## In Progress
 
@@ -75,7 +77,7 @@ module passes checks or has documented blockers.
 - [x] Permissions module compliance audit.
 - [x] Sessions module compliance audit.
 - [x] Reference catalogs module compliance audit.
-- [ ] Audit logs module compliance audit.
+- [x] Audit logs module compliance audit.
 - [ ] Analytics module compliance audit.
 - [ ] Billing module compliance audit.
 - [ ] Notifications module compliance audit.
@@ -101,6 +103,9 @@ module passes checks or has documented blockers.
   global admin session management or community scheduled sessions.
 - Reference catalogs are active, read-only taxonomy arrays; no catalog write
   endpoints are currently exposed.
+- Audit log browsing is blocked by missing backend list/export endpoints. Auth
+  audit events currently go to structured logs only, so the mock Admin table was
+  removed from navigation.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
