@@ -14,11 +14,25 @@ the UI.
 
 ## Read First
 
+- Read `ARCHITECTURE.md`, `FRONTEND_GUIDELINES.md`,
+  `COMPONENT_GUIDELINES.md`, `TESTING.md`, `PERFORMANCE.md`, and `ROADMAP.md`
+  before planning implementation work.
 - Read `CLAUDE.md` before frontend work.
 - Read `../api/CLAUDE.md` before backend-contract or API behavior work.
 - For backend capability and domain language, prefer `../api/openapi.json`,
   `../api/src/modules/**`, `../api/prisma/schema.prisma`, and
   `../api/architecture/*.md`.
+
+## Documentation First Rule
+
+Do not begin broad implementation refactors until the root standards docs exist
+and the planned work is consistent with them. Documentation is the source of
+truth for architecture, folder structure, naming, exports, TypeScript, state,
+React usage, performance, tests, API integration, forms, loading, errors,
+accessibility, styling, and clean code.
+
+When adding a new convention, update the relevant standards doc and prefer an
+automated lint, type, test, or generation guard when practical.
 
 ## Frontend Rules
 

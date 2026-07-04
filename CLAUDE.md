@@ -2,6 +2,22 @@
 
 Guidance for Claude Code (claude.ai/code) when working in the **Admin** repository.
 
+## Canonical Standards
+
+Before implementation work, read these root standards docs:
+
+- `ARCHITECTURE.md`
+- `FRONTEND_GUIDELINES.md`
+- `COMPONENT_GUIDELINES.md`
+- `TESTING.md`
+- `PERFORMANCE.md`
+- `ROADMAP.md`
+
+These documents are the source of truth for future frontend work. When a module
+does not match them, refactor the module to the documented architecture one
+module at a time. When a documented convention can be enforced automatically,
+prefer ESLint, TypeScript, tests, generation, or Knip over prose alone.
+
 ## Project Overview
 
 Single, unified **Admin web application** for the Creative Education Platform (a
