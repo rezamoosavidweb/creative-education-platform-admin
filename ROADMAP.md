@@ -55,6 +55,8 @@ root standards docs.
       order, subscription, and payout contracts.
 - [x] Notifications module migrated from mock inbox data to current-user backend
       notification inbox contracts.
+- [x] Remaining template modules audited; unsupported mock surfaces removed from
+      navigation and replaced with direct-route unavailable states.
 
 ## In Progress
 
@@ -87,13 +89,13 @@ module passes checks or has documented blockers.
 - [x] Analytics module compliance audit.
 - [x] Billing module compliance audit.
 - [x] Notifications module compliance audit.
-- [ ] Projects/tasks/template modules: decide keep, rename, or remove based on
+- [x] Projects/tasks/template modules: decide keep, rename, or remove based on
       backend domain fit.
 
 ## Known Technical Debt
 
-- Several pages still use mock/template data instead of backend-backed services.
-  The dashboard is no longer mock-backed.
+- Remaining direct routes for unsupported template pages show unavailable states
+  instead of mock/template data.
 - The Users module is read-only because the backend currently exposes only list
   and detail endpoints for admin users.
 - Identity verification admin UI is scoped to staff review actions; self-service
@@ -128,9 +130,11 @@ module passes checks or has documented blockers.
 - Orval config currently sanitizes non-standard backend OpenAPI metadata before
   generation; remove the sanitizer only after the backend spec validates without
   it.
-- Sidebar/navigation still contains template-era entries; command menu and
-  sidebar visibility are capability-driven, but each entry still needs a
-  backend-domain fit check during module migration.
+- Sidebar/navigation now advertises backend-backed workflows only. Unsupported
+  template routes remain direct-link compatible with clear unavailable states.
+- Backend-supported future candidates include courses, events, marketplace
+  services, jobs, reviews, media, search, notification administration, revenue,
+  and coupons. Implement each as its own generated-contract-backed module.
 
 ## Required Module Completion Checklist
 

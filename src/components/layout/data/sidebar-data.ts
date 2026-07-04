@@ -1,21 +1,13 @@
 import {
-  Activity,
   Bell,
   BookOpenText,
   Building2,
   CreditCard,
-  FolderKanban,
   KeyRound,
   LayoutDashboard,
-  ListTodo,
   Lock,
-  MessagesSquare,
-  Monitor,
-  Plug,
   Settings,
-  Shield,
   ShieldCheck,
-  Terminal,
   UserCircle,
   Users,
 } from 'lucide-react'
@@ -31,20 +23,6 @@ export const sidebarData: SidebarData = {
           url: '/',
           icon: LayoutDashboard,
         },
-        {
-          title: 'Tasks',
-          url: '/tasks',
-          badge: '20',
-          badgeVariant: 'primary',
-          icon: ListTodo,
-        },
-        {
-          title: 'Chat',
-          url: '/chats',
-          badge: '4',
-          badgeVariant: 'destructive',
-          icon: MessagesSquare,
-        },
       ],
     },
     {
@@ -57,11 +35,6 @@ export const sidebarData: SidebarData = {
           badgeVariant: 'neutral',
           requiredCapabilities: ['identity.user.read'],
           icon: Users,
-        },
-        {
-          title: 'Roles',
-          url: '/roles',
-          icon: ShieldCheck,
         },
         {
           title: 'Permissions',
@@ -81,44 +54,9 @@ export const sidebarData: SidebarData = {
           icon: ShieldCheck,
         },
         {
-          title: 'Teams',
-          url: '/teams',
-          icon: UserCircle,
-        },
-        {
           title: 'Organizations',
           url: '/organizations',
           icon: Building2,
-        },
-      ],
-    },
-    {
-      title: 'Projects',
-      items: [
-        {
-          title: 'Projects',
-          url: '/projects',
-          icon: FolderKanban,
-        },
-        {
-          title: 'Activity',
-          url: '/activity',
-          icon: Activity,
-        },
-      ],
-    },
-    {
-      title: 'Analytics & Logs',
-      items: [
-        {
-          title: 'Logs',
-          url: '/logs',
-          icon: Terminal,
-        },
-        {
-          title: 'Monitoring',
-          url: '/monitoring',
-          icon: Monitor,
         },
       ],
     },
@@ -137,16 +75,6 @@ export const sidebarData: SidebarData = {
           url: '/reference',
           icon: BookOpenText,
         },
-        {
-          title: 'Integrations',
-          url: '/integrations',
-          icon: Plug,
-        },
-        {
-          title: 'API Keys',
-          url: '/api-keys',
-          icon: KeyRound,
-        },
       ],
     },
     {
@@ -161,11 +89,6 @@ export const sidebarData: SidebarData = {
           title: 'Billing',
           url: '/billing',
           icon: CreditCard,
-        },
-        {
-          title: 'Security',
-          url: '/security',
-          icon: Shield,
         },
         {
           title: 'Sessions',
