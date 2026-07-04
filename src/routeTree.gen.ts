@@ -39,6 +39,7 @@ import { Route as AuthenticatedPermissionsIndexRouteImport } from './routes/_aut
 import { Route as AuthenticatedOrganizationsIndexRouteImport } from './routes/_authenticated/organizations/index'
 import { Route as AuthenticatedNotificationsIndexRouteImport } from './routes/_authenticated/notifications/index'
 import { Route as AuthenticatedMonitoringIndexRouteImport } from './routes/_authenticated/monitoring/index'
+import { Route as AuthenticatedMarketplaceIndexRouteImport } from './routes/_authenticated/marketplace/index'
 import { Route as AuthenticatedLogsIndexRouteImport } from './routes/_authenticated/logs/index'
 import { Route as AuthenticatedIntegrationsIndexRouteImport } from './routes/_authenticated/integrations/index'
 import { Route as AuthenticatedIdentityVerificationIndexRouteImport } from './routes/_authenticated/identity-verification/index'
@@ -220,6 +221,12 @@ const AuthenticatedMonitoringIndexRoute =
     path: '/monitoring/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMarketplaceIndexRoute =
+  AuthenticatedMarketplaceIndexRouteImport.update({
+    id: '/marketplace/',
+    path: '/marketplace/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLogsIndexRoute = AuthenticatedLogsIndexRouteImport.update({
   id: '/logs/',
   path: '/logs/',
@@ -384,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations/': typeof AuthenticatedIntegrationsIndexRoute
   '/logs/': typeof AuthenticatedLogsIndexRoute
+  '/marketplace/': typeof AuthenticatedMarketplaceIndexRoute
   '/monitoring/': typeof AuthenticatedMonitoringIndexRoute
   '/notifications/': typeof AuthenticatedNotificationsIndexRoute
   '/organizations/': typeof AuthenticatedOrganizationsIndexRoute
@@ -434,6 +442,7 @@ export interface FileRoutesByTo {
   '/identity-verification': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations': typeof AuthenticatedIntegrationsIndexRoute
   '/logs': typeof AuthenticatedLogsIndexRoute
+  '/marketplace': typeof AuthenticatedMarketplaceIndexRoute
   '/monitoring': typeof AuthenticatedMonitoringIndexRoute
   '/notifications': typeof AuthenticatedNotificationsIndexRoute
   '/organizations': typeof AuthenticatedOrganizationsIndexRoute
@@ -489,6 +498,7 @@ export interface FileRoutesById {
   '/_authenticated/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/_authenticated/integrations/': typeof AuthenticatedIntegrationsIndexRoute
   '/_authenticated/logs/': typeof AuthenticatedLogsIndexRoute
+  '/_authenticated/marketplace/': typeof AuthenticatedMarketplaceIndexRoute
   '/_authenticated/monitoring/': typeof AuthenticatedMonitoringIndexRoute
   '/_authenticated/notifications/': typeof AuthenticatedNotificationsIndexRoute
   '/_authenticated/organizations/': typeof AuthenticatedOrganizationsIndexRoute
@@ -542,6 +552,7 @@ export interface FileRouteTypes {
     | '/identity-verification/'
     | '/integrations/'
     | '/logs/'
+    | '/marketplace/'
     | '/monitoring/'
     | '/notifications/'
     | '/organizations/'
@@ -592,6 +603,7 @@ export interface FileRouteTypes {
     | '/identity-verification'
     | '/integrations'
     | '/logs'
+    | '/marketplace'
     | '/monitoring'
     | '/notifications'
     | '/organizations'
@@ -646,6 +658,7 @@ export interface FileRouteTypes {
     | '/_authenticated/identity-verification/'
     | '/_authenticated/integrations/'
     | '/_authenticated/logs/'
+    | '/_authenticated/marketplace/'
     | '/_authenticated/monitoring/'
     | '/_authenticated/notifications/'
     | '/_authenticated/organizations/'
@@ -889,6 +902,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMonitoringIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/marketplace/': {
+      id: '/_authenticated/marketplace/'
+      path: '/marketplace'
+      fullPath: '/marketplace/'
+      preLoaderRoute: typeof AuthenticatedMarketplaceIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/logs/': {
       id: '/_authenticated/logs/'
       path: '/logs'
@@ -1087,6 +1107,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIdentityVerificationIndexRoute: typeof AuthenticatedIdentityVerificationIndexRoute
   AuthenticatedIntegrationsIndexRoute: typeof AuthenticatedIntegrationsIndexRoute
   AuthenticatedLogsIndexRoute: typeof AuthenticatedLogsIndexRoute
+  AuthenticatedMarketplaceIndexRoute: typeof AuthenticatedMarketplaceIndexRoute
   AuthenticatedMonitoringIndexRoute: typeof AuthenticatedMonitoringIndexRoute
   AuthenticatedNotificationsIndexRoute: typeof AuthenticatedNotificationsIndexRoute
   AuthenticatedOrganizationsIndexRoute: typeof AuthenticatedOrganizationsIndexRoute
@@ -1121,6 +1142,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedIdentityVerificationIndexRoute,
   AuthenticatedIntegrationsIndexRoute: AuthenticatedIntegrationsIndexRoute,
   AuthenticatedLogsIndexRoute: AuthenticatedLogsIndexRoute,
+  AuthenticatedMarketplaceIndexRoute: AuthenticatedMarketplaceIndexRoute,
   AuthenticatedMonitoringIndexRoute: AuthenticatedMonitoringIndexRoute,
   AuthenticatedNotificationsIndexRoute: AuthenticatedNotificationsIndexRoute,
   AuthenticatedOrganizationsIndexRoute: AuthenticatedOrganizationsIndexRoute,

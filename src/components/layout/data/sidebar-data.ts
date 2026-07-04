@@ -1,6 +1,7 @@
 import {
   Bell,
   BookOpenText,
+  Briefcase,
   Building2,
   CalendarDays,
   CreditCard,
@@ -74,6 +75,11 @@ export const sidebarData: SidebarData = {
           title: 'Events',
           url: '/events',
           icon: CalendarDays,
+        },
+        {
+          title: 'Marketplace',
+          url: '/marketplace',
+          icon: Briefcase,
         },
       ],
     },

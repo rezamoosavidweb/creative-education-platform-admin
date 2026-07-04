@@ -61,6 +61,8 @@ root standards docs.
       visibility, draft creation, and owner lifecycle actions.
 - [x] Events module added for discovery, organizer events, RSVPs, venues,
       lifecycle actions, attendee lookup, and creation workflows.
+- [x] Marketplace module added for service listings, open jobs, applications,
+      and current-user contracts.
 
 ## In Progress
 
@@ -97,6 +99,8 @@ module passes checks or has documented blockers.
       backend domain fit.
 - [x] Courses module initial backend-backed slice.
 - [x] Events module backend-backed discovery, organizer, RSVP, and venue slice.
+- [x] Marketplace module backend-backed service, job, application, and contract
+      slice.
 
 ## Known Technical Debt
 
@@ -138,9 +142,9 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include marketplace services, jobs,
-  reviews, media, search, notification administration, revenue, coupons, and
-  deeper learning workflows. Implement each as its own
+- Backend-supported future candidates include reviews, media, search,
+  notification administration, revenue, coupons, and deeper learning workflows.
+  Implement each as its own
   generated-contract-backed module.
 - Courses is scoped to current-user authoring plus public catalog visibility;
   no global course moderation contract exists. Course sections, lessons,
@@ -149,6 +153,11 @@ module passes checks or has documented blockers.
 - Events is scoped to published discovery, current-user organizer events,
   RSVPs, attendee lookup, and venue creation. No event update/delete, global
   event moderation, venue ownership, or event pagination contracts exist yet.
+- Marketplace is scoped to published service discovery, current-user service
+  listings, open job discovery, submitted applications, hirer application
+  review by job ID, and current-user contracts. No current-user posted jobs
+  listing, marketplace update/delete, global moderation, or pagination
+  contracts exist yet.
 
 ## Required Module Completion Checklist
 
