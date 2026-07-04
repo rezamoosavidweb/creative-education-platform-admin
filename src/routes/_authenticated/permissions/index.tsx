@@ -2,7 +2,7 @@ import z from 'zod'
 import { createFileRoute } from '@tanstack/react-router'
 import { requireCapabilities } from '@/lib/capabilities'
 import { Permissions } from '@/features/permissions'
-import { CAPABILITY_MANAGEMENT_CAPABILITY } from '@/features/permissions/services/capabilities-query'
+import { CAPABILITY_READ_CAPABILITY } from '@/features/permissions/services/capabilities-query'
 import { normalizeUsersOrder } from '@/features/users/services/users-query'
 
 const permissionsSearchSchema = z.object({
@@ -19,6 +19,6 @@ const permissionsSearchSchema = z.object({
 
 export const Route = createFileRoute('/_authenticated/permissions/')({
   validateSearch: permissionsSearchSchema,
-  staticData: requireCapabilities(CAPABILITY_MANAGEMENT_CAPABILITY),
+  staticData: requireCapabilities(CAPABILITY_READ_CAPABILITY),
   component: Permissions,
 })

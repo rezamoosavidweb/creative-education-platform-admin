@@ -37,7 +37,7 @@ import { useGrantCapability } from '../hooks/use-grant-capability'
 import { useRevokeCapability } from '../hooks/use-revoke-capability'
 import { useUserCapabilities } from '../hooks/use-user-capabilities'
 import {
-  CAPABILITY_MANAGEMENT_CAPABILITY,
+  CAPABILITY_MANAGE_CAPABILITY,
   getUserCapabilityKeys,
   groupCapabilities,
 } from '../services/capabilities-query'
@@ -136,9 +136,7 @@ export function CapabilityAssignmentDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <CapabilityGate
-            requiredCapabilities={CAPABILITY_MANAGEMENT_CAPABILITY}
-          >
+          <CapabilityGate requiredCapabilities={CAPABILITY_MANAGE_CAPABILITY}>
             <Form {...form}>
               <form
                 id='grant-capability-form'
@@ -260,7 +258,7 @@ function CapabilityGroups({
               >
                 <span className='break-all'>{capability}</span>
                 <CapabilityGate
-                  requiredCapabilities={CAPABILITY_MANAGEMENT_CAPABILITY}
+                  requiredCapabilities={CAPABILITY_MANAGE_CAPABILITY}
                 >
                   <Button
                     type='button'

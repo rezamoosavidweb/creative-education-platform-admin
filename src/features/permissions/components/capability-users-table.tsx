@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ShieldCheck } from 'lucide-react'
+import { Eye } from 'lucide-react'
 import {
   getAuthUserDisplayName,
   getAuthUserEmail,
@@ -21,7 +21,7 @@ import { LongText } from '@/components/long-text'
 import { StatusPill } from '@/components/status-pill'
 import { useUsersList } from '@/features/users/hooks/use-users-list'
 import { toUsersListQuery } from '@/features/users/services/users-query'
-import { CAPABILITY_MANAGEMENT_CAPABILITY } from '../services/capabilities-query'
+import { CAPABILITY_READ_CAPABILITY } from '../services/capabilities-query'
 import type { CapabilityUser } from '../types'
 
 type CapabilityUsersTableProps = {
@@ -162,15 +162,15 @@ function createCapabilityUserColumns(
     {
       id: 'actions',
       cell: ({ row }) => (
-        <CapabilityGate requiredCapabilities={CAPABILITY_MANAGEMENT_CAPABILITY}>
+        <CapabilityGate requiredCapabilities={CAPABILITY_READ_CAPABILITY}>
           <Button
             type='button'
             variant='ghost'
             size='sm'
             onClick={() => onManageUser(row.original)}
           >
-            <ShieldCheck className='size-4' />
-            Manage
+            <Eye className='size-4' />
+            View
           </Button>
         </CapabilityGate>
       ),

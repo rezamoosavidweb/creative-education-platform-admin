@@ -1,11 +1,18 @@
 import { describe, expect, it } from 'vitest'
 import {
+  CAPABILITY_MANAGE_CAPABILITY,
+  CAPABILITY_READ_CAPABILITY,
   getCapabilityGroupName,
   getUserCapabilityKeys,
   groupCapabilities,
 } from './capabilities-query'
 
 describe('capabilities query helpers', () => {
+  it('tracks distinct backend guards for read and grant workflows', () => {
+    expect(CAPABILITY_READ_CAPABILITY).toBe('identity.capability.read')
+    expect(CAPABILITY_MANAGE_CAPABILITY).toBe('identity.capability.manage')
+  })
+
   it('reads backend capability keys without local DTOs', () => {
     expect(
       getUserCapabilityKeys({

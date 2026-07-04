@@ -5,8 +5,11 @@ import type {
   UserCapabilitiesResponse,
 } from '../types'
 
-export const CAPABILITY_MANAGEMENT_CAPABILITY =
+export const CAPABILITY_READ_CAPABILITY =
   'identity.capability.read' satisfies AuthCapability
+
+export const CAPABILITY_MANAGE_CAPABILITY =
+  'identity.capability.manage' satisfies AuthCapability
 
 export function getUserCapabilityKeys(
   raw: UserCapabilitiesResponse | undefined

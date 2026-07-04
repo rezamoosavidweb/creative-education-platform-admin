@@ -42,6 +42,8 @@ root standards docs.
       generated org type/role enums.
 - [x] Profiles module audited for directory/current-user contract fit and
       generated availability status enum controls.
+- [x] Permissions module audited against identity capability read/manage
+      guards.
 
 ## In Progress
 
@@ -67,7 +69,7 @@ module passes checks or has documented blockers.
 - [x] Identity verification module compliance audit.
 - [x] Organizations module compliance audit.
 - [x] Profiles module compliance audit.
-- [ ] Permissions module compliance audit.
+- [x] Permissions module compliance audit.
 - [ ] Sessions module compliance audit.
 - [ ] Reference catalogs module compliance audit.
 - [ ] Audit logs module compliance audit.
@@ -89,6 +91,9 @@ module passes checks or has documented blockers.
   page is not a global organization directory.
 - Profiles combines public directory search with current-user profile and
   persona management; availability status controls use backend enum values.
+- Permissions is read-gated by `identity.capability.read`; grant and revoke
+  controls require `identity.capability.manage`. There is no backend capability
+  catalog endpoint, so capability grants stay free-form.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
