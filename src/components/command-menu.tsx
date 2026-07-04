@@ -1,6 +1,10 @@
 import React from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, ChevronRight, Laptop, Moon, Sun } from 'lucide-react'
+import {
+  filterNavGroupsByCapabilities,
+  useCapabilities,
+} from '@/lib/capabilities'
 import { useSearch } from '@/context/search-provider'
 import { useTheme } from '@/context/theme-provider'
 import {
@@ -19,6 +23,11 @@ export function CommandMenu() {
   const navigate = useNavigate()
   const { setTheme } = useTheme()
   const { open, setOpen } = useSearch()
+  const capabilities = useCapabilities()
+  const navGroups = React.useMemo(
+    () => filterNavGroupsByCapabilities(sidebarData.navGroups, capabilities),
+    [capabilities]
+  )
 
   const runCommand = React.useCallback(
     (command: () => unknown) => {
@@ -34,7 +43,7 @@ export function CommandMenu() {
       <CommandList>
         <ScrollArea type='hover' className='h-72 pe-1'>
           <CommandEmpty>No results found.</CommandEmpty>
-          {sidebarData.navGroups.map((group) => (
+          {navGroups.map((group) => (
             <CommandGroup key={group.title} heading={group.title}>
               {group.items.map((navItem, i) => {
                 if (navItem.url)

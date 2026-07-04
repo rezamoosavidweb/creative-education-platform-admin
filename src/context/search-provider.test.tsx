@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, type RenderResult } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
+import type { CapabilityKey } from '@/lib/capabilities'
+import { CapabilityContext } from '@/lib/capabilities/capability-context-value'
 import { SearchProvider } from '@/context/search-provider'
 
 const COMMAND_MENU_PLACEHOLDER = 'Type a command or search...'
@@ -24,8 +26,14 @@ vi.mock('@/context/theme-provider', () => ({
 
 type ShortcutModifier = 'Control' | 'Meta'
 
-async function renderWithSearchProvider() {
-  return await render(<SearchProvider>{null}</SearchProvider>)
+async function renderWithSearchProvider(
+  capabilities: readonly CapabilityKey[] = []
+) {
+  return await render(
+    <CapabilityContext.Provider value={capabilities}>
+      <SearchProvider>{null}</SearchProvider>
+    </CapabilityContext.Provider>
+  )
 }
 
 /**
@@ -128,6 +136,32 @@ describe('SearchProvider and CommandMenu', () => {
     expect(mocks.navigate).toHaveBeenCalledWith({ to: '/settings' })
     await expect
       .element(getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
+      .not.toBeInTheDocument()
+  })
+
+  it('hides protected navigation commands when capabilities are missing', async () => {
+    const screen = await renderWithSearchProvider()
+
+    await openCommandPalette(screen)
+
+    await expect
+      .element(screen.getByRole('option', { name: 'Permissions' }))
+      .not.toBeInTheDocument()
+    await expect
+      .element(screen.getByRole('option', { name: 'Verification' }))
+      .not.toBeInTheDocument()
+  })
+
+  it('shows and runs protected navigation commands when capabilities are granted', async () => {
+    const screen = await renderWithSearchProvider(['identity.capability.read'])
+
+    await openCommandPalette(screen)
+
+    await userEvent.click(screen.getByRole('option', { name: 'Permissions' }))
+
+    expect(mocks.navigate).toHaveBeenCalledWith({ to: '/permissions' })
+    await expect
+      .element(screen.getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
       .not.toBeInTheDocument()
   })
 

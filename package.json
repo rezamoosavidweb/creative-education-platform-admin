@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "knip": "knip",
+    "knip": "knip --no-config-hints",
     "generate:api-types": "openapi-typescript ../api/openapi.json -o src/lib/api/schema.d.ts",
     "generate:api": "orval --config ./orval.config.ts",
     "validate:api": "orval --config ./orval.config.ts --fail-on-warnings",

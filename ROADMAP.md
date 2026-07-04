@@ -30,6 +30,8 @@ root standards docs.
 - [x] Orval runtime client generation added under `src/lib/api/generated/`.
 - [x] Orval mutator added to delegate generated requests to the shared
       `apiClient`.
+- [x] Command palette navigation now uses the same capability filtering as the
+      sidebar.
 
 ## In Progress
 
@@ -49,7 +51,7 @@ root standards docs.
 Refactor one module at a time. Do not begin the next module until the current
 module passes checks or has documented blockers.
 
-- [ ] Navigation and capability-aware sidebar/command menu audit.
+- [x] Navigation and capability-aware sidebar/command menu audit.
 - [ ] Dashboard real API migration.
 - [ ] Users module compliance audit.
 - [ ] Identity verification module compliance audit.
@@ -70,16 +72,14 @@ module passes checks or has documented blockers.
 - Several pages still use mock/template data instead of backend-backed services.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
-- Sidebar/navigation still contains template-era entries and must become fully
-  capability-driven.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
 - Coverage expectations need a project-wide baseline after the next test pass.
 - Orval config currently sanitizes non-standard backend OpenAPI metadata before
   generation; remove the sanitizer only after the backend spec validates without
   it.
-- `prettier --check .` currently reports pre-existing formatting drift across
-  many app files. Avoid mixing a repository-wide formatting sweep into feature
-  commits; schedule it as a dedicated `style` change.
+- Sidebar/navigation still contains template-era entries; command menu and
+  sidebar visibility are capability-driven, but each entry still needs a
+  backend-domain fit check during module migration.
 
 ## Required Module Completion Checklist
 
