@@ -1,3 +1,4 @@
+import type { AuthCapability } from '@/lib/auth/types'
 import type { ServerTableQueryParams } from '@/components/data-table'
 import type {
   UsersListItem,
@@ -5,6 +6,9 @@ import type {
   UsersListResponse,
   UsersOrder,
 } from '../types'
+
+export const USER_READ_CAPABILITY =
+  'identity.user.read' satisfies AuthCapability
 
 export const DEFAULT_USERS_ORDER = 'DESC' satisfies UsersOrder
 

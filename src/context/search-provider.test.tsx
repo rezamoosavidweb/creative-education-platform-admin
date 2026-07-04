@@ -150,6 +150,9 @@ describe('SearchProvider and CommandMenu', () => {
     await expect
       .element(screen.getByRole('option', { name: 'Verification' }))
       .not.toBeInTheDocument()
+    await expect
+      .element(screen.getByRole('option', { name: 'Users' }))
+      .not.toBeInTheDocument()
   })
 
   it('shows and runs protected navigation commands when capabilities are granted', async () => {
@@ -160,6 +163,19 @@ describe('SearchProvider and CommandMenu', () => {
     await userEvent.click(screen.getByRole('option', { name: 'Permissions' }))
 
     expect(mocks.navigate).toHaveBeenCalledWith({ to: '/permissions' })
+    await expect
+      .element(screen.getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
+      .not.toBeInTheDocument()
+  })
+
+  it('shows and runs user navigation commands when user read capability is granted', async () => {
+    const screen = await renderWithSearchProvider(['identity.user.read'])
+
+    await openCommandPalette(screen)
+
+    await userEvent.click(screen.getByRole('option', { name: 'Users' }))
+
+    expect(mocks.navigate).toHaveBeenCalledWith({ to: '/users' })
     await expect
       .element(screen.getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
       .not.toBeInTheDocument()

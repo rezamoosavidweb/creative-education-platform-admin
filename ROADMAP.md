@@ -34,6 +34,8 @@ root standards docs.
       sidebar.
 - [x] Dashboard migrated from mock business analytics to backend-backed
       operational health and outbox signals.
+- [x] Users module audited against backend read-only user contracts and gated by
+      `identity.user.read`.
 
 ## In Progress
 
@@ -55,7 +57,7 @@ module passes checks or has documented blockers.
 
 - [x] Navigation and capability-aware sidebar/command menu audit.
 - [x] Dashboard real API migration.
-- [ ] Users module compliance audit.
+- [x] Users module compliance audit.
 - [ ] Identity verification module compliance audit.
 - [ ] Organizations module compliance audit.
 - [ ] Profiles module compliance audit.
@@ -73,6 +75,8 @@ module passes checks or has documented blockers.
 
 - Several pages still use mock/template data instead of backend-backed services.
   The dashboard is no longer mock-backed.
+- The Users module is read-only because the backend currently exposes only list
+  and detail endpoints for admin users.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.

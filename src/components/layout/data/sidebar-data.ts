@@ -57,6 +57,7 @@ export const sidebarData: SidebarData = {
           url: '/users',
           badge: '2.4k',
           badgeVariant: 'neutral',
+          requiredCapabilities: ['identity.user.read'],
           icon: Users,
         },
         {

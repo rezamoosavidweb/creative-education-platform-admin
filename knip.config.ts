@@ -7,12 +7,6 @@ const config: KnipConfig = {
     'src/components/layout/app-title.tsx',
     'src/components/layout/top-nav.tsx',
     'src/features/settings/components/sidebar-nav.tsx',
-    'src/features/users/components/data-table-bulk-actions.tsx',
-    'src/features/users/components/data-table-row-actions.tsx',
-    'src/features/users/components/users-dialogs.tsx',
-    'src/features/users/components/users-primary-buttons.tsx',
-    'src/features/users/components/users-provider.tsx',
-    'src/features/users/data/users.ts',
     'src/tanstack-table.d.ts',
     // Generated from ../api/openapi.json via `pnpm generate:api-types`
     'src/lib/api/schema.d.ts',
