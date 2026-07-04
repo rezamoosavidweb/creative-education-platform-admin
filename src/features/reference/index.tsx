@@ -54,9 +54,11 @@ export function Reference() {
 
       <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
         <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Reference</h2>
+          <h2 className='text-2xl font-bold tracking-tight'>
+            Reference Catalogs
+          </h2>
           <p className='text-muted-foreground'>
-            Browse active catalog values used across the platform.
+            Browse active, read-only taxonomy values used across the platform.
           </p>
         </div>
 
