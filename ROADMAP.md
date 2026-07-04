@@ -49,6 +49,8 @@ root standards docs.
       contracts.
 - [x] Audit logs module audited; mock data removed because no backend listing
       contract exists.
+- [x] Analytics module audited; mock product analytics removed because no
+      backend analytics contract exists.
 
 ## In Progress
 
@@ -78,7 +80,7 @@ module passes checks or has documented blockers.
 - [x] Sessions module compliance audit.
 - [x] Reference catalogs module compliance audit.
 - [x] Audit logs module compliance audit.
-- [ ] Analytics module compliance audit.
+- [x] Analytics module compliance audit.
 - [ ] Billing module compliance audit.
 - [ ] Notifications module compliance audit.
 - [ ] Projects/tasks/template modules: decide keep, rename, or remove based on
@@ -106,6 +108,9 @@ module passes checks or has documented blockers.
 - Audit log browsing is blocked by missing backend list/export endpoints. Auth
   audit events currently go to structured logs only, so the mock Admin table was
   removed from navigation.
+- Product analytics is blocked by missing backend analytics endpoints. The
+  Prometheus `/metrics` scrape endpoint is operational infrastructure, not an
+  Admin analytics contract.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.

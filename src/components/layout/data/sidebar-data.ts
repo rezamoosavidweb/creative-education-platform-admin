@@ -1,6 +1,5 @@
 import {
   Activity,
-  BarChart3,
   Bell,
   BookOpenText,
   Building2,
@@ -111,11 +110,6 @@ export const sidebarData: SidebarData = {
     {
       title: 'Analytics & Logs',
       items: [
-        {
-          title: 'Analytics',
-          url: '/analytics',
-          icon: BarChart3,
-        },
         {
           title: 'Logs',
           url: '/logs',
