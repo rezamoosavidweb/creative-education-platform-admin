@@ -20,3 +20,6 @@
 
 # Ignore auto generated OpenAPI types (pnpm generate:api-types)
 /src/lib/api/schema.d.ts
+
+# Ignore auto generated Orval clients (pnpm generate:api)
+/src/lib/api/generated

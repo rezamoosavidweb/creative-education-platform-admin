@@ -5,10 +5,12 @@ root standards docs.
 
 ## Current Status
 
-- Phase 1 documentation baseline is in progress.
+- Phase 1 documentation baseline is complete.
+- Orval runtime client generation is available.
 - Existing app uses the shadcn-admin/TanStack Router template with Enterprise
   Admin styling.
 - OpenAPI type generation exists at `src/lib/api/schema.d.ts`.
+- Orval generation exists at `src/lib/api/generated/`.
 - Shared API, auth, capabilities, query, form, server-table, and API-state
   foundations exist.
 - Many business pages still use template or mock data and must be migrated
@@ -25,11 +27,12 @@ root standards docs.
 - [x] Testing standards added in `TESTING.md`.
 - [x] Performance standards added in `PERFORMANCE.md`.
 - [x] `AGENTS.md` and `CLAUDE.md` aligned with the canonical docs.
+- [x] Orval runtime client generation added under `src/lib/api/generated/`.
+- [x] Orval mutator added to delegate generated requests to the shared
+      `apiClient`.
 
 ## In Progress
 
-- [ ] Add Orval runtime client generation under `src/lib/api/generated/` and
-      keep handwritten wrappers outside generated folders.
 - [ ] Add automated lint rules for conventions that are currently documented
       only in prose.
 - [ ] Audit feature modules against the canonical feature structure.
@@ -71,6 +74,12 @@ module passes checks or has documented blockers.
   capability-driven.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
 - Coverage expectations need a project-wide baseline after the next test pass.
+- Orval config currently sanitizes non-standard backend OpenAPI metadata before
+  generation; remove the sanitizer only after the backend spec validates without
+  it.
+- `prettier --check .` currently reports pre-existing formatting drift across
+  many app files. Avoid mixing a repository-wide formatting sweep into feature
+  commits; schedule it as a dedicated `style` change.
 
 ## Required Module Completion Checklist
 
@@ -109,7 +118,7 @@ For every module:
 
 - Enforce no direct `axios` imports outside `src/lib/api`.
 - Enforce generated API schema is not manually edited.
-- Enforce Orval generated output is not manually edited after migration.
+- Enforce Orval generated output is not manually edited.
 - Enforce no feature-to-feature internal imports.
 - Enforce route files stay thin where practical.
 - Enforce type-only imports and unused code through existing ESLint/TypeScript.

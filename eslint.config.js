@@ -7,7 +7,14 @@ import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig(
-  { ignores: ['dist', 'src/components/ui', 'src/lib/api/schema.d.ts'] },
+  {
+    ignores: [
+      'dist',
+      'src/components/ui',
+      'src/lib/api/generated',
+      'src/lib/api/schema.d.ts',
+    ],
+  },
   {
     extends: [
       js.configs.recommended,

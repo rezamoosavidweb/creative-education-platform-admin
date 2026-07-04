@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { playwright } from '@vitest/browser-playwright'
 
+const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -26,7 +28,13 @@ export default defineConfig({
     unstubEnvs: true,
     browser: {
       enabled: true,
-      provider: playwright(),
+      provider: playwright({
+        launchOptions: chromiumExecutablePath
+          ? {
+              executablePath: chromiumExecutablePath,
+            }
+          : undefined,
+      }),
       instances: [{ browser: 'chromium' }],
     },
     coverage: {
@@ -36,6 +44,7 @@ export default defineConfig({
         'src/assets/**',
         'src/tanstack-table.d.ts',
         'src/routeTree.gen.ts',
+        'src/lib/api/generated/**',
         'src/test-utils/**',
         'src/routes/**',
       ],

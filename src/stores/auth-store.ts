@@ -46,99 +46,103 @@ interface AuthState {
   }
 }
 
-const initialSession = readPersistedSession()
+export function createAuthStore() {
+  const initialSession = readPersistedSession()
 
-export const useAuthStore = create<AuthState>()((set) => ({
-  auth: {
-    user: initialSession.user,
-    accessToken: initialSession.accessToken,
-    refreshToken: initialSession.refreshToken,
-    capabilities: initialSession.capabilities,
-    organizations: initialSession.organizations,
-    currentOrganizationId: initialSession.currentOrganizationId,
-    status: initialSession.refreshToken ? 'restoring' : 'anonymous',
-    setUser: (user) =>
-      set((state) =>
-        commitSessionUpdate(state, {
-          user,
-          status:
-            user && state.auth.accessToken && state.auth.refreshToken
-              ? 'authenticated'
-              : state.auth.status,
-        })
-      ),
-    setTokens: (tokens) =>
-      set((state) =>
-        commitSessionUpdate(state, {
-          accessToken: tokens?.accessToken ?? null,
-          refreshToken: tokens?.refreshToken ?? null,
-          status: tokens ? 'authenticated' : 'anonymous',
-        })
-      ),
-    setSession: ({
-      capabilities,
-      currentOrganizationId,
-      organizations,
-      tokens,
-      user,
-    }) =>
-      set((state) => {
-        const nextCurrentOrganizationId = resolveCurrentOrganizationId(
-          organizations,
-          currentOrganizationId ?? state.auth.currentOrganizationId
-        )
-
-        return commitSessionUpdate(state, {
-          accessToken: tokens.accessToken,
-          capabilities,
-          currentOrganizationId: nextCurrentOrganizationId,
-          organizations,
-          refreshToken: tokens.refreshToken,
-          status: 'authenticated',
-          user,
-        })
-      }),
-    setCapabilities: (capabilities) =>
-      set((state) => commitSessionUpdate(state, { capabilities })),
-    setOrganizations: (organizations) =>
-      set((state) =>
-        commitSessionUpdate(state, {
-          currentOrganizationId: resolveCurrentOrganizationId(
+  return create<AuthState>()((set) => ({
+    auth: {
+      user: initialSession.user,
+      accessToken: initialSession.accessToken,
+      refreshToken: initialSession.refreshToken,
+      capabilities: initialSession.capabilities,
+      organizations: initialSession.organizations,
+      currentOrganizationId: initialSession.currentOrganizationId,
+      status: initialSession.refreshToken ? 'restoring' : 'anonymous',
+      setUser: (user) =>
+        set((state) =>
+          commitSessionUpdate(state, {
+            user,
+            status:
+              user && state.auth.accessToken && state.auth.refreshToken
+                ? 'authenticated'
+                : state.auth.status,
+          })
+        ),
+      setTokens: (tokens) =>
+        set((state) =>
+          commitSessionUpdate(state, {
+            accessToken: tokens?.accessToken ?? null,
+            refreshToken: tokens?.refreshToken ?? null,
+            status: tokens ? 'authenticated' : 'anonymous',
+          })
+        ),
+      setSession: ({
+        capabilities,
+        currentOrganizationId,
+        organizations,
+        tokens,
+        user,
+      }) =>
+        set((state) => {
+          const nextCurrentOrganizationId = resolveCurrentOrganizationId(
             organizations,
-            state.auth.currentOrganizationId
-          ),
-          organizations,
-        })
-      ),
-    setCurrentOrganizationId: (organizationId) =>
-      set((state) =>
-        commitSessionUpdate(state, {
-          currentOrganizationId: resolveCurrentOrganizationId(
-            state.auth.organizations,
-            organizationId
-          ),
-        })
-      ),
-    setStatus: (status) =>
-      set((state) => commitSessionUpdate(state, { status })),
-    reset: () => {
-      removeCookie(AUTH_SESSION_COOKIE)
-      set((state) => ({
-        ...state,
-        auth: {
-          ...state.auth,
-          accessToken: null,
-          capabilities: [],
-          currentOrganizationId: null,
-          organizations: [],
-          refreshToken: null,
-          status: 'anonymous',
-          user: null,
-        },
-      }))
+            currentOrganizationId ?? state.auth.currentOrganizationId
+          )
+
+          return commitSessionUpdate(state, {
+            accessToken: tokens.accessToken,
+            capabilities,
+            currentOrganizationId: nextCurrentOrganizationId,
+            organizations,
+            refreshToken: tokens.refreshToken,
+            status: 'authenticated',
+            user,
+          })
+        }),
+      setCapabilities: (capabilities) =>
+        set((state) => commitSessionUpdate(state, { capabilities })),
+      setOrganizations: (organizations) =>
+        set((state) =>
+          commitSessionUpdate(state, {
+            currentOrganizationId: resolveCurrentOrganizationId(
+              organizations,
+              state.auth.currentOrganizationId
+            ),
+            organizations,
+          })
+        ),
+      setCurrentOrganizationId: (organizationId) =>
+        set((state) =>
+          commitSessionUpdate(state, {
+            currentOrganizationId: resolveCurrentOrganizationId(
+              state.auth.organizations,
+              organizationId
+            ),
+          })
+        ),
+      setStatus: (status) =>
+        set((state) => commitSessionUpdate(state, { status })),
+      reset: () => {
+        removeCookie(AUTH_SESSION_COOKIE)
+        set((state) => ({
+          ...state,
+          auth: {
+            ...state.auth,
+            accessToken: null,
+            capabilities: [],
+            currentOrganizationId: null,
+            organizations: [],
+            refreshToken: null,
+            status: 'anonymous',
+            user: null,
+          },
+        }))
+      },
     },
-  },
-}))
+  }))
+}
+
+export const useAuthStore = createAuthStore()
 
 function commitSessionUpdate(
   state: AuthState,

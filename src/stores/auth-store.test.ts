@@ -13,9 +13,9 @@ vi.mock('@/lib/cookies', () => ({
   }),
 }))
 
-async function importAuthStore() {
-  const { useAuthStore } = await import('./auth-store')
-  return useAuthStore
+async function createTestAuthStore() {
+  const { createAuthStore } = await import('./auth-store')
+  return createAuthStore()
 }
 
 const sampleUser: AuthUser = {
@@ -57,7 +57,7 @@ describe('useAuthStore', () => {
   })
 
   it('starts anonymous when no session is persisted', async () => {
-    const useAuthStore = await importAuthStore()
+    const useAuthStore = await createTestAuthStore()
 
     expect(useAuthStore.getState().auth.status).toBe('anonymous')
     expect(useAuthStore.getState().auth.accessToken).toBeNull()
@@ -66,7 +66,7 @@ describe('useAuthStore', () => {
   })
 
   it('persists the backend session so a new store instance can restore it', async () => {
-    const useAuthStore = await importAuthStore()
+    const useAuthStore = await createTestAuthStore()
     useAuthStore.getState().auth.setSession({
       capabilities: ['identity.capability.read'],
       organizations: sampleOrganizations,
@@ -74,8 +74,7 @@ describe('useAuthStore', () => {
       user: sampleUser,
     })
 
-    vi.resetModules()
-    const useAuthStoreAfterReload = await importAuthStore()
+    const useAuthStoreAfterReload = await createTestAuthStore()
     const auth = useAuthStoreAfterReload.getState().auth
 
     expect(auth.status).toBe('restoring')
@@ -87,7 +86,7 @@ describe('useAuthStore', () => {
   })
 
   it('rotates tokens without clearing user context', async () => {
-    const useAuthStore = await importAuthStore()
+    const useAuthStore = await createTestAuthStore()
     useAuthStore.getState().auth.setSession({
       capabilities: ['course.publish'],
       organizations: sampleOrganizations,
@@ -108,7 +107,7 @@ describe('useAuthStore', () => {
   })
 
   it('keeps current organization within the backend organization list', async () => {
-    const useAuthStore = await importAuthStore()
+    const useAuthStore = await createTestAuthStore()
     useAuthStore.getState().auth.setSession({
       capabilities: [],
       currentOrganizationId: 'missing-org',
@@ -121,7 +120,7 @@ describe('useAuthStore', () => {
   })
 
   it('reset clears session state and drops persistence', async () => {
-    const useAuthStore = await importAuthStore()
+    const useAuthStore = await createTestAuthStore()
     useAuthStore.getState().auth.setSession({
       capabilities: ['course.publish'],
       organizations: sampleOrganizations,
@@ -136,8 +135,7 @@ describe('useAuthStore', () => {
     expect(useAuthStore.getState().auth.accessToken).toBeNull()
     expect(useAuthStore.getState().auth.refreshToken).toBeNull()
 
-    vi.resetModules()
-    const useAuthStoreAfterReload = await importAuthStore()
+    const useAuthStoreAfterReload = await createTestAuthStore()
 
     expect(useAuthStoreAfterReload.getState().auth.user).toBeNull()
     expect(useAuthStoreAfterReload.getState().auth.accessToken).toBeNull()
