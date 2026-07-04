@@ -43,6 +43,7 @@ import { Route as AuthenticatedLogsIndexRouteImport } from './routes/_authentica
 import { Route as AuthenticatedIntegrationsIndexRouteImport } from './routes/_authenticated/integrations/index'
 import { Route as AuthenticatedIdentityVerificationIndexRouteImport } from './routes/_authenticated/identity-verification/index'
 import { Route as AuthenticatedHelpCenterIndexRouteImport } from './routes/_authenticated/help-center/index'
+import { Route as AuthenticatedCoursesIndexRouteImport } from './routes/_authenticated/courses/index'
 import { Route as AuthenticatedChatsIndexRouteImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
 import { Route as AuthenticatedAuditLogsIndexRouteImport } from './routes/_authenticated/audit-logs/index'
@@ -241,6 +242,12 @@ const AuthenticatedHelpCenterIndexRoute =
     path: '/help-center/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCoursesIndexRoute =
+  AuthenticatedCoursesIndexRouteImport.update({
+    id: '/courses/',
+    path: '/courses/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChatsIndexRoute = AuthenticatedChatsIndexRouteImport.update({
   id: '/chats/',
   path: '/chats/',
@@ -364,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/audit-logs/': typeof AuthenticatedAuditLogsIndexRoute
   '/billing/': typeof AuthenticatedBillingIndexRoute
   '/chats/': typeof AuthenticatedChatsIndexRoute
+  '/courses/': typeof AuthenticatedCoursesIndexRoute
   '/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations/': typeof AuthenticatedIntegrationsIndexRoute
@@ -412,6 +420,7 @@ export interface FileRoutesByTo {
   '/audit-logs': typeof AuthenticatedAuditLogsIndexRoute
   '/billing': typeof AuthenticatedBillingIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/courses': typeof AuthenticatedCoursesIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/identity-verification': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations': typeof AuthenticatedIntegrationsIndexRoute
@@ -465,6 +474,7 @@ export interface FileRoutesById {
   '/_authenticated/audit-logs/': typeof AuthenticatedAuditLogsIndexRoute
   '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
+  '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/_authenticated/integrations/': typeof AuthenticatedIntegrationsIndexRoute
@@ -516,6 +526,7 @@ export interface FileRouteTypes {
     | '/audit-logs/'
     | '/billing/'
     | '/chats/'
+    | '/courses/'
     | '/help-center/'
     | '/identity-verification/'
     | '/integrations/'
@@ -564,6 +575,7 @@ export interface FileRouteTypes {
     | '/audit-logs'
     | '/billing'
     | '/chats'
+    | '/courses'
     | '/help-center'
     | '/identity-verification'
     | '/integrations'
@@ -616,6 +628,7 @@ export interface FileRouteTypes {
     | '/_authenticated/audit-logs/'
     | '/_authenticated/billing/'
     | '/_authenticated/chats/'
+    | '/_authenticated/courses/'
     | '/_authenticated/help-center/'
     | '/_authenticated/identity-verification/'
     | '/_authenticated/integrations/'
@@ -891,6 +904,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHelpCenterIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/courses/': {
+      id: '/_authenticated/courses/'
+      path: '/courses'
+      fullPath: '/courses/'
+      preLoaderRoute: typeof AuthenticatedCoursesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/chats/': {
       id: '/_authenticated/chats/'
       path: '/chats'
@@ -1041,6 +1061,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAuditLogsIndexRoute: typeof AuthenticatedAuditLogsIndexRoute
   AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
+  AuthenticatedCoursesIndexRoute: typeof AuthenticatedCoursesIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedIdentityVerificationIndexRoute: typeof AuthenticatedIdentityVerificationIndexRoute
   AuthenticatedIntegrationsIndexRoute: typeof AuthenticatedIntegrationsIndexRoute
@@ -1072,6 +1093,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAuditLogsIndexRoute: AuthenticatedAuditLogsIndexRoute,
   AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
+  AuthenticatedCoursesIndexRoute: AuthenticatedCoursesIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedIdentityVerificationIndexRoute:
     AuthenticatedIdentityVerificationIndexRoute,

@@ -3,6 +3,7 @@ import {
   BookOpenText,
   Building2,
   CreditCard,
+  GraduationCap,
   KeyRound,
   LayoutDashboard,
   Lock,
@@ -57,6 +58,16 @@ export const sidebarData: SidebarData = {
           title: 'Organizations',
           url: '/organizations',
           icon: Building2,
+        },
+      ],
+    },
+    {
+      title: 'Learning',
+      items: [
+        {
+          title: 'Courses',
+          url: '/courses',
+          icon: GraduationCap,
         },
       ],
     },

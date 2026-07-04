@@ -57,6 +57,8 @@ root standards docs.
       notification inbox contracts.
 - [x] Remaining template modules audited; unsupported mock surfaces removed from
       navigation and replaced with direct-route unavailable states.
+- [x] Courses module added for current-user authored courses, public catalog
+      visibility, draft creation, and owner lifecycle actions.
 
 ## In Progress
 
@@ -91,6 +93,7 @@ module passes checks or has documented blockers.
 - [x] Notifications module compliance audit.
 - [x] Projects/tasks/template modules: decide keep, rename, or remove based on
       backend domain fit.
+- [x] Courses module initial backend-backed slice.
 
 ## Known Technical Debt
 
@@ -133,8 +136,14 @@ module passes checks or has documented blockers.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
 - Backend-supported future candidates include courses, events, marketplace
-  services, jobs, reviews, media, search, notification administration, revenue,
-  and coupons. Implement each as its own generated-contract-backed module.
+- Backend-supported future candidates include events, marketplace services,
+  jobs, reviews, media, search, notification administration, revenue, coupons,
+  and deeper learning workflows. Implement each as its own
+  generated-contract-backed module.
+- Courses is scoped to current-user authoring plus public catalog visibility;
+  no global course moderation contract exists. Course sections, lessons,
+  localization, FAQs, attachments, captions, enrollment, playback, and
+  certificates remain future learning slices.
 
 ## Required Module Completion Checklist
 
