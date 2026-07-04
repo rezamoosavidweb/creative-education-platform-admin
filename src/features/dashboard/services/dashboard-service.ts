@@ -1,124 +1,112 @@
-import { subDays, format } from 'date-fns'
+import { outboxAdminControllerStats } from '@/lib/api/generated/endpoints/admin/admin'
+import { healthCheckerControllerCheck } from '@/lib/api/generated/endpoints/health/health'
 import type {
-  DashboardStats,
-  RevenueData,
-  ActivityData,
-  Activity,
-  DashboardFilter,
-} from '../types/dashboard'
+  HealthCheckerControllerCheck200,
+  OutboxStatsDto,
+} from '@/lib/api/generated/model'
+import type { DashboardMetric, HealthMetric } from '../types/dashboard'
 
-// Mock data generator - in production, replace with API calls
-function generateMockStats(): DashboardStats {
+export const OUTBOX_MANAGE_CAPABILITY = 'platform.outbox.manage'
+
+export async function getDashboardHealth() {
+  return await healthCheckerControllerCheck()
+}
+
+export async function getDashboardOutboxStats() {
+  return await outboxAdminControllerStats()
+}
+
+export function getHealthIndicator(
+  health: HealthCheckerControllerCheck200 | null | undefined,
+  indicator: string
+) {
+  return health?.details?.[indicator] ?? health?.info?.[indicator] ?? null
+}
+
+export function getOutboxBacklogFromHealth(
+  health: HealthCheckerControllerCheck200 | null | undefined
+) {
+  const outbox = getHealthIndicator(health, 'outbox')
+  const pending = Number(outbox?.pending)
+  const failed = Number(outbox?.failed)
+
   return {
-    totalRevenue: 128420,
-    revenue_trend: {
-      value: 12.4,
-      direction: 'up',
-      label: 'vs last month',
-    },
-    activeUsers: 24891,
-    users_trend: {
-      value: 8.1,
-      direction: 'up',
-      label: 'vs last month',
-    },
-    conversion: 3.24,
-    conversion_trend: {
-      value: 0.6,
-      direction: 'up',
-      label: 'vs last month',
-    },
-    // Represents API Requests (count) for the 4th KPI card.
-    growth: 1_240_000,
-    growth_trend: {
-      value: 21.3,
-      direction: 'up',
-      label: 'vs last month',
-    },
+    pending: Number.isFinite(pending) ? pending : null,
+    failed: Number.isFinite(failed) ? failed : null,
   }
 }
 
-function generateMockRevenueData(): RevenueData[] {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-  return months.map((name) => ({
-    name,
-    value: Math.floor(Math.random() * 50000) + 10000,
-    revenue: Math.floor(Math.random() * 45000) + 15000,
-    cost: Math.floor(Math.random() * 20000) + 5000,
-    profit: Math.floor(Math.random() * 25000) + 8000,
+export function mapHealthMetrics(
+  health: HealthCheckerControllerCheck200 | null | undefined
+): HealthMetric[] {
+  if (!health?.details) return []
+
+  return Object.entries(health.details).map(([id, indicator]) => ({
+    id,
+    label: toTitleLabel(id),
+    status: String(indicator.status ?? 'unknown'),
+    details: Object.entries(indicator)
+      .filter(([key]) => key !== 'status')
+      .map(([key, value]) => `${toTitleLabel(key)}: ${String(value)}`)
+      .join(' · '),
   }))
 }
 
-function generateMockActivityData(): ActivityData[] {
-  const days = Array.from({ length: 30 }, (_, i) => {
-    const date = subDays(new Date(), 29 - i)
-    return {
-      name: format(date, 'MMM d'),
-      value: Math.floor(Math.random() * 100) + 20,
-      count: Math.floor(Math.random() * 100) + 20,
-    }
-  })
-  return days
-}
+export function mapDashboardMetrics({
+  health,
+  outboxStats,
+  canReadOutbox,
+}: {
+  health: HealthCheckerControllerCheck200 | null | undefined
+  outboxStats: OutboxStatsDto | null | undefined
+  canReadOutbox: boolean
+}): DashboardMetric[] {
+  const healthOutbox = getOutboxBacklogFromHealth(health)
+  const pending = outboxStats?.pending ?? healthOutbox.pending
+  const failed = outboxStats?.failed ?? healthOutbox.failed
 
-function generateMockActivities(): Activity[] {
   return [
     {
-      id: '1',
-      type: 'sale',
-      title: 'New Sale',
-      description: 'Customer purchased Premium Plan',
-      timestamp: new Date(Date.now() - 5 * 60 * 1000),
+      id: 'system-status',
+      title: 'System Status',
+      value: toTitleLabel(health?.status ?? 'unknown'),
+      description: 'Reported by /health',
+      tone: health?.status === 'ok' ? 'success' : 'warning',
     },
     {
-      id: '2',
-      type: 'user_signup',
-      title: 'New Signup',
-      description: 'New user created account',
-      timestamp: new Date(Date.now() - 15 * 60 * 1000),
+      id: 'pending-events',
+      title: 'Pending Events',
+      value: formatNullableNumber(pending),
+      description: 'Outbox backlog',
+      tone: pending && pending > 0 ? 'warning' : 'success',
     },
     {
-      id: '3',
-      type: 'payment',
-      title: 'Payment Received',
-      description: 'Invoice #INV-2024-001 paid',
-      timestamp: new Date(Date.now() - 30 * 60 * 1000),
+      id: 'failed-events',
+      title: 'Failed Events',
+      value: formatNullableNumber(failed),
+      description: 'Needs operator review when above zero',
+      tone: failed && failed > 0 ? 'danger' : 'success',
     },
     {
-      id: '4',
-      type: 'sale',
-      title: 'New Sale',
-      description: 'Customer purchased Enterprise Plan',
-      timestamp: new Date(Date.now() - 45 * 60 * 1000),
-    },
-    {
-      id: '5',
-      type: 'error',
-      title: 'Error Occurred',
-      description: 'Payment processing failed',
-      timestamp: new Date(Date.now() - 60 * 60 * 1000),
+      id: 'processed-events',
+      title: 'Processed Events',
+      value: canReadOutbox
+        ? formatNullableNumber(outboxStats?.processed ?? null)
+        : 'Restricted',
+      description: canReadOutbox
+        ? 'Admin outbox stats'
+        : 'Requires platform.outbox.manage',
+      tone: 'neutral',
     },
   ]
 }
 
-export const dashboardService = {
-  async getStats(_filters?: DashboardFilter): Promise<DashboardStats> {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return generateMockStats()
-  },
+function formatNullableNumber(value: number | null | undefined) {
+  return typeof value === 'number' ? value.toLocaleString() : 'Unavailable'
+}
 
-  async getRevenueData(_filters?: DashboardFilter): Promise<RevenueData[]> {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return generateMockRevenueData()
-  },
-
-  async getActivityData(_filters?: DashboardFilter): Promise<ActivityData[]> {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return generateMockActivityData()
-  },
-
-  async getRecentActivities(_filters?: DashboardFilter): Promise<Activity[]> {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return generateMockActivities()
-  },
+function toTitleLabel(value: string) {
+  return value
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase())
 }

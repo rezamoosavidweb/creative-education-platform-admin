@@ -1,56 +1,59 @@
-import { useQueries } from '@tanstack/react-query'
-import { dashboardService } from '../services/dashboard-service'
-import type { DashboardFilter } from '../types/dashboard'
+import { useQuery } from '@tanstack/react-query'
+import { useCapability } from '@/lib/capabilities'
+import {
+  getDashboardHealth,
+  getDashboardOutboxStats,
+  mapDashboardMetrics,
+  mapHealthMetrics,
+  OUTBOX_MANAGE_CAPABILITY,
+} from '../services/dashboard-service'
 
-type UseDashboardDataOptions = {
-  filters?: DashboardFilter
-  enabled?: boolean
-}
-
-export function useDashboardData({
-  filters,
-  enabled = true,
-}: UseDashboardDataOptions = {}) {
-  const results = useQueries({
-    queries: [
-      {
-        queryKey: ['dashboard', 'stats', filters],
-        queryFn: () => dashboardService.getStats(filters),
-        staleTime: 5 * 60 * 1000,
-        enabled,
-      },
-      {
-        queryKey: ['dashboard', 'revenue', filters],
-        queryFn: () => dashboardService.getRevenueData(filters),
-        staleTime: 5 * 60 * 1000,
-        enabled,
-      },
-      {
-        queryKey: ['dashboard', 'activity', filters],
-        queryFn: () => dashboardService.getActivityData(filters),
-        staleTime: 5 * 60 * 1000,
-        enabled,
-      },
-      {
-        queryKey: ['dashboard', 'activities', filters],
-        queryFn: () => dashboardService.getRecentActivities(filters),
-        staleTime: 5 * 60 * 1000,
-        enabled,
-      },
-    ],
+export function useDashboardData() {
+  const canReadOutbox = useCapability(OUTBOX_MANAGE_CAPABILITY)
+  const healthQuery = useQuery({
+    queryKey: ['dashboard', 'health'],
+    queryFn: getDashboardHealth,
+    staleTime: 30 * 1000,
+  })
+  const outboxQuery = useQuery({
+    queryKey: ['dashboard', 'outbox-stats'],
+    queryFn: getDashboardOutboxStats,
+    enabled: canReadOutbox,
+    staleTime: 30 * 1000,
   })
 
-  const [statsQuery, revenueQuery, activityQuery, activitiesQuery] = results
-
-  const isLoading = results.some((q) => q.isLoading)
-  const error = results.find((q) => q.error)?.error as Error | null
+  const metrics = mapDashboardMetrics({
+    health: healthQuery.data,
+    outboxStats: outboxQuery.data,
+    canReadOutbox,
+  })
+  const healthMetrics = mapHealthMetrics(healthQuery.data)
+  const isLoading =
+    healthQuery.isLoading || (canReadOutbox && outboxQuery.isLoading)
+  const isFetching =
+    healthQuery.isFetching || (canReadOutbox && outboxQuery.isFetching)
+  const healthError =
+    healthQuery.error instanceof Error ? healthQuery.error.message : null
+  const outboxError =
+    canReadOutbox && outboxQuery.error instanceof Error
+      ? outboxQuery.error.message
+      : null
 
   return {
-    stats: statsQuery.data ?? null,
-    revenueData: revenueQuery.data ?? [],
-    activityData: activityQuery.data ?? [],
-    recentActivities: activitiesQuery.data ?? [],
+    canReadOutbox,
+    error: healthError ?? outboxError,
+    healthMetrics,
+    healthError,
+    isFetching,
     isLoading,
-    error: error?.message ?? null,
+    metrics,
+    outboxError,
+    outboxStats: outboxQuery.data ?? null,
+    refresh: async () => {
+      await Promise.all([
+        healthQuery.refetch(),
+        canReadOutbox ? outboxQuery.refetch() : Promise.resolve(),
+      ])
+    },
   }
 }

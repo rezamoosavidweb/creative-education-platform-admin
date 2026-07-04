@@ -1,47 +1,34 @@
 import { memo, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import type { MetricCard as MetricCardType } from '../../types/dashboard'
-import { Sparkline, type SparklineData } from '../charts/sparkline'
+import type { DashboardMetricTone } from '../../types/dashboard'
 
-type MetricCardProps = Omit<MetricCardType, 'id' | 'icon'> & {
+type MetricCardProps = {
   className?: string
+  description: string
   icon?: ReactNode
-  iconColor?: string
-  iconBg?: string
-  sparklineData?: SparklineData[]
-  sparklineColor?: string
+  isLoading?: boolean
+  title: string
+  tone?: DashboardMetricTone
+  value: string | number
+}
+
+const TONE_CLASS: Record<DashboardMetricTone, string> = {
+  danger: 'bg-[var(--errs)] text-[var(--err)]',
+  neutral: 'bg-[var(--sur2)] text-[var(--t2)]',
+  success: 'bg-[var(--oks)] text-[var(--ok)]',
+  warning: 'bg-[var(--warns)] text-[var(--warn)]',
 }
 
 export const MetricCard = memo(function MetricCard({
   title,
   value,
-  trend,
+  description,
   icon,
-  iconColor = 'var(--pri)',
-  iconBg = 'var(--pris)',
+  tone = 'neutral',
   isLoading = false,
-  error,
   className,
-  sparklineData,
-  sparklineColor,
 }: MetricCardProps) {
-  if (error) {
-    return (
-      <Card className={cn('border-red-500/50 bg-red-500/5', className)}>
-        <CardHeader className='pb-2'>
-          <div className='flex items-center justify-between'>
-            <p className='text-xs font-medium text-[var(--t2)]'>{title}</p>
-            {icon && <div className='h-4 w-4 text-[var(--t2)]'>{icon}</div>}
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className='text-xs text-red-500'>{error}</p>
-        </CardContent>
-      </Card>
-    )
-  }
-
   if (isLoading) {
     return (
       <Card className={className}>
@@ -53,8 +40,7 @@ export const MetricCard = memo(function MetricCard({
         </CardHeader>
         <CardContent className='space-y-3'>
           <div className='h-7 w-24 animate-pulse rounded bg-[var(--sur2)]' />
-          <div className='h-6 w-full animate-pulse rounded bg-[var(--sur2)]' />
-          <div className='h-4 w-20 animate-pulse rounded bg-[var(--sur2)]' />
+          <div className='h-4 w-36 animate-pulse rounded bg-[var(--sur2)]' />
         </CardContent>
       </Card>
     )
@@ -71,51 +57,20 @@ export const MetricCard = memo(function MetricCard({
         <p className='text-xs font-medium text-[var(--t2)]'>{title}</p>
         {icon && (
           <div
-            className='flex h-8 w-8 items-center justify-center rounded-lg'
-            style={{ backgroundColor: iconBg, color: iconColor }}
+            className={cn(
+              'flex h-8 w-8 items-center justify-center rounded-lg',
+              TONE_CLASS[tone]
+            )}
           >
             {icon}
           </div>
         )}
       </CardHeader>
       <CardContent className='space-y-2 px-5 pb-4'>
-        <div className='flex items-end justify-between gap-2'>
-          <div className='flex flex-col gap-1'>
-            <div className='text-[26px] font-bold text-[var(--t1)] tabular-nums'>
-              {value}
-            </div>
-            {trend && (
-              <div className='flex items-center gap-1'>
-                <span
-                  className={cn(
-                    'text-xs font-medium',
-                    trend.direction === 'up'
-                      ? 'text-[var(--ok)]'
-                      : trend.direction === 'down'
-                        ? 'text-[var(--err)]'
-                        : 'text-[var(--t3)]'
-                  )}
-                >
-                  {trend.direction === 'up'
-                    ? '↑ '
-                    : trend.direction === 'down'
-                      ? '↓ '
-                      : ''}
-                  {Math.abs(trend.value)}%
-                </span>
-              </div>
-            )}
-          </div>
-          {sparklineData && sparklineData.length > 0 && (
-            <Sparkline
-              data={sparklineData}
-              color={sparklineColor || 'var(--pri)'}
-              width={80}
-              height={28}
-            />
-          )}
+        <div className='text-[26px] font-bold text-[var(--t1)] tabular-nums'>
+          {value}
         </div>
-        {trend && <p className='text-xs text-[var(--t3)]'>{trend.label}</p>}
+        <p className='text-xs text-[var(--t3)]'>{description}</p>
       </CardContent>
     </Card>
   )

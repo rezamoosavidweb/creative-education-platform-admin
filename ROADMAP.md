@@ -32,6 +32,8 @@ root standards docs.
       `apiClient`.
 - [x] Command palette navigation now uses the same capability filtering as the
       sidebar.
+- [x] Dashboard migrated from mock business analytics to backend-backed
+      operational health and outbox signals.
 
 ## In Progress
 
@@ -52,7 +54,7 @@ Refactor one module at a time. Do not begin the next module until the current
 module passes checks or has documented blockers.
 
 - [x] Navigation and capability-aware sidebar/command menu audit.
-- [ ] Dashboard real API migration.
+- [x] Dashboard real API migration.
 - [ ] Users module compliance audit.
 - [ ] Identity verification module compliance audit.
 - [ ] Organizations module compliance audit.
@@ -70,6 +72,7 @@ module passes checks or has documented blockers.
 ## Known Technical Debt
 
 - Several pages still use mock/template data instead of backend-backed services.
+  The dashboard is no longer mock-backed.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
