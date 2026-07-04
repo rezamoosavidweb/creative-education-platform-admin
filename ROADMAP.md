@@ -38,6 +38,8 @@ root standards docs.
       `identity.user.read`.
 - [x] Identity verification admin review module audited against backend queue,
       approve, and reject contracts.
+- [x] Organizations module audited against current-user membership contracts and
+      generated org type/role enums.
 
 ## In Progress
 
@@ -61,7 +63,7 @@ module passes checks or has documented blockers.
 - [x] Dashboard real API migration.
 - [x] Users module compliance audit.
 - [x] Identity verification module compliance audit.
-- [ ] Organizations module compliance audit.
+- [x] Organizations module compliance audit.
 - [ ] Profiles module compliance audit.
 - [ ] Permissions module compliance audit.
 - [ ] Sessions module compliance audit.
@@ -81,6 +83,8 @@ module passes checks or has documented blockers.
   and detail endpoints for admin users.
 - Identity verification admin UI is scoped to staff review actions; self-service
   profile verification requests should live outside the staff queue route.
+- Organizations are membership-scoped through `/organizations/mine`; the Admin
+  page is not a global organization directory.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.

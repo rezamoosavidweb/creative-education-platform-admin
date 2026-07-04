@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { KeyRound, Plus, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
-import { CapabilityGate } from '@/lib/capabilities'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -136,16 +135,14 @@ function OrganizationDetailsContent({
         <Card>
           <CardHeader className='flex flex-row items-center justify-between gap-3'>
             <CardTitle className='text-base'>Teams</CardTitle>
-            <CapabilityGate>
-              <Button
-                type='button'
-                size='sm'
-                onClick={() => setCreateTeamOpen(true)}
-              >
-                <Plus className='size-4' />
-                Team
-              </Button>
-            </CapabilityGate>
+            <Button
+              type='button'
+              size='sm'
+              onClick={() => setCreateTeamOpen(true)}
+            >
+              <Plus className='size-4' />
+              Team
+            </Button>
           </CardHeader>
           <CardContent className='grid gap-3'>
             {teamsQuery.isLoading ? (
@@ -184,16 +181,14 @@ function OrganizationDetailsContent({
       <Card>
         <CardHeader className='flex flex-row items-center justify-between gap-3'>
           <CardTitle className='text-base'>Members</CardTitle>
-          <CapabilityGate>
-            <Button
-              type='button'
-              size='sm'
-              onClick={() => setAddMemberOpen(true)}
-            >
-              <Plus className='size-4' />
-              Member
-            </Button>
-          </CapabilityGate>
+          <Button
+            type='button'
+            size='sm'
+            onClick={() => setAddMemberOpen(true)}
+          >
+            <Plus className='size-4' />
+            Member
+          </Button>
         </CardHeader>
         <CardContent className='grid gap-3'>
           {membersQuery.isLoading ? (
@@ -231,28 +226,26 @@ function OrganizationDetailsContent({
                   <StatusPill tone={getMembershipStatusTone(member.status)}>
                     {member.status}
                   </StatusPill>
-                  <CapabilityGate>
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='sm'
-                      onClick={() => setAssignRoleMembership(member)}
-                    >
-                      <KeyRound className='size-4' />
-                      Role
-                    </Button>
-                    <Button
-                      type='button'
-                      variant='outline'
-                      size='sm'
-                      disabled={removeMutation.isPending}
-                      onClick={() => setRemoveMembership(member)}
-                      className='border-[var(--err)]/40 text-[var(--err)] hover:bg-[var(--errs)] hover:text-[var(--err)]'
-                    >
-                      <Trash2 className='size-4' />
-                      Remove
-                    </Button>
-                  </CapabilityGate>
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='sm'
+                    onClick={() => setAssignRoleMembership(member)}
+                  >
+                    <KeyRound className='size-4' />
+                    Role
+                  </Button>
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='sm'
+                    disabled={removeMutation.isPending}
+                    onClick={() => setRemoveMembership(member)}
+                    className='border-[var(--err)]/40 text-[var(--err)] hover:bg-[var(--errs)] hover:text-[var(--err)]'
+                  >
+                    <Trash2 className='size-4' />
+                    Remove
+                  </Button>
                 </div>
               </div>
             ))

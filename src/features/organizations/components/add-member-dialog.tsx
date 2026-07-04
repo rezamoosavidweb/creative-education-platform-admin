@@ -22,7 +22,9 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { SelectDropdown } from '@/components/select-dropdown'
 import { useAddOrganizationMember } from '../hooks/use-add-organization-member'
+import { ORG_ROLE_OPTIONS } from '../services/organizations-query'
 import type { AddMemberRequest, OrgRole } from '../types'
 
 const addMemberSchema = z.object({
@@ -105,16 +107,13 @@ export function AddMemberDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Role</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={addMutation.isPending}
-                        value={field.value ?? ''}
-                        onBlur={field.onBlur}
-                        onChange={field.onChange}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    </FormControl>
+                    <SelectDropdown
+                      defaultValue={field.value}
+                      disabled={addMutation.isPending}
+                      isControlled
+                      items={ORG_ROLE_OPTIONS}
+                      onValueChange={field.onChange}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}

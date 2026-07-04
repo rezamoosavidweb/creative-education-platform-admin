@@ -8,6 +8,8 @@ import {
   getOrganizationStats,
   getOrganizationTeams,
   getOrgRoleTone,
+  ORG_ROLE_OPTIONS,
+  ORG_TYPE_OPTIONS,
 } from './organizations-query'
 
 const organization: Organization = {
@@ -76,5 +78,24 @@ describe('organizations query helpers', () => {
     expect(getOrgRoleTone('OWNER')).toBe('primary')
     expect(getOrgRoleTone('ADMIN')).toBe('warn')
     expect(getOrgRoleTone('MEMBER')).toBe('neutral')
+  })
+
+  it('exposes generated enum options for organization forms', () => {
+    expect(ORG_TYPE_OPTIONS.map((option) => option.value)).toEqual([
+      'SCHOOL',
+      'ACADEMY',
+      'LABEL',
+      'AGENCY',
+      'STUDIO',
+      'COMPANY',
+      'ORCHESTRA',
+      'VENUE',
+      'COLLECTIVE',
+    ])
+    expect(ORG_ROLE_OPTIONS.map((option) => option.value)).toEqual([
+      'OWNER',
+      'ADMIN',
+      'MEMBER',
+    ])
   })
 })

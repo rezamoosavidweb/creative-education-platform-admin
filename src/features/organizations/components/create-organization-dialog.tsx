@@ -22,7 +22,9 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { SelectDropdown } from '@/components/select-dropdown'
 import { useCreateOrganization } from '../hooks/use-create-organization'
+import { ORG_TYPE_OPTIONS } from '../services/organizations-query'
 import type { CreateOrganizationRequest, OrgType } from '../types'
 
 const createOrganizationSchema = z.object({
@@ -98,16 +100,13 @@ export function CreateOrganizationDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Type</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={createMutation.isPending}
-                        value={field.value ?? ''}
-                        onBlur={field.onBlur}
-                        onChange={field.onChange}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    </FormControl>
+                    <SelectDropdown
+                      defaultValue={field.value}
+                      disabled={createMutation.isPending}
+                      isControlled
+                      items={ORG_TYPE_OPTIONS}
+                      onValueChange={field.onChange}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}

@@ -7,6 +7,32 @@ import type {
   Team,
 } from '../types'
 
+const ORG_TYPES = [
+  'SCHOOL',
+  'ACADEMY',
+  'LABEL',
+  'AGENCY',
+  'STUDIO',
+  'COMPANY',
+  'ORCHESTRA',
+  'VENUE',
+  'COLLECTIVE',
+] as const satisfies readonly Organization['type'][]
+
+const ORG_ROLES = [
+  'OWNER',
+  'ADMIN',
+  'MEMBER',
+] as const satisfies readonly OrgRole[]
+
+export const ORG_TYPE_OPTIONS: {
+  label: string
+  value: Organization['type']
+}[] = ORG_TYPES.map((value) => ({ label: formatEnumLabel(value), value }))
+
+export const ORG_ROLE_OPTIONS: { label: string; value: OrgRole }[] =
+  ORG_ROLES.map((value) => ({ label: formatEnumLabel(value), value }))
+
 type StatTone = 'default' | 'ok'
 
 export type OrganizationStat = {
@@ -122,4 +148,11 @@ function getLatestOrganization(
       ? organization
       : latest
   }, null)
+}
+
+function formatEnumLabel(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase())
 }

@@ -43,7 +43,7 @@ export function Organizations() {
           <div>
             <h2 className='text-2xl font-bold tracking-tight'>Organizations</h2>
             <p className='text-muted-foreground'>
-              Manage organizations, members, and teams across the workspace.
+              Manage organizations where the current user has membership.
             </p>
           </div>
           <Button onClick={() => setCreateOpen(true)}>

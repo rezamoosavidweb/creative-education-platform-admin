@@ -15,14 +15,14 @@ import {
 } from '@/components/ui/dialog'
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { SelectDropdown } from '@/components/select-dropdown'
 import { useAssignOrganizationRole } from '../hooks/use-assign-organization-role'
+import { ORG_ROLE_OPTIONS } from '../services/organizations-query'
 import type { AssignOrgRoleRequest, OrgMembership, OrgRole } from '../types'
 
 const assignRoleSchema = z.object({
@@ -89,16 +89,13 @@ export function AssignRoleDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={assignMutation.isPending}
-                      value={field.value ?? ''}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                  </FormControl>
+                  <SelectDropdown
+                    defaultValue={field.value}
+                    disabled={assignMutation.isPending}
+                    isControlled
+                    items={ORG_ROLE_OPTIONS}
+                    onValueChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
