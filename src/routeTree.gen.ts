@@ -43,6 +43,7 @@ import { Route as AuthenticatedLogsIndexRouteImport } from './routes/_authentica
 import { Route as AuthenticatedIntegrationsIndexRouteImport } from './routes/_authenticated/integrations/index'
 import { Route as AuthenticatedIdentityVerificationIndexRouteImport } from './routes/_authenticated/identity-verification/index'
 import { Route as AuthenticatedHelpCenterIndexRouteImport } from './routes/_authenticated/help-center/index'
+import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events/index'
 import { Route as AuthenticatedCoursesIndexRouteImport } from './routes/_authenticated/courses/index'
 import { Route as AuthenticatedChatsIndexRouteImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
@@ -242,6 +243,12 @@ const AuthenticatedHelpCenterIndexRoute =
     path: '/help-center/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEventsIndexRoute =
+  AuthenticatedEventsIndexRouteImport.update({
+    id: '/events/',
+    path: '/events/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCoursesIndexRoute =
   AuthenticatedCoursesIndexRouteImport.update({
     id: '/courses/',
@@ -372,6 +379,7 @@ export interface FileRoutesByFullPath {
   '/billing/': typeof AuthenticatedBillingIndexRoute
   '/chats/': typeof AuthenticatedChatsIndexRoute
   '/courses/': typeof AuthenticatedCoursesIndexRoute
+  '/events/': typeof AuthenticatedEventsIndexRoute
   '/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations/': typeof AuthenticatedIntegrationsIndexRoute
@@ -421,6 +429,7 @@ export interface FileRoutesByTo {
   '/billing': typeof AuthenticatedBillingIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
   '/courses': typeof AuthenticatedCoursesIndexRoute
+  '/events': typeof AuthenticatedEventsIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/identity-verification': typeof AuthenticatedIdentityVerificationIndexRoute
   '/integrations': typeof AuthenticatedIntegrationsIndexRoute
@@ -475,6 +484,7 @@ export interface FileRoutesById {
   '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
+  '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/identity-verification/': typeof AuthenticatedIdentityVerificationIndexRoute
   '/_authenticated/integrations/': typeof AuthenticatedIntegrationsIndexRoute
@@ -527,6 +537,7 @@ export interface FileRouteTypes {
     | '/billing/'
     | '/chats/'
     | '/courses/'
+    | '/events/'
     | '/help-center/'
     | '/identity-verification/'
     | '/integrations/'
@@ -576,6 +587,7 @@ export interface FileRouteTypes {
     | '/billing'
     | '/chats'
     | '/courses'
+    | '/events'
     | '/help-center'
     | '/identity-verification'
     | '/integrations'
@@ -629,6 +641,7 @@ export interface FileRouteTypes {
     | '/_authenticated/billing/'
     | '/_authenticated/chats/'
     | '/_authenticated/courses/'
+    | '/_authenticated/events/'
     | '/_authenticated/help-center/'
     | '/_authenticated/identity-verification/'
     | '/_authenticated/integrations/'
@@ -904,6 +917,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHelpCenterIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/events/': {
+      id: '/_authenticated/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/courses/': {
       id: '/_authenticated/courses/'
       path: '/courses'
@@ -1062,6 +1082,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
   AuthenticatedCoursesIndexRoute: typeof AuthenticatedCoursesIndexRoute
+  AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedIdentityVerificationIndexRoute: typeof AuthenticatedIdentityVerificationIndexRoute
   AuthenticatedIntegrationsIndexRoute: typeof AuthenticatedIntegrationsIndexRoute
@@ -1094,6 +1115,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
   AuthenticatedCoursesIndexRoute: AuthenticatedCoursesIndexRoute,
+  AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedIdentityVerificationIndexRoute:
     AuthenticatedIdentityVerificationIndexRoute,
