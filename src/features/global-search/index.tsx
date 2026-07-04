@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { Search as SearchIcon } from 'lucide-react'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -9,7 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
+import {
+  ApiEmpty,
+  ApiError,
+  ApiLoading,
+  CursorPagination,
+} from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { SearchResultsTable } from './components/search-results-table'
@@ -45,10 +52,11 @@ export function GlobalSearch() {
   >(ANY)
   const [tagCsv, setTagCsv] = useState('')
   const [params, setParams] = useState<GlobalSearchParams | null>(null)
+  const debouncedText = useDebouncedValue(text, 300)
 
   const searchQuery = useGlobalSearch(params)
-  const autocompleteQuery = useGlobalAutocomplete(text)
-  const suggestionsQuery = useGlobalTermSuggestions(text)
+  const autocompleteQuery = useGlobalAutocomplete(debouncedText)
+  const suggestionsQuery = useGlobalTermSuggestions(debouncedText)
 
   const facetSummary = useMemo(() => {
     const facets = searchQuery.data?.facets
@@ -87,7 +95,7 @@ export function GlobalSearch() {
   })
 
   const runSearch = () => setParams(buildParams())
-  const loadNext = () => setParams(buildParams(searchQuery.data?.nextCursor))
+  const loadNext = (cursor: string) => setParams(buildParams(cursor))
 
   return (
     <>
@@ -104,15 +112,16 @@ export function GlobalSearch() {
 
         <div className='grid gap-3 rounded-md border border-[var(--bdr)] bg-[var(--sur)] p-4 xl:grid-cols-[minmax(220px,1.6fr)_180px_160px_140px_140px_auto] xl:items-end'>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Text</span>
+            <Label htmlFor='global-search-text'>Text</Label>
             <Input
+              id='global-search-text'
               value={text}
               onChange={(event) => setText(event.target.value)}
               placeholder='Search text'
             />
           </div>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Type</span>
+            <Label>Type</Label>
             <Select
               value={type}
               onValueChange={(value) => setType(value as typeof type)}
@@ -131,7 +140,7 @@ export function GlobalSearch() {
             </Select>
           </div>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Sort</span>
+            <Label>Sort</Label>
             <Select
               value={sort}
               onValueChange={(value) => setSort(value as GlobalSearchSort)}
@@ -166,16 +175,19 @@ export function GlobalSearch() {
 
         <div className='grid gap-3 sm:grid-cols-3'>
           <Input
+            aria-label='Country'
             value={country}
             onChange={(event) => setCountry(event.target.value)}
             placeholder='Country'
           />
           <Input
+            aria-label='City'
             value={city}
             onChange={(event) => setCity(event.target.value)}
             placeholder='City'
           />
           <Input
+            aria-label='Discipline IDs'
             value={tagCsv}
             onChange={(event) => setTagCsv(event.target.value)}
             placeholder='Discipline IDs, comma separated'
@@ -232,11 +244,13 @@ export function GlobalSearch() {
               </div>
             </div>
             <SearchResultsTable hits={hits} />
-            {searchQuery.data.nextCursor && (
-              <Button variant='outline' className='w-fit' onClick={loadNext}>
-                Load next page
-              </Button>
-            )}
+            <CursorPagination
+              hasNextPage={Boolean(searchQuery.data.nextCursor)}
+              isRefreshing={searchQuery.isFetching}
+              nextCursor={searchQuery.data.nextCursor ?? null}
+              onNext={loadNext}
+              onRefresh={() => void searchQuery.refetch()}
+            />
           </div>
         )}
       </Main>
@@ -255,7 +269,7 @@ function BooleanSelect({
 }) {
   return (
     <div className='grid gap-2'>
-      <span className='text-sm font-medium'>{label}</span>
+      <Label>{label}</Label>
       <Select
         value={value}
         onValueChange={(next) => onChange(next as typeof value)}

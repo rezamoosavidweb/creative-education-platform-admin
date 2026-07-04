@@ -3,7 +3,7 @@ import { Plus, Store } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
+import { ApiQueryState } from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { JobApplicationsDialog } from './components/job-applications-dialog'
@@ -136,7 +136,7 @@ export function Marketplace() {
           </TabsList>
 
           <TabsContent value='services' className='mt-4'>
-            <QueryState
+            <ApiQueryState
               emptyDescription='No published services match the current filters.'
               emptyTitle='No services'
               isError={servicesQuery.isError}
@@ -147,11 +147,11 @@ export function Marketplace() {
               loadingLabel='Loading services...'
             >
               <ServicesTable mode='public' services={services} />
-            </QueryState>
+            </ApiQueryState>
           </TabsContent>
 
           <TabsContent value='mine' className='mt-4'>
-            <QueryState
+            <ApiQueryState
               emptyDescription='No service listings match the current filters.'
               emptyTitle='No service listings'
               isError={myServicesQuery.isError}
@@ -167,11 +167,11 @@ export function Marketplace() {
                 onUnlist={unlistService}
                 services={myServices}
               />
-            </QueryState>
+            </ApiQueryState>
           </TabsContent>
 
           <TabsContent value='jobs' className='mt-4'>
-            <QueryState
+            <ApiQueryState
               emptyDescription='No open jobs match the current filters.'
               emptyTitle='No jobs'
               isError={jobsQuery.isError}
@@ -187,11 +187,11 @@ export function Marketplace() {
                 onClose={closeJob}
                 onReviewApplications={setReviewJob}
               />
-            </QueryState>
+            </ApiQueryState>
           </TabsContent>
 
           <TabsContent value='applications' className='mt-4'>
-            <QueryState
+            <ApiQueryState
               emptyDescription='The backend returned no applications for this account.'
               emptyTitle='No applications'
               isError={applicationsQuery.isError}
@@ -206,11 +206,11 @@ export function Marketplace() {
                 jobs={jobsQuery.data ?? []}
                 onWithdraw={withdrawApplication}
               />
-            </QueryState>
+            </ApiQueryState>
           </TabsContent>
 
           <TabsContent value='contracts' className='mt-4'>
-            <QueryState
+            <ApiQueryState
               emptyDescription='The backend returned no contracts for this account.'
               emptyTitle='No contracts'
               isError={contractsQuery.isError}
@@ -225,7 +225,7 @@ export function Marketplace() {
                 onCancel={cancelContract}
                 onComplete={completeContract}
               />
-            </QueryState>
+            </ApiQueryState>
           </TabsContent>
         </Tabs>
       </Main>
@@ -251,36 +251,4 @@ export function Marketplace() {
       />
     </>
   )
-}
-
-type QueryStateProps = {
-  children: React.ReactNode
-  emptyDescription: string
-  emptyTitle: string
-  error: unknown
-  hasData: boolean
-  isError: boolean
-  isLoading: boolean
-  loadingLabel: string
-  onRetry: () => void
-}
-
-function QueryState({
-  children,
-  emptyDescription,
-  emptyTitle,
-  error,
-  hasData,
-  isError,
-  isLoading,
-  loadingLabel,
-  onRetry,
-}: QueryStateProps) {
-  if (isLoading) return <ApiLoading label={loadingLabel} />
-  if (isError) return <ApiError error={error} onRetry={onRetry} />
-  if (!hasData) {
-    return <ApiEmpty title={emptyTitle} description={emptyDescription} />
-  }
-
-  return children
 }

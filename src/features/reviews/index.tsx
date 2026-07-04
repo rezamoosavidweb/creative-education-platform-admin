@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Plus, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -10,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
+import { ApiEmpty, ApiQueryState } from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { StatCard } from '@/components/stat-card'
@@ -87,7 +88,7 @@ export function Reviews() {
 
         <div className='grid gap-3 rounded-md border border-[var(--bdr)] bg-[var(--sur)] p-4 lg:grid-cols-[180px_minmax(0,1fr)_auto] lg:items-end'>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Subject type</span>
+            <Label>Subject type</Label>
             <Select
               value={subjectType}
               onValueChange={(value) =>
@@ -107,8 +108,9 @@ export function Reviews() {
             </Select>
           </div>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Subject ID</span>
+            <Label htmlFor='review-subject-id'>Subject ID</Label>
             <Input
+              id='review-subject-id'
               value={subjectId}
               onChange={(event) => setSubjectId(event.target.value)}
               placeholder='Backend subject UUID'
@@ -153,7 +155,7 @@ export function Reviews() {
           </TabsList>
 
           <TabsContent value='mine' className='mt-4'>
-            <QueryState
+            <ApiQueryState
               emptyDescription='The backend returned no reviews for this account.'
               emptyTitle='No reviews'
               error={myReviewsQuery.error}
@@ -172,7 +174,7 @@ export function Reviews() {
                 }}
                 onRemove={removeReview}
               />
-            </QueryState>
+            </ApiQueryState>
           </TabsContent>
 
           <TabsContent value='subject' className='mt-4'>
@@ -183,7 +185,7 @@ export function Reviews() {
               />
             )}
             {subject && (
-              <QueryState
+              <ApiQueryState
                 emptyDescription='The backend returned no published reviews for this subject.'
                 emptyTitle='No subject reviews'
                 error={subjectReviewsQuery.error}
@@ -194,7 +196,7 @@ export function Reviews() {
                 onRetry={() => void subjectReviewsQuery.refetch()}
               >
                 <ReviewsTable mode='subject' reviews={subjectReviews} />
-              </QueryState>
+              </ApiQueryState>
             )}
           </TabsContent>
         </Tabs>
@@ -211,36 +213,4 @@ export function Reviews() {
       />
     </>
   )
-}
-
-type QueryStateProps = {
-  children: React.ReactNode
-  emptyDescription: string
-  emptyTitle: string
-  error: unknown
-  hasData: boolean
-  isError: boolean
-  isLoading: boolean
-  loadingLabel: string
-  onRetry: () => void
-}
-
-function QueryState({
-  children,
-  emptyDescription,
-  emptyTitle,
-  error,
-  hasData,
-  isError,
-  isLoading,
-  loadingLabel,
-  onRetry,
-}: QueryStateProps) {
-  if (isLoading) return <ApiLoading label={loadingLabel} />
-  if (isError) return <ApiError error={error} onRetry={onRetry} />
-  if (!hasData) {
-    return <ApiEmpty title={emptyTitle} description={emptyDescription} />
-  }
-
-  return children
 }

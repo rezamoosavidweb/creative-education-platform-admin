@@ -83,9 +83,7 @@ function useMarketplaceInvalidation() {
   const queryClient = useQueryClient()
 
   return async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: marketplaceQueryKeys.all }),
-    ])
+    await queryClient.invalidateQueries({ queryKey: marketplaceQueryKeys.all })
   }
 }
 

@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -80,11 +81,11 @@ export function Media() {
 
         <div className='grid gap-3 rounded-md border border-[var(--bdr)] bg-[var(--sur)] p-4 lg:grid-cols-[minmax(0,1fr)_160px_auto] lg:items-end'>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>File</span>
-            <Input type='file' onChange={onFileChange} />
+            <Label htmlFor='media-file'>File</Label>
+            <Input id='media-file' type='file' onChange={onFileChange} />
           </div>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Visibility</span>
+            <Label>Visibility</Label>
             <Select
               value={visibility}
               onValueChange={(value) =>
@@ -108,8 +109,9 @@ export function Media() {
 
         <div className='grid gap-3 rounded-md border border-[var(--bdr)] bg-[var(--sur)] p-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end'>
           <div className='grid gap-2'>
-            <span className='text-sm font-medium'>Asset ID</span>
+            <Label htmlFor='media-asset-id'>Asset ID</Label>
             <Input
+              id='media-asset-id'
               value={lookupId}
               onChange={(event) => setLookupId(event.target.value)}
               placeholder='Backend media UUID'

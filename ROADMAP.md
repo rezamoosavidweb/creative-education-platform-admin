@@ -69,6 +69,7 @@ root standards docs.
       owner delete workflows.
 - [x] Search module added for global faceted search, autocomplete, term
       suggestions, facets, and cursor pagination.
+- [x] Quality refactor completed for Marketplace, Reviews, Media, and Search.
 
 ## In Progress
 
@@ -113,6 +114,7 @@ module passes checks or has documented blockers.
       slice.
 - [x] Search module backend-backed global search, suggestions, facets, and
       pagination slice.
+- [x] Cross-module quality refactor for recently added backend-backed modules.
 
 ## Known Technical Debt
 
@@ -178,6 +180,8 @@ module passes checks or has documented blockers.
 - Search is scoped to backend faceted search, autocomplete, term suggestions,
   and cursor pagination. Local response normalization exists because generated
   nested search arrays currently come through as singular DTO types.
+- Shared `ApiQueryState` is now the preferred non-table loading/error/empty
+  wrapper for backend-backed feature screens.
 
 ## Required Module Completion Checklist
 
@@ -211,6 +215,8 @@ For every module:
   approved runtime-client generator.
 - Keep shadcn/ui, Radix, Tailwind v4, and Enterprise Admin tokens as the design
   system.
+- Keep API-state UI primitives in `src/components/api` when they are reused
+  across backend-backed modules.
 
 ## Pending Automation
 
