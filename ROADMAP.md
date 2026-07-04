@@ -36,6 +36,8 @@ root standards docs.
       operational health and outbox signals.
 - [x] Users module audited against backend read-only user contracts and gated by
       `identity.user.read`.
+- [x] Identity verification admin review module audited against backend queue,
+      approve, and reject contracts.
 
 ## In Progress
 
@@ -58,7 +60,7 @@ module passes checks or has documented blockers.
 - [x] Navigation and capability-aware sidebar/command menu audit.
 - [x] Dashboard real API migration.
 - [x] Users module compliance audit.
-- [ ] Identity verification module compliance audit.
+- [x] Identity verification module compliance audit.
 - [ ] Organizations module compliance audit.
 - [ ] Profiles module compliance audit.
 - [ ] Permissions module compliance audit.
@@ -77,6 +79,8 @@ module passes checks or has documented blockers.
   The dashboard is no longer mock-backed.
 - The Users module is read-only because the backend currently exposes only list
   and detail endpoints for admin users.
+- Identity verification admin UI is scoped to staff review actions; self-service
+  profile verification requests should live outside the staff queue route.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
