@@ -3,7 +3,6 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { KeyRound, Monitor, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
-import { CapabilityGate } from '@/lib/capabilities'
 import { type NavigateFn } from '@/hooks/use-table-url-state'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/confirm-dialog'
@@ -194,23 +193,21 @@ function createSessionColumns({
     {
       id: 'actions',
       cell: ({ row }) => (
-        <CapabilityGate>
-          <Button
-            type='button'
-            variant='outline'
-            size='sm'
-            disabled={isRevoking || row.original.id === currentSessionId}
-            onClick={() => onRevoke(row.original)}
-            className='border-[var(--err)]/40 text-[var(--err)] hover:bg-[var(--errs)] hover:text-[var(--err)]'
-          >
-            {isRevoking ? (
-              <KeyRound className='size-4' />
-            ) : (
-              <Trash2 className='size-4' />
-            )}
-            Revoke
-          </Button>
-        </CapabilityGate>
+        <Button
+          type='button'
+          variant='outline'
+          size='sm'
+          disabled={isRevoking || row.original.id === currentSessionId}
+          onClick={() => onRevoke(row.original)}
+          className='border-[var(--err)]/40 text-[var(--err)] hover:bg-[var(--errs)] hover:text-[var(--err)]'
+        >
+          {isRevoking ? (
+            <KeyRound className='size-4' />
+          ) : (
+            <Trash2 className='size-4' />
+          )}
+          Revoke
+        </Button>
       ),
       enableHiding: false,
       enableSorting: false,
