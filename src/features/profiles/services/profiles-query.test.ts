@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { DirectoryEntry, Profile } from '../types'
 import {
+  AVAILABILITY_STATUS_OPTIONS,
   getDirectoryEntries,
   getDirectoryTableMeta,
   getProfileStats,
@@ -81,5 +82,13 @@ describe('profiles-query', () => {
     expect(getVerificationStatusTone('PENDING')).toBe('warn')
     expect(getVerificationStatusTone('REJECTED')).toBe('err')
     expect(getVerificationStatusTone('UNVERIFIED')).toBe('neutral')
+  })
+
+  it('exposes generated availability status options for persona forms', () => {
+    expect(AVAILABILITY_STATUS_OPTIONS.map((option) => option.value)).toEqual([
+      'AVAILABLE',
+      'BUSY',
+      'UNAVAILABLE',
+    ])
   })
 })

@@ -40,6 +40,8 @@ root standards docs.
       approve, and reject contracts.
 - [x] Organizations module audited against current-user membership contracts and
       generated org type/role enums.
+- [x] Profiles module audited for directory/current-user contract fit and
+      generated availability status enum controls.
 
 ## In Progress
 
@@ -64,7 +66,7 @@ module passes checks or has documented blockers.
 - [x] Users module compliance audit.
 - [x] Identity verification module compliance audit.
 - [x] Organizations module compliance audit.
-- [ ] Profiles module compliance audit.
+- [x] Profiles module compliance audit.
 - [ ] Permissions module compliance audit.
 - [ ] Sessions module compliance audit.
 - [ ] Reference catalogs module compliance audit.
@@ -85,6 +87,8 @@ module passes checks or has documented blockers.
   profile verification requests should live outside the staff queue route.
 - Organizations are membership-scoped through `/organizations/mine`; the Admin
   page is not a global organization directory.
+- Profiles combines public directory search with current-user profile and
+  persona management; availability status controls use backend enum values.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.

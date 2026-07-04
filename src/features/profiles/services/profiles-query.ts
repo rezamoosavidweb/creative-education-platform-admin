@@ -2,12 +2,27 @@ import { createQueryKey } from '@/lib/query'
 import type { ServerTableMeta } from '@/components/data-table'
 import type { PillTone } from '@/components/status-pill'
 import type {
+  AvailabilityStatus,
   DirectoryEntry,
   DirectoryQuery,
   DirectoryResponse,
   Profile,
   VerificationStatus,
 } from '../types'
+
+const AVAILABILITY_STATUSES = [
+  'AVAILABLE',
+  'BUSY',
+  'UNAVAILABLE',
+] as const satisfies readonly AvailabilityStatus[]
+
+export const AVAILABILITY_STATUS_OPTIONS: {
+  label: string
+  value: AvailabilityStatus
+}[] = AVAILABILITY_STATUSES.map((value) => ({
+  label: formatEnumLabel(value),
+  value,
+}))
 
 export const profileQueryKeys = {
   directory: () => createQueryKey('profiles', 'directory'),
@@ -135,4 +150,11 @@ function stripEmptyValues<T extends Record<string, unknown>>(value: T): T {
       return entry !== undefined && entry !== null
     })
   ) as T
+}
+
+function formatEnumLabel(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase())
 }

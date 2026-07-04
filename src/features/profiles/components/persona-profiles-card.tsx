@@ -21,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { ApiError as ApiErrorState, ApiLoading } from '@/components/api'
+import { SelectDropdown } from '@/components/select-dropdown'
 import { StatusPill } from '@/components/status-pill'
 import { useChangePractitionerAvailability } from '../hooks/use-change-practitioner-availability'
 import { useEnsureInstructorProfile } from '../hooks/use-ensure-instructor-profile'
@@ -31,7 +32,10 @@ import { usePractitionerProfile } from '../hooks/use-practitioner-profile'
 import { useStudioProfile } from '../hooks/use-studio-profile'
 import { useUpdateInstructorProfile } from '../hooks/use-update-instructor-profile'
 import { useUpdateStudioProfile } from '../hooks/use-update-studio-profile'
-import { getVerificationStatusTone } from '../services/profiles-query'
+import {
+  AVAILABILITY_STATUS_OPTIONS,
+  getVerificationStatusTone,
+} from '../services/profiles-query'
 import type {
   ChangeAvailabilityRequest,
   UpdateInstructorRequest,
@@ -136,20 +140,10 @@ function PractitionerProfilePanel() {
               control={form.form.control}
               name='status'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Availability status</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={updateMutation.isPending}
-                      value={field.value ?? ''}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <AvailabilityStatusField
+                  disabled={updateMutation.isPending}
+                  field={field}
+                />
               )}
             />
             <ReferenceSummary
@@ -424,20 +418,7 @@ function InstructorAvailabilityInput({
       control={control}
       name='availabilityStatus'
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>Availability status</FormLabel>
-          <FormControl>
-            <Input
-              disabled={disabled}
-              value={typeof field.value === 'string' ? field.value : ''}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              name={field.name}
-              ref={field.ref}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+        <AvailabilityStatusField disabled={disabled} field={field} />
       )}
     />
   )
@@ -455,22 +436,37 @@ function StudioAvailabilityInput({
       control={control}
       name='availabilityStatus'
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>Availability status</FormLabel>
-          <FormControl>
-            <Input
-              disabled={disabled}
-              value={typeof field.value === 'string' ? field.value : ''}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              name={field.name}
-              ref={field.ref}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+        <AvailabilityStatusField disabled={disabled} field={field} />
       )}
     />
+  )
+}
+
+function AvailabilityStatusField({
+  disabled,
+  field,
+}: {
+  disabled: boolean
+  field: {
+    name: string
+    onBlur: () => void
+    onChange: (value: string) => void
+    ref: React.Ref<unknown>
+    value: unknown
+  }
+}) {
+  return (
+    <FormItem>
+      <FormLabel>Availability status</FormLabel>
+      <SelectDropdown
+        defaultValue={typeof field.value === 'string' ? field.value : ''}
+        disabled={disabled}
+        isControlled
+        items={AVAILABILITY_STATUS_OPTIONS}
+        onValueChange={field.onChange}
+      />
+      <FormMessage />
+    </FormItem>
   )
 }
 
