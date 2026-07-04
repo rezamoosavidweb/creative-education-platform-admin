@@ -4,8 +4,9 @@ import { KeyRound, Monitor, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
 import { CapabilityGate } from '@/lib/capabilities'
-import { ConfirmDialog } from '@/components/confirm-dialog'
+import { type NavigateFn } from '@/hooks/use-table-url-state'
 import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import {
   DataTableColumnHeader,
   getServerTableStatus,
@@ -14,7 +15,6 @@ import {
 } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
 import { StatusPill } from '@/components/status-pill'
-import { type NavigateFn } from '@/hooks/use-table-url-state'
 import { useActiveSessionsList } from '../hooks/use-active-sessions'
 import { useRevokeActiveSession } from '../hooks/use-revoke-session'
 import {
@@ -155,8 +155,7 @@ function createSessionColumns({
       enableHiding: false,
       enableSorting: false,
       meta: {
-        className:
-          'inset-s-0 ps-0.5 max-md:sticky @4xl/content:table-cell',
+        className: 'inset-s-0 ps-0.5 max-md:sticky @4xl/content:table-cell',
       },
     },
     {

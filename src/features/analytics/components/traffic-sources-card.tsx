@@ -1,11 +1,6 @@
 import { memo } from 'react'
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { type TrafficSource } from '../types/analytics'
 
 type TrafficSourcesCardProps = {
@@ -56,7 +51,7 @@ export const TrafficSourcesCard = memo(function TrafficSourcesCard({
                   />
                   {source.name}
                 </span>
-                <span className='font-medium tabular-nums text-[var(--t1)]'>
+                <span className='font-medium text-[var(--t1)] tabular-nums'>
                   {source.value}%
                 </span>
               </li>

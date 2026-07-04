@@ -1,7 +1,7 @@
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, UserPlus } from 'lucide-react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { getApiErrorMessage } from '@/lib/api'
 import { useApiForm } from '@/lib/forms'
 import { Button } from '@/components/ui/button'
@@ -28,12 +28,9 @@ import type { AddMemberRequest, OrgRole } from '../types'
 const addMemberSchema = z.object({
   userId: z.string().trim().uuid('User ID must be a UUID.'),
   role: z
-    .custom<OrgRole | undefined>(
-      (value) =>
-        value === undefined ||
-        (typeof value === 'string' && value.trim().length > 0),
-      'Role is required when provided.'
-    )
+    .custom<
+      OrgRole | undefined
+    >((value) => value === undefined || (typeof value === 'string' && value.trim().length > 0), 'Role is required when provided.')
     .optional(),
 })
 

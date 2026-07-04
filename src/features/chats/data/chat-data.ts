@@ -98,7 +98,12 @@ export const conversations: Record<string, ChatMessage[]> = {
       text: 'Hey Jordan! Just pushed the auth fix you requested. Can you review when you get a chance?',
       time: '10:24 AM',
     },
-    { id: 'm2', from: 'me', text: 'On it! Checking the PR now.', time: '10:26 AM' },
+    {
+      id: 'm2',
+      from: 'me',
+      text: 'On it! Checking the PR now.',
+      time: '10:26 AM',
+    },
     {
       id: 'm3',
       from: 'them',
@@ -117,7 +122,12 @@ export const conversations: Record<string, ChatMessage[]> = {
       text: 'Sounds good. Let me know if you need anything else.',
       time: '10:31 AM',
     },
-    { id: 'm6', from: 'me', text: 'Will do. Great work today! 👍', time: '10:32 AM' },
+    {
+      id: 'm6',
+      from: 'me',
+      text: 'Will do. Great work today! 👍',
+      time: '10:32 AM',
+    },
   ],
   mark: [
     {

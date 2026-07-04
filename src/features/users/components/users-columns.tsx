@@ -39,9 +39,7 @@ export const usersColumns: ColumnDef<AdminUser>[] = [
       <DataTableColumnHeader column={column} title='Email' />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-56'>
-        {getAuthUserEmail(row.original)}
-      </LongText>
+      <LongText className='max-w-56'>{getAuthUserEmail(row.original)}</LongText>
     ),
     enableSorting: false,
   },

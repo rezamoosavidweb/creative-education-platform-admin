@@ -34,8 +34,15 @@ export const EventsByHourChart = memo(function EventsByHourChart({
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width='100%' height={240}>
-          <BarChart data={data} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray='3 3' stroke='var(--bdr)' vertical={false} />
+          <BarChart
+            data={data}
+            margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+          >
+            <CartesianGrid
+              strokeDasharray='3 3'
+              stroke='var(--bdr)'
+              vertical={false}
+            />
             <XAxis
               dataKey='label'
               stroke='var(--t3)'

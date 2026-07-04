@@ -2,12 +2,12 @@ import { memo } from 'react'
 import { Download, Percent, Plus, TrendingUp, Users, Zap } from 'lucide-react'
 import { getAuthUserGreetingName, useCurrentUser } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
+import { useDashboardData } from '../hooks/use-dashboard-data'
+import type { SparklineData } from '../types/dashboard'
 import { MetricCard } from './cards'
 import { ActivityChart, RevenueChart } from './charts'
 import { RecentActivityFeed } from './widgets/recent-activity-feed'
 import { SystemHealthCard } from './widgets/system-health-card'
-import { useDashboardData } from '../hooks/use-dashboard-data'
-import type { SparklineData } from '../types/dashboard'
 
 const TODAY = new Intl.DateTimeFormat('en-US', {
   weekday: 'long',
@@ -24,8 +24,14 @@ function generateSparklineData(): SparklineData[] {
 }
 
 export const DashboardLayout = memo(function DashboardLayout() {
-  const { stats, revenueData, activityData, recentActivities, isLoading, error } =
-    useDashboardData()
+  const {
+    stats,
+    revenueData,
+    activityData,
+    recentActivities,
+    isLoading,
+    error,
+  } = useDashboardData()
   const user = useCurrentUser()
   const greetingName = getAuthUserGreetingName(user)
 
@@ -118,7 +124,11 @@ export const DashboardLayout = memo(function DashboardLayout() {
       {/* Charts Section */}
       <div className='grid gap-6 lg:grid-cols-[1.6fr_1fr]'>
         <RevenueChart data={revenueData} isLoading={isLoading} error={error} />
-        <ActivityChart data={activityData} isLoading={isLoading} error={error} />
+        <ActivityChart
+          data={activityData}
+          isLoading={isLoading}
+          error={error}
+        />
       </div>
 
       {/* Recent Activity + System Health */}

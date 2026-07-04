@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { ReferenceCatalogId, ReferenceItem } from '../types'
 import {
   getReferenceItems,
   getReferenceStats,
@@ -6,7 +7,6 @@ import {
   normalizeDisciplineId,
   normalizeReferenceCatalog,
 } from './reference-query'
-import type { ReferenceCatalogId, ReferenceItem } from '../types'
 
 const item: ReferenceItem = {
   id: '0f9beaaa-b8f7-4e4d-b245-5bb356757510',

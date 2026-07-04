@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, ShieldPlus, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { getApiErrorMessage } from '@/lib/api'
 import { getAuthUserDisplayName, getAuthUserEmail } from '@/lib/auth'
 import { CapabilityGate } from '@/lib/capabilities'
 import { useApiForm } from '@/lib/forms'
-import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
-import { ConfirmDialog } from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -33,6 +31,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { useGrantCapability } from '../hooks/use-grant-capability'
 import { useRevokeCapability } from '../hooks/use-revoke-capability'
 import { useUserCapabilities } from '../hooks/use-user-capabilities'
@@ -49,10 +49,7 @@ import type {
 } from '../types'
 
 const grantCapabilitySchema = z.object({
-  capability: z
-    .string()
-    .trim()
-    .min(1, 'Enter a backend capability key.'),
+  capability: z.string().trim().min(1, 'Enter a backend capability key.'),
 })
 
 type CapabilityAssignmentDialogProps = {
@@ -74,10 +71,7 @@ export function CapabilityAssignmentDialog({
     () => getUserCapabilityKeys(capabilitiesQuery.data?.data),
     [capabilitiesQuery.data?.data]
   )
-  const groups = useMemo(
-    () => groupCapabilities(capabilities),
-    [capabilities]
-  )
+  const groups = useMemo(() => groupCapabilities(capabilities), [capabilities])
   const { form, handleApiSubmit } = useApiForm<GrantCapabilityRequest>({
     defaultValues: {
       capability: '',

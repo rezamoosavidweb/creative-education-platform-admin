@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
+import type { ProfileVerification } from '../types'
 import {
   getVerificationQueueItems,
   getVerificationQueueMeta,
   getVerificationStatusTone,
   PROFILE_VERIFICATION_REVIEW_CAPABILITY,
 } from './verification-query'
-import type { ProfileVerification } from '../types'
 
 const verification: ProfileVerification = {
   id: 'verification-1',

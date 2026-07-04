@@ -32,7 +32,9 @@ export function getOrganizationTeams(raw: Team[] | null | undefined): Team[] {
   return raw ?? []
 }
 
-export function getArrayServerTableMeta(items: readonly unknown[]): ServerTableMeta {
+export function getArrayServerTableMeta(
+  items: readonly unknown[]
+): ServerTableMeta {
   return {
     hasNextPage: false,
     hasPreviousPage: false,

@@ -60,7 +60,10 @@ function NotificationsButton() {
         </div>
         <DropdownMenuSeparator />
         {NOTIFICATIONS.map((n) => (
-          <DropdownMenuItem key={n.id} className='flex flex-col items-start gap-0.5'>
+          <DropdownMenuItem
+            key={n.id}
+            className='flex flex-col items-start gap-0.5'
+          >
             <span className='text-[13px] text-[var(--t1)]'>{n.title}</span>
             <span className='text-[11px] text-[var(--t3)]'>{n.time}</span>
           </DropdownMenuItem>

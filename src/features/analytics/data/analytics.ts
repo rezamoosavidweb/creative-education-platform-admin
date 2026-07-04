@@ -50,14 +50,39 @@ export const trafficSources: TrafficSource[] = [
 ]
 
 // Page views per day over the last 30 days — gentle upward trend with noise.
-export const trafficSeries: TrafficPoint[] = Array.from({ length: 30 }, (_, i) => ({
-  label: `Day ${i + 1}`,
-  views: Math.round(18000 + i * 520 + Math.sin(i / 2) * 1800 + (i % 4) * 700),
-}))
+export const trafficSeries: TrafficPoint[] = Array.from(
+  { length: 30 },
+  (_, i) => ({
+    label: `Day ${i + 1}`,
+    views: Math.round(18000 + i * 520 + Math.sin(i / 2) * 1800 + (i % 4) * 700),
+  })
+)
 
 const HOUR_LABELS = [
-  '12am', '', '', '3am', '', '', '6am', '', '', '9am', '', '',
-  '12pm', '', '', '3pm', '', '', '6pm', '', '', '9pm', '', '12am',
+  '12am',
+  '',
+  '',
+  '3am',
+  '',
+  '',
+  '6am',
+  '',
+  '',
+  '9am',
+  '',
+  '',
+  '12pm',
+  '',
+  '',
+  '3pm',
+  '',
+  '',
+  '6pm',
+  '',
+  '',
+  '9pm',
+  '',
+  '12am',
 ]
 
 // Average event count by hour — peaks through the working day.
@@ -70,10 +95,46 @@ export const eventsByHour: HourPoint[] = HOUR_LABELS.map((label, i) => {
 })
 
 export const topPages: TopPage[] = [
-  { path: '/', views: 124382, unique: 98201, bounce: '28.4%', avgTime: '5m 12s' },
-  { path: '/dashboard', views: 84291, unique: 71038, bounce: '14.2%', avgTime: '8m 44s' },
-  { path: '/analytics', views: 52108, unique: 41294, bounce: '18.9%', avgTime: '6m 22s' },
-  { path: '/users', views: 38924, unique: 31012, bounce: '22.1%', avgTime: '4m 10s' },
-  { path: '/settings', views: 21483, unique: 18392, bounce: '31.8%', avgTime: '3m 08s' },
-  { path: '/billing', views: 14201, unique: 12834, bounce: '35.2%', avgTime: '2m 55s' },
+  {
+    path: '/',
+    views: 124382,
+    unique: 98201,
+    bounce: '28.4%',
+    avgTime: '5m 12s',
+  },
+  {
+    path: '/dashboard',
+    views: 84291,
+    unique: 71038,
+    bounce: '14.2%',
+    avgTime: '8m 44s',
+  },
+  {
+    path: '/analytics',
+    views: 52108,
+    unique: 41294,
+    bounce: '18.9%',
+    avgTime: '6m 22s',
+  },
+  {
+    path: '/users',
+    views: 38924,
+    unique: 31012,
+    bounce: '22.1%',
+    avgTime: '4m 10s',
+  },
+  {
+    path: '/settings',
+    views: 21483,
+    unique: 18392,
+    bounce: '31.8%',
+    avgTime: '3m 08s',
+  },
+  {
+    path: '/billing',
+    views: 14201,
+    unique: 12834,
+    bounce: '35.2%',
+    avgTime: '2m 55s',
+  },
 ]

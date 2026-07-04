@@ -7,13 +7,8 @@ import {
   ShoppingCart,
   UserPlus,
 } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { type Activity } from '../../types/dashboard'
 
 type RecentActivityFeedProps = {
@@ -51,7 +46,10 @@ export const RecentActivityFeed = memo(function RecentActivityFeed({
         {isLoading ? (
           <div className='space-y-3'>
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className='h-10 animate-pulse rounded bg-[var(--sur2)]' />
+              <div
+                key={i}
+                className='h-10 animate-pulse rounded bg-[var(--sur2)]'
+              />
             ))}
           </div>
         ) : (
@@ -78,7 +76,9 @@ export const RecentActivityFeed = memo(function RecentActivityFeed({
                     </p>
                   </div>
                   <span className='shrink-0 text-[11.5px] whitespace-nowrap text-[var(--t3)]'>
-                    {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
+                    {formatDistanceToNow(activity.timestamp, {
+                      addSuffix: true,
+                    })}
                   </span>
                 </li>
               )

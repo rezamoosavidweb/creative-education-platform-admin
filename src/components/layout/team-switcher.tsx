@@ -1,8 +1,5 @@
 import { Building2, ChevronsUpDown } from 'lucide-react'
-import {
-  getAuthOrganizationPlanLabel,
-  type AuthOrganization,
-} from '@/lib/auth'
+import { getAuthOrganizationPlanLabel, type AuthOrganization } from '@/lib/auth'
 import {
   DropdownMenu,
   DropdownMenuContent,

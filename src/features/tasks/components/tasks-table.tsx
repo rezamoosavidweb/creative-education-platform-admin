@@ -131,7 +131,10 @@ export function TasksTable({ data }: DataTableProps) {
         <Table className='min-w-xl'>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className='bg-muted hover:bg-muted'>
+              <TableRow
+                key={headerGroup.id}
+                className='bg-muted hover:bg-muted'
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead

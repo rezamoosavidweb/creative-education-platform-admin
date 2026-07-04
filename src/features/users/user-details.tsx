@@ -8,7 +8,7 @@ import {
   getAuthUserInitials,
   getAuthUserRoleLabel,
 } from '@/lib/auth'
-import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { StatusPill } from '@/components/status-pill'
@@ -85,9 +85,7 @@ export function UserDetails() {
                       src={getAuthUserAvatar(user)}
                       alt={getAuthUserDisplayName(user)}
                     />
-                    <AvatarFallback>
-                      {getAuthUserInitials(user)}
-                    </AvatarFallback>
+                    <AvatarFallback>{getAuthUserInitials(user)}</AvatarFallback>
                   </Avatar>
                   <div className='space-y-1'>
                     <div className='flex flex-wrap items-center gap-2'>
@@ -164,11 +162,7 @@ export function UserDetails() {
   )
 }
 
-function UserStatus({
-  user,
-}: {
-  user: AdminUser
-}) {
+function UserStatus({ user }: { user: AdminUser }) {
   if (user.isActive === false) {
     return <StatusPill tone='err'>Inactive</StatusPill>
   }
@@ -195,7 +189,7 @@ function DetailItem({
         {icon}
         {label}
       </div>
-      <div className='break-words text-sm text-[var(--t1)]'>{children}</div>
+      <div className='text-sm break-words text-[var(--t1)]'>{children}</div>
     </div>
   )
 }

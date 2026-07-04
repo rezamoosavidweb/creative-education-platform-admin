@@ -26,7 +26,9 @@ export const IntegrationCard = memo(function IntegrationCard({
         </StatusPill>
       </div>
 
-      <h3 className='mt-3 font-semibold text-[var(--t1)]'>{integration.name}</h3>
+      <h3 className='mt-3 font-semibold text-[var(--t1)]'>
+        {integration.name}
+      </h3>
       <p className='mt-1 flex-1 text-[12.5px] leading-relaxed text-[var(--t2)]'>
         {integration.description}
       </p>

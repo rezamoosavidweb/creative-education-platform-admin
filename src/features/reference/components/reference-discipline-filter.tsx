@@ -46,9 +46,7 @@ export function ReferenceDisciplineFilter({
           <SelectValue placeholder='All disciplines' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={ALL_DISCIPLINES_VALUE}>
-            All disciplines
-          </SelectItem>
+          <SelectItem value={ALL_DISCIPLINES_VALUE}>All disciplines</SelectItem>
           {disciplines.map((discipline) => (
             <SelectItem key={discipline.id} value={discipline.id}>
               {discipline.name}

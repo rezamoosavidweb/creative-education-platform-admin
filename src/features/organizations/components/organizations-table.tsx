@@ -1,13 +1,14 @@
 import { memo, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Eye, MoreHorizontal } from 'lucide-react'
+import { type NavigateFn } from '@/hooks/use-table-url-state'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
 import {
   DataTableColumnHeader,
   getServerTableStatus,
@@ -15,7 +16,6 @@ import {
   useServerTableState,
 } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
-import { type NavigateFn } from '@/hooks/use-table-url-state'
 import { useOrganizationsList } from '../hooks/use-organizations-list'
 import {
   formatOrganizationDate,
@@ -114,8 +114,7 @@ function createOrganizationColumns({
       enableHiding: false,
       enableSorting: false,
       meta: {
-        className:
-          'inset-s-0 ps-0.5 max-md:sticky @4xl/content:table-cell',
+        className: 'inset-s-0 ps-0.5 max-md:sticky @4xl/content:table-cell',
       },
     },
     {
@@ -134,7 +133,7 @@ function createOrganizationColumns({
         <DataTableColumnHeader column={column} title='Disciplines' />
       ),
       cell: ({ row }) => (
-        <span className='tabular-nums text-[var(--t1)]'>
+        <span className='text-[var(--t1)] tabular-nums'>
           {row.original.disciplineIds.length.toLocaleString()}
         </span>
       ),

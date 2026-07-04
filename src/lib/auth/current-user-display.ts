@@ -4,7 +4,10 @@ import type { AuthOrganization, AuthUser } from './types'
 export function getAuthUserDisplayName(
   user: AuthUser | null | undefined
 ): string {
-  const fullName = [normalizeText(user?.firstName), normalizeText(user?.lastName)]
+  const fullName = [
+    normalizeText(user?.firstName),
+    normalizeText(user?.lastName),
+  ]
     .filter(Boolean)
     .join(' ')
 
@@ -31,9 +34,7 @@ export function getAuthUserAvatar(user: AuthUser | null | undefined): string {
   return normalizeText(user?.avatar) || ''
 }
 
-export function getAuthUserInitials(
-  user: AuthUser | null | undefined
-): string {
+export function getAuthUserInitials(user: AuthUser | null | undefined): string {
   const initials = getInitials(getAuthUserDisplayName(user))
   return initials === '?' ? 'A' : initials
 }
@@ -50,7 +51,10 @@ export function getAuthOrganizationPlanLabel(
   return toTitleLabel(organization?.type, 'Organization')
 }
 
-function toTitleLabel(value: string | null | undefined, fallback: string): string {
+function toTitleLabel(
+  value: string | null | undefined,
+  fallback: string
+): string {
   const normalized = normalizeText(value)
   if (!normalized) return fallback
 

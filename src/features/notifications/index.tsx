@@ -14,7 +14,9 @@ export function Notifications() {
         <div className='mx-auto flex w-full max-w-[800px] flex-col gap-5'>
           <div className='flex flex-wrap items-end justify-between gap-2'>
             <div>
-              <h2 className='text-2xl font-bold tracking-tight'>Notifications</h2>
+              <h2 className='text-2xl font-bold tracking-tight'>
+                Notifications
+              </h2>
               <p className='text-muted-foreground'>
                 Stay up to date with your workspace activity.
               </p>

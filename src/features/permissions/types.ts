@@ -1,7 +1,4 @@
-import type {
-  ApiRequestBody,
-  ApiResponseBody,
-} from '@/lib/api'
+import type { ApiRequestBody, ApiResponseBody } from '@/lib/api'
 import type { components } from '@/lib/api/schema'
 import type { UsersListItem, UsersListQuery } from '@/features/users/types'
 

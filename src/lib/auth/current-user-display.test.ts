@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import type { AuthOrganization, AuthUser } from './types'
 import {
   getAuthOrganizationPlanLabel,
   getAuthUserAvatar,
@@ -9,6 +8,7 @@ import {
   getAuthUserInitials,
   getAuthUserRoleLabel,
 } from './current-user-display'
+import type { AuthOrganization, AuthUser } from './types'
 
 const sampleUser: AuthUser = {
   id: 'user-1',

@@ -9,13 +9,13 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { StatCard } from '@/components/stat-card'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { CreateOrganizationDialog } from './components/create-organization-dialog'
+import { OrganizationsTable } from './components/organizations-table'
 import { useOrganizationsList } from './hooks/use-organizations-list'
 import {
   getOrganizationItems,
   getOrganizationStats,
 } from './services/organizations-query'
-import { CreateOrganizationDialog } from './components/create-organization-dialog'
-import { OrganizationsTable } from './components/organizations-table'
 
 const route = getRouteApi('/_authenticated/organizations/')
 

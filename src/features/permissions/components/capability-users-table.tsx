@@ -8,6 +8,7 @@ import {
 } from '@/lib/auth'
 import { CapabilityGate } from '@/lib/capabilities'
 import { cn } from '@/lib/utils'
+import { type NavigateFn } from '@/hooks/use-table-url-state'
 import { Button } from '@/components/ui/button'
 import {
   DataTableColumnHeader,
@@ -20,10 +21,7 @@ import { LongText } from '@/components/long-text'
 import { StatusPill } from '@/components/status-pill'
 import { useUsersList } from '@/features/users/hooks/use-users-list'
 import { toUsersListQuery } from '@/features/users/services/users-query'
-import { type NavigateFn } from '@/hooks/use-table-url-state'
-import {
-  CAPABILITY_MANAGEMENT_CAPABILITY,
-} from '../services/capabilities-query'
+import { CAPABILITY_MANAGEMENT_CAPABILITY } from '../services/capabilities-query'
 import type { CapabilityUser } from '../types'
 
 type CapabilityUsersTableProps = {
@@ -164,9 +162,7 @@ function createCapabilityUserColumns(
     {
       id: 'actions',
       cell: ({ row }) => (
-        <CapabilityGate
-          requiredCapabilities={CAPABILITY_MANAGEMENT_CAPABILITY}
-        >
+        <CapabilityGate requiredCapabilities={CAPABILITY_MANAGEMENT_CAPABILITY}>
           <Button
             type='button'
             variant='ghost'

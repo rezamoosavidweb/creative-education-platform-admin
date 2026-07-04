@@ -21,10 +21,7 @@ export type OrganizationTeamsResponse = ApiResponseBody<
   '/organizations/{id}/teams',
   'get'
 >
-export type CreateOrganizationRequest = ApiRequestBody<
-  '/organizations',
-  'post'
->
+export type CreateOrganizationRequest = ApiRequestBody<'/organizations', 'post'>
 export type AddMemberRequest = ApiRequestBody<
   '/organizations/{id}/members',
   'post'

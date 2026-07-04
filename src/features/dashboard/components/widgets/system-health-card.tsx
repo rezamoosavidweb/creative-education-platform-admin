@@ -1,10 +1,5 @@
 import { memo } from 'react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type HealthMetric = {
   id: string
@@ -38,7 +33,7 @@ export const SystemHealthCard = memo(function SystemHealthCard() {
               className='flex items-center justify-between py-2.5 text-[13px]'
             >
               <span className='text-[var(--t2)]'>{metric.label}</span>
-              <span className='font-medium tabular-nums text-[var(--t1)]'>
+              <span className='font-medium text-[var(--t1)] tabular-nums'>
                 {metric.value}
               </span>
             </li>

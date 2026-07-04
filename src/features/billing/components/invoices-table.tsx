@@ -1,11 +1,6 @@
 import { memo } from 'react'
 import { Download } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusPill } from '@/components/status-pill'
 import { invoices } from '../data/billing'
 
@@ -43,7 +38,7 @@ export const InvoicesTable = memo(function InvoicesTable() {
                   <td className='px-[14px] py-[12px] text-[var(--t2)]'>
                     {invoice.date}
                   </td>
-                  <td className='px-[14px] py-[12px] tabular-nums text-[var(--t1)]'>
+                  <td className='px-[14px] py-[12px] text-[var(--t1)] tabular-nums'>
                     {invoice.amount}
                   </td>
                   <td className='px-[14px] py-[12px]'>

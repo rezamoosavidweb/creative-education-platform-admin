@@ -23,9 +23,7 @@ export function Projects() {
 
   const visibleProjects = useMemo(
     () =>
-      filter === 'All'
-        ? projects
-        : projects.filter((p) => p.status === filter),
+      filter === 'All' ? projects : projects.filter((p) => p.status === filter),
     [filter]
   )
 

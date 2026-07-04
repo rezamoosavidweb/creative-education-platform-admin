@@ -1,8 +1,4 @@
 import {
-  filterNavGroupsByCapabilities,
-  useCapabilities,
-} from '@/lib/capabilities'
-import {
   getAuthUserAvatar,
   getAuthUserDisplayName,
   getAuthUserEmail,
@@ -12,6 +8,10 @@ import {
   useCurrentUser,
   useSetCurrentOrganizationId,
 } from '@/lib/auth'
+import {
+  filterNavGroupsByCapabilities,
+  useCapabilities,
+} from '@/lib/capabilities'
 import { useLayout } from '@/context/layout-provider'
 import {
   Sidebar,

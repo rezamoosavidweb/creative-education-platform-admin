@@ -41,14 +41,21 @@ export const LatencyChart = memo(function LatencyChart({
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width='100%' height={260}>
-          <AreaChart data={data} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+          >
             <defs>
               <linearGradient id='latencyGradient' x1='0' y1='0' x2='0' y2='1'>
                 <stop offset='5%' stopColor='var(--pri)' stopOpacity={0.35} />
                 <stop offset='95%' stopColor='var(--pri)' stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray='3 3' stroke='var(--bdr)' vertical={false} />
+            <CartesianGrid
+              strokeDasharray='3 3'
+              stroke='var(--bdr)'
+              vertical={false}
+            />
             <XAxis
               dataKey='label'
               stroke='var(--t3)'

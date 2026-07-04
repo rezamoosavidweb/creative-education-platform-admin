@@ -21,9 +21,16 @@ export type ActivityCategoryStyle = {
 
 // Icon + color per category. Colors use design tokens where available;
 // purple (Projects) has no token, so it uses an explicit accent tint.
-export const ACTIVITY_CATEGORY: Record<ActivityCategory, ActivityCategoryStyle> = {
+export const ACTIVITY_CATEGORY: Record<
+  ActivityCategory,
+  ActivityCategoryStyle
+> = {
   Users: { icon: UserPlus, color: 'var(--pri)', bg: 'var(--pris)' },
-  Projects: { icon: FolderKanban, color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)' },
+  Projects: {
+    icon: FolderKanban,
+    color: '#8b5cf6',
+    bg: 'rgba(139,92,246,0.12)',
+  },
   'API Keys': { icon: KeyRound, color: 'var(--warn)', bg: 'var(--warns)' },
   Security: { icon: ShieldAlert, color: 'var(--err)', bg: 'var(--errs)' },
   Settings: { icon: Settings, color: 'var(--t2)', bg: 'var(--sur3)' },

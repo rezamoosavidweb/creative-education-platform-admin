@@ -96,9 +96,7 @@ export function getReferenceCatalogConfig(
   )
 }
 
-export function normalizeReferenceCatalog(
-  value: unknown
-): ReferenceCatalogId {
+export function normalizeReferenceCatalog(value: unknown): ReferenceCatalogId {
   return referenceCatalogConfigs.some((config) => config.id === value)
     ? (value as ReferenceCatalogId)
     : 'disciplines'

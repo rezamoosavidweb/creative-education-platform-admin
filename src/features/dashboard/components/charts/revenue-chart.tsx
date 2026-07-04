@@ -8,7 +8,13 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import type { RevenueData } from '../../types/dashboard'
 
 type RevenueChartProps = {
@@ -20,7 +26,10 @@ type RevenueChartProps = {
 function RevenueChartContent({ data }: { data: RevenueData[] }) {
   return (
     <ResponsiveContainer width='100%' height={340}>
-      <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+      <AreaChart
+        data={data}
+        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+      >
         <defs>
           <linearGradient id='revenueGradient' x1='0' y1='0' x2='0' y2='1'>
             <stop offset='5%' stopColor='var(--pri)' stopOpacity={0.35} />
@@ -28,11 +37,7 @@ function RevenueChartContent({ data }: { data: RevenueData[] }) {
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray='3 3' stroke='var(--bdr)' />
-        <XAxis
-          dataKey='name'
-          stroke='var(--t3)'
-          style={{ fontSize: '12px' }}
-        />
+        <XAxis dataKey='name' stroke='var(--t3)' style={{ fontSize: '12px' }} />
         <YAxis stroke='var(--t3)' />
         <Tooltip
           contentStyle={{

@@ -1,10 +1,5 @@
 import { memo } from 'react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { usage } from '../data/billing'
 
 export const UsageCard = memo(function UsageCard() {
@@ -23,7 +18,7 @@ export const UsageCard = memo(function UsageCard() {
             <div key={metric.id}>
               <div className='mb-1.5 flex items-center justify-between text-[13px]'>
                 <span className='text-[var(--t2)]'>{metric.label}</span>
-                <span className='tabular-nums text-[var(--t1)]'>
+                <span className='text-[var(--t1)] tabular-nums'>
                   {metric.display}
                 </span>
               </div>

@@ -1,4 +1,8 @@
-import { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from 'axios'
+import {
+  AxiosError,
+  AxiosHeaders,
+  type InternalAxiosRequestConfig,
+} from 'axios'
 import { describe, expect, it } from 'vitest'
 import { ApiError, getApiErrorMessage, isApiError, toApiError } from './errors'
 

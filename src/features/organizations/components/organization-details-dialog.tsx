@@ -3,15 +3,8 @@ import { KeyRound, Plus, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
 import { CapabilityGate } from '@/lib/capabilities'
-import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
-import { ConfirmDialog } from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -19,6 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { LongText } from '@/components/long-text'
 import { StatusPill } from '@/components/status-pill'
 import { useOrganization } from '../hooks/use-organization'
@@ -57,7 +52,9 @@ export function OrganizationDetailsDialog({
             Backend organization record, memberships, and teams.
           </DialogDescription>
         </DialogHeader>
-        {organization && <OrganizationDetailsContent organization={organization} />}
+        {organization && (
+          <OrganizationDetailsContent organization={organization} />
+        )}
       </DialogContent>
     </Dialog>
   )
@@ -171,7 +168,9 @@ function OrganizationDetailsContent({
                   key={team.id}
                   className='rounded-md border border-[var(--bdr)] p-3'
                 >
-                  <div className='font-medium text-[var(--t1)]'>{team.name}</div>
+                  <div className='font-medium text-[var(--t1)]'>
+                    {team.name}
+                  </div>
                   <LongText className='text-xs text-muted-foreground'>
                     {team.id}
                   </LongText>
@@ -309,7 +308,7 @@ function DetailItem({
 }) {
   return (
     <div className='grid gap-1'>
-      <span className='text-xs font-medium uppercase text-muted-foreground'>
+      <span className='text-xs font-medium text-muted-foreground uppercase'>
         {label}
       </span>
       <LongText className='max-w-full text-[var(--t1)]'>{children}</LongText>

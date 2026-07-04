@@ -22,7 +22,7 @@ export function getActiveSessionsTableMeta(
 export function getReliableCurrentSessionId(
   sessions: readonly AdminSession[]
 ): string | null {
-  return sessions.length === 1 ? sessions[0]?.id ?? null : null
+  return sessions.length === 1 ? (sessions[0]?.id ?? null) : null
 }
 
 export function formatSessionDateTime(value: string): string {

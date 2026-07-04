@@ -38,7 +38,10 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <Label htmlFor={htmlFor} className='mb-1.5 block text-[12.5px] text-[var(--t2)]'>
+      <Label
+        htmlFor={htmlFor}
+        className='mb-1.5 block text-[12.5px] text-[var(--t2)]'
+      >
         {label}
       </Label>
       {children}
@@ -73,7 +76,11 @@ export function WorkspaceSettings() {
               <option value='tky'>Asia/Tokyo (UTC+9)</option>
             </select>
           </Field>
-          <Field label='Description' htmlFor='ws-desc' className='sm:col-span-2'>
+          <Field
+            label='Description'
+            htmlFor='ws-desc'
+            className='sm:col-span-2'
+          >
             <Textarea
               id='ws-desc'
               className='h-[72px] resize-y leading-relaxed'
@@ -82,7 +89,9 @@ export function WorkspaceSettings() {
           </Field>
         </div>
         <div className='mt-5 flex gap-2'>
-          <Button onClick={() => showSubmittedData({ section: 'workspace-identity' })}>
+          <Button
+            onClick={() => showSubmittedData({ section: 'workspace-identity' })}
+          >
             Save Changes
           </Button>
           <Button variant='outline'>Cancel</Button>
@@ -126,7 +135,10 @@ export function WorkspaceSettings() {
               All members must enable 2FA to access the workspace
             </div>
           </div>
-          <Switch defaultChecked aria-label='Require two-factor authentication' />
+          <Switch
+            defaultChecked
+            aria-label='Require two-factor authentication'
+          />
         </div>
         <div className='flex items-center justify-between gap-4 border-b border-[var(--bdr)] py-4'>
           <div>
@@ -163,7 +175,9 @@ export function WorkspaceSettings() {
           </Button>
         </div>
         <div className='mt-1 flex gap-2'>
-          <Button onClick={() => showSubmittedData({ section: 'security-policies' })}>
+          <Button
+            onClick={() => showSubmittedData({ section: 'security-policies' })}
+          >
             Save Policies
           </Button>
         </div>

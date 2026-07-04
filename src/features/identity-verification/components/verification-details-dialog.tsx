@@ -50,7 +50,9 @@ export function VerificationDetailsDialog({
                 </CardDescription>
               </CardHeader>
               <CardContent className='grid gap-3'>
-                <DetailItem label='Verification ID'>{verification.id}</DetailItem>
+                <DetailItem label='Verification ID'>
+                  {verification.id}
+                </DetailItem>
                 <DetailItem label='User ID'>{verification.userId}</DetailItem>
                 <DetailItem label='Profile type'>
                   {verification.profileType}
@@ -104,7 +106,7 @@ function DetailItem({
   return (
     <div className='space-y-1 rounded-md border bg-[var(--sur)] p-3'>
       <div className='text-xs font-medium text-muted-foreground'>{label}</div>
-      <div className='break-words text-sm text-[var(--t1)]'>{children}</div>
+      <div className='text-sm break-words text-[var(--t1)]'>{children}</div>
     </div>
   )
 }

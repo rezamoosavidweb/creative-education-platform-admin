@@ -1,8 +1,8 @@
 import { memo, type ReactNode } from 'react'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Sparkline, type SparklineData } from '../charts/sparkline'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import type { MetricCard as MetricCardType } from '../../types/dashboard'
+import { Sparkline, type SparklineData } from '../charts/sparkline'
 
 type MetricCardProps = Omit<MetricCardType, 'id' | 'icon'> & {
   className?: string
@@ -78,10 +78,12 @@ export const MetricCard = memo(function MetricCard({
           </div>
         )}
       </CardHeader>
-      <CardContent className='px-5 pb-4 space-y-2'>
+      <CardContent className='space-y-2 px-5 pb-4'>
         <div className='flex items-end justify-between gap-2'>
           <div className='flex flex-col gap-1'>
-            <div className='text-[26px] font-bold text-[var(--t1)] tabular-nums'>{value}</div>
+            <div className='text-[26px] font-bold text-[var(--t1)] tabular-nums'>
+              {value}
+            </div>
             {trend && (
               <div className='flex items-center gap-1'>
                 <span
@@ -98,7 +100,8 @@ export const MetricCard = memo(function MetricCard({
                     ? '↑ '
                     : trend.direction === 'down'
                       ? '↓ '
-                      : ''}{Math.abs(trend.value)}%
+                      : ''}
+                  {Math.abs(trend.value)}%
                 </span>
               </div>
             )}
@@ -112,9 +115,7 @@ export const MetricCard = memo(function MetricCard({
             />
           )}
         </div>
-        {trend && (
-          <p className='text-xs text-[var(--t3)]'>{trend.label}</p>
-        )}
+        {trend && <p className='text-xs text-[var(--t3)]'>{trend.label}</p>}
       </CardContent>
     </Card>
   )

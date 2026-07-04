@@ -1,5 +1,7 @@
 import { memo } from 'react'
 import { MoreHorizontal } from 'lucide-react'
+import { getAvatarColor } from '@/lib/avatar'
+import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,8 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { getAvatarColor } from '@/lib/avatar'
-import { cn } from '@/lib/utils'
 import { type Project, type ProjectStatus } from '../types/project'
 
 type ProjectCardProps = {
@@ -75,7 +75,10 @@ export const ProjectCard = memo(function ProjectCard({
         <div className='h-1 overflow-hidden rounded-full bg-[var(--sur3)]'>
           <div
             className='h-full rounded-full transition-[width]'
-            style={{ width: `${project.progress}%`, backgroundColor: project.color }}
+            style={{
+              width: `${project.progress}%`,
+              backgroundColor: project.color,
+            }}
           />
         </div>
       </div>

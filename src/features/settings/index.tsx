@@ -11,7 +11,8 @@ export function Settings() {
         <div className='mx-auto w-full max-w-[880px]'>
           <h2 className='text-2xl font-bold tracking-tight'>Settings</h2>
           <p className='text-muted-foreground'>
-            Configure workspace preferences, security policies, and integrations.
+            Configure workspace preferences, security policies, and
+            integrations.
           </p>
         </div>
 

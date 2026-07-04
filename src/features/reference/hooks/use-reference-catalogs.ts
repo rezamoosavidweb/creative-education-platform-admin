@@ -1,11 +1,8 @@
 import type { UseQueryResult } from '@tanstack/react-query'
-import { useServerQuery } from '@/lib/query'
 import type { ApiError, ApiQueryParams } from '@/lib/api'
+import { useServerQuery } from '@/lib/query'
 import { referenceQueryKeys } from '../services/reference-query'
-import type {
-  ReferenceCatalogId,
-  ReferenceCatalogResult,
-} from '../types'
+import type { ReferenceCatalogId, ReferenceCatalogResult } from '../types'
 
 type DisciplineScopedReferenceQuery = ApiQueryParams<
   '/reference/specializations',

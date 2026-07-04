@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import type { NavigateFn } from '@/hooks/use-table-url-state'
 import {
   DataTableColumnHeader,
   getServerTableStatus,
@@ -7,14 +8,13 @@ import {
 } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
 import { StatusPill } from '@/components/status-pill'
-import type { NavigateFn } from '@/hooks/use-table-url-state'
+import type { ReferenceCatalogQuery } from '../hooks/use-reference-catalogs'
 import {
   formatReferenceDate,
   getReferenceCatalogConfig,
   getReferenceTableMeta,
 } from '../services/reference-query'
 import type { ReferenceCatalogId, ReferenceItem } from '../types'
-import type { ReferenceCatalogQuery } from '../hooks/use-reference-catalogs'
 
 type ReferenceTableProps = {
   catalog: ReferenceCatalogId
@@ -95,7 +95,9 @@ const referenceColumns: ColumnDef<ReferenceItem>[] = [
   },
   {
     accessorKey: 'id',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='ID' />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='ID' />
+    ),
     cell: ({ row }) => (
       <LongText className='max-w-72 font-mono text-xs text-muted-foreground'>
         {row.original.id}
@@ -112,7 +114,7 @@ const referenceColumns: ColumnDef<ReferenceItem>[] = [
       row.original.rank === undefined ? (
         <StatusPill tone='neutral'>None</StatusPill>
       ) : (
-        <span className='tabular-nums text-[var(--t1)]'>
+        <span className='text-[var(--t1)] tabular-nums'>
           {row.original.rank.toLocaleString()}
         </span>
       ),

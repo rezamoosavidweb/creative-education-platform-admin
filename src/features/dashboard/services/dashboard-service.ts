@@ -117,9 +117,7 @@ export const dashboardService = {
     return generateMockActivityData()
   },
 
-  async getRecentActivities(
-    _filters?: DashboardFilter
-  ): Promise<Activity[]> {
+  async getRecentActivities(_filters?: DashboardFilter): Promise<Activity[]> {
     await new Promise((resolve) => setTimeout(resolve, 500))
     return generateMockActivities()
   },

@@ -8,7 +8,7 @@ export function SidebarSearch() {
       type='button'
       onClick={() => setOpen(true)}
       aria-keyshortcuts='Meta+K Control+K'
-      className='flex w-full items-center gap-2 rounded-md border border-[var(--bdr)] bg-[var(--sur2)] px-2.5 py-[7px] text-start transition-colors hover:bg-[var(--sur3)] group-data-[collapsible=icon]:hidden'
+      className='flex w-full items-center gap-2 rounded-md border border-[var(--bdr)] bg-[var(--sur2)] px-2.5 py-[7px] text-start transition-colors group-data-[collapsible=icon]:hidden hover:bg-[var(--sur3)]'
     >
       <SearchIcon className='h-[13px] w-[13px] shrink-0 text-[var(--t3)]' />
       <span className='flex-1 text-[13px] text-[var(--t3)]'>Search…</span>

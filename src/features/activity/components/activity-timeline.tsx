@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
-import { ActivityItem } from './activity-item'
 import { type ActivityEvent } from '../types/activity'
+import { ActivityItem } from './activity-item'
 
 type ActivityTimelineProps = {
   events: ActivityEvent[]

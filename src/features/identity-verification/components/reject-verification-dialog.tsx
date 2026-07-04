@@ -1,7 +1,7 @@
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { getApiErrorMessage } from '@/lib/api'
 import { useApiForm } from '@/lib/forms'
 import { Button } from '@/components/ui/button'
@@ -23,10 +23,7 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useRejectVerification } from '../hooks/use-reject-verification'
-import type {
-  ProfileVerification,
-  RejectVerificationRequest,
-} from '../types'
+import type { ProfileVerification, RejectVerificationRequest } from '../types'
 
 const rejectVerificationSchema = z.object({
   note: z.string().trim().optional(),

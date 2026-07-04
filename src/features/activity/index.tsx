@@ -1,14 +1,20 @@
 import { useMemo, useState } from 'react'
 import { RefreshCw } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { cn } from '@/lib/utils'
 import { ActivityTimeline } from './components/activity-timeline'
 import { activities } from './data/activities'
 import { type ActivityCategory } from './types/activity'
 
-type ActivityTab = 'All Events' | 'Auth' | 'Users' | 'Projects' | 'System' | 'Billing'
+type ActivityTab =
+  | 'All Events'
+  | 'Auth'
+  | 'Users'
+  | 'Projects'
+  | 'System'
+  | 'Billing'
 
 const TABS: ActivityTab[] = [
   'All Events',

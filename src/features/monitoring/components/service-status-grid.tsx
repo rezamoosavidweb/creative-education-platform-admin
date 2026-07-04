@@ -1,11 +1,6 @@
 import { memo } from 'react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { type Service, type ServiceStatus } from '../types/monitoring'
 
 type ServiceStatusGridProps = {
@@ -53,7 +48,7 @@ export const ServiceStatusGrid = memo(function ServiceStatusGrid({
                   </div>
                 </div>
               </div>
-              <div className='text-[13px] tabular-nums text-[var(--t2)]'>
+              <div className='text-[13px] text-[var(--t2)] tabular-nums'>
                 {service.latency}
               </div>
             </div>

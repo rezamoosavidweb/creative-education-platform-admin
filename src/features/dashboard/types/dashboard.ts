@@ -67,4 +67,3 @@ export type DashboardFilter = {
   region?: string
   productCategory?: string
 }
-

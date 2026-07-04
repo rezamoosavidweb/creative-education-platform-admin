@@ -1,10 +1,5 @@
 import { memo } from 'react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { type TopPage } from '../types/analytics'
 
 type TopPagesTableProps = {
@@ -50,16 +45,16 @@ export const TopPagesTable = memo(function TopPagesTable({
                   <td className='px-[14px] py-[11px] font-mono text-[12.5px] text-[var(--pri)]'>
                     {page.path}
                   </td>
-                  <td className='px-[14px] py-[11px] text-right tabular-nums text-[var(--t1)]'>
+                  <td className='px-[14px] py-[11px] text-right text-[var(--t1)] tabular-nums'>
                     {page.views.toLocaleString()}
                   </td>
-                  <td className='px-[14px] py-[11px] text-right tabular-nums text-[var(--t2)]'>
+                  <td className='px-[14px] py-[11px] text-right text-[var(--t2)] tabular-nums'>
                     {page.unique.toLocaleString()}
                   </td>
-                  <td className='px-[14px] py-[11px] text-right tabular-nums text-[var(--t2)]'>
+                  <td className='px-[14px] py-[11px] text-right text-[var(--t2)] tabular-nums'>
                     {page.bounce}
                   </td>
-                  <td className='px-[14px] py-[11px] text-right tabular-nums text-[var(--t2)]'>
+                  <td className='px-[14px] py-[11px] text-right text-[var(--t2)] tabular-nums'>
                     {page.avgTime}
                   </td>
                 </tr>

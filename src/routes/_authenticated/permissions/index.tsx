@@ -2,10 +2,8 @@ import z from 'zod'
 import { createFileRoute } from '@tanstack/react-router'
 import { requireCapabilities } from '@/lib/capabilities'
 import { Permissions } from '@/features/permissions'
+import { CAPABILITY_MANAGEMENT_CAPABILITY } from '@/features/permissions/services/capabilities-query'
 import { normalizeUsersOrder } from '@/features/users/services/users-query'
-import {
-  CAPABILITY_MANAGEMENT_CAPABILITY,
-} from '@/features/permissions/services/capabilities-query'
 
 const permissionsSearchSchema = z.object({
   page: z.number().optional().catch(1),

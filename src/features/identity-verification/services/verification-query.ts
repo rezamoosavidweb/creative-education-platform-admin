@@ -1,6 +1,6 @@
 import type { AuthCapability } from '@/lib/auth'
-import type { PillTone } from '@/components/status-pill'
 import type { ServerTableMeta } from '@/components/data-table'
+import type { PillTone } from '@/components/status-pill'
 import type {
   ProfileVerification,
   VerificationQueueResponse,

@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { showSubmittedData } from '@/lib/show-submitted-data'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -9,7 +10,6 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { showSubmittedData } from '@/lib/show-submitted-data'
 
 export const PasswordCard = memo(function PasswordCard() {
   return (
@@ -30,15 +30,27 @@ export const PasswordCard = memo(function PasswordCard() {
         >
           <div className='grid gap-1.5'>
             <Label htmlFor='current-password'>Current password</Label>
-            <Input id='current-password' type='password' autoComplete='current-password' />
+            <Input
+              id='current-password'
+              type='password'
+              autoComplete='current-password'
+            />
           </div>
           <div className='grid gap-1.5'>
             <Label htmlFor='new-password'>New password</Label>
-            <Input id='new-password' type='password' autoComplete='new-password' />
+            <Input
+              id='new-password'
+              type='password'
+              autoComplete='new-password'
+            />
           </div>
           <div className='grid gap-1.5'>
             <Label htmlFor='confirm-password'>Confirm new password</Label>
-            <Input id='confirm-password' type='password' autoComplete='new-password' />
+            <Input
+              id='confirm-password'
+              type='password'
+              autoComplete='new-password'
+            />
           </div>
           <div>
             <Button type='submit'>Update Password</Button>

@@ -1,10 +1,10 @@
+import { type NavigateFn } from '@/hooks/use-table-url-state'
 import {
   getPageServerTableMeta,
   getServerTableStatus,
   ServerDataTable,
   useServerTableState,
 } from '@/components/data-table'
-import { type NavigateFn } from '@/hooks/use-table-url-state'
 import { useUsersList } from '../hooks/use-users-list'
 import { toUsersListQuery } from '../services/users-query'
 import { usersColumns } from './users-columns'
