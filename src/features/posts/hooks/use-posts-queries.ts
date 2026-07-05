@@ -15,8 +15,9 @@ export const postsQueryKeys = {
     [...postsQueryKeys.all, 'list', params] as const,
 }
 
-export function usePosts(params: PostsParams) {
+export function usePosts(params: PostsParams, enabled = true) {
   return useQuery({
+    enabled,
     queryFn: ({ signal }) => postControllerGetPosts(params, undefined, signal),
     queryKey: postsQueryKeys.list(params),
   })

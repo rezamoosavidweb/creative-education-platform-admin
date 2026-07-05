@@ -176,6 +176,7 @@ async function applyLoginPayload(payload: LoginResponse): Promise<AuthContext> {
     tokens,
     user: payload.user,
   })
+  useAuthStore.getState().auth.setStatus('restoring')
 
   try {
     const authContext = await loadAuthContext(payload.user, tokens)

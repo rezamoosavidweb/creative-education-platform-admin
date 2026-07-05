@@ -120,6 +120,39 @@ describe('auth service', () => {
     ])
   })
 
+  it('keeps login in restoring state until capabilities are loaded', async () => {
+    const { apiClient, login, useAuthStore } = await setup()
+    const statusesDuringContextLoad: string[] = []
+
+    apiClient.defaults.adapter = createAdapter((config) => {
+      if (config.url === '/auth/login') {
+        return createResponse(config, {
+          user: sampleUser,
+          ...initialTokens,
+        })
+      }
+
+      if (config.url === '/identity/me/capabilities') {
+        statusesDuringContextLoad.push(useAuthStore.getState().auth.status)
+        return createResponse(config, {
+          capabilities: ['identity.capability.read'],
+        })
+      }
+
+      if (config.url === '/organizations/mine') {
+        statusesDuringContextLoad.push(useAuthStore.getState().auth.status)
+        return createResponse(config, [sampleOrganization])
+      }
+
+      throw new Error(`Unexpected request: ${config.url}`)
+    })
+
+    await login({ email: 'user@example.com', password: 'password123' })
+
+    expect(statusesDuringContextLoad).toEqual(['restoring', 'restoring'])
+    expect(useAuthStore.getState().auth.status).toBe('authenticated')
+  })
+
   it('restores a persisted session through auth/me and context endpoints', async () => {
     const { apiClient, restoreSession, useAuthStore } = await setup()
     useAuthStore.getState().auth.setSession({

@@ -12,6 +12,7 @@ export default defineConfig({
       clean: true,
       client: 'react-query',
       httpClient: 'axios',
+      indexFiles: true,
       mode: 'tags-split',
       schemas: 'src/lib/api/generated/model',
       target: 'src/lib/api/generated/endpoints',

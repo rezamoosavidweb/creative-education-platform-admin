@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle2, Eye, Loader2, Plus, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
+import { useCurrentUser } from '@/lib/auth'
 import { useApiForm } from '@/lib/forms'
 import { Button } from '@/components/ui/button'
 import {
@@ -64,7 +65,9 @@ export function Posts() {
     () => ({ order: 'DESC', page, take: 10 }),
     [page]
   )
-  const postsQuery = usePosts(params)
+  const currentUser = useCurrentUser()
+  const canUsePostEndpoints = currentUser?.role === 'USER'
+  const postsQuery = usePosts(params, canUsePostEndpoints)
   const deleteMutation = useDeletePost()
   const accessMutation = useCheckPostAccess()
   const posts = getPosts(postsQuery.data)
@@ -106,49 +109,63 @@ export function Posts() {
               Review paginated posts and create translated post content.
             </p>
           </div>
-          <Button onClick={() => setIsCreateOpen(true)}>
+          <Button
+            onClick={() => setIsCreateOpen(true)}
+            disabled={!canUsePostEndpoints}
+          >
             <Plus className='size-4' />
             New post
           </Button>
         </div>
 
-        <div className='grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center'>
-          <Input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder='Search loaded posts...'
-          />
-          <div className='flex items-center gap-2'>
-            <Button
-              type='button'
-              variant='outline'
-              disabled={!meta?.hasPreviousPage}
-              onClick={() => setPage((current) => Math.max(1, current - 1))}
-            >
-              Previous
-            </Button>
-            <span className='text-sm text-muted-foreground'>
-              Page {meta?.page ?? page} of {meta?.pageCount ?? 1}
-            </span>
-            <Button
-              type='button'
-              variant='outline'
-              disabled={!meta?.hasNextPage}
-              onClick={() => setPage((current) => current + 1)}
-            >
-              Next
-            </Button>
+        {canUsePostEndpoints && (
+          <div className='grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center'>
+            <Input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder='Search loaded posts...'
+            />
+            <div className='flex items-center gap-2'>
+              <Button
+                type='button'
+                variant='outline'
+                disabled={!meta?.hasPreviousPage}
+                onClick={() => setPage((current) => Math.max(1, current - 1))}
+              >
+                Previous
+              </Button>
+              <span className='text-sm text-muted-foreground'>
+                Page {meta?.page ?? page} of {meta?.pageCount ?? 1}
+              </span>
+              <Button
+                type='button'
+                variant='outline'
+                disabled={!meta?.hasNextPage}
+                onClick={() => setPage((current) => current + 1)}
+              >
+                Next
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
-        {postsQuery.isLoading && <ApiLoading label='Loading posts...' />}
-        {postsQuery.isError && (
+        {!canUsePostEndpoints && (
+          <ApiEmpty
+            title='Posts unavailable for admins'
+            description='The backend posts endpoints currently allow user accounts only.'
+          />
+        )}
+        {canUsePostEndpoints && postsQuery.isLoading && (
+          <ApiLoading label='Loading posts...' />
+        )}
+        {canUsePostEndpoints && postsQuery.isError && (
           <ApiError
             error={postsQuery.error}
             onRetry={() => void postsQuery.refetch()}
           />
         )}
-        {!postsQuery.isLoading &&
+        {canUsePostEndpoints &&
+          !postsQuery.isLoading &&
           !postsQuery.isError &&
           filteredPosts.length === 0 && (
             <ApiEmpty
@@ -156,7 +173,8 @@ export function Posts() {
               description='Create a post or adjust the current search.'
             />
           )}
-        {!postsQuery.isLoading &&
+        {canUsePostEndpoints &&
+          !postsQuery.isLoading &&
           !postsQuery.isError &&
           filteredPosts.length > 0 && (
             <PostsList

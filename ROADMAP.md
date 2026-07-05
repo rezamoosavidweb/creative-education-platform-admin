@@ -141,6 +141,18 @@ module passes checks or has documented blockers.
 
 ## Known Technical Debt
 
+- Production acceptance QA on 2026-07-05 verified the Admin app against the
+  local backend using system Chrome, PostgreSQL, RBAC-enabled API settings, and
+  seeded admin/user accounts. See `QA_REPORT.md`.
+- The Docker API container currently cannot perform DB writes in this local
+  setup because its container runtime resolves `DATABASE_URL` to
+  `127.0.0.1:5432`; local API acceptance used `localhost:3001` instead.
+- Vitest browser execution is blocked in this environment until Playwright's
+  managed Chromium can be installed from an allowed mirror/cache. The CDN
+  returned HTTP 403 for the current network region.
+- The backend defaults `RBAC_ENABLED=false` for migration safety. Admin
+  capability-gated acceptance requires `RBAC_ENABLED=true` or equivalent direct
+  grants.
 - Remaining direct routes for unsupported template pages show unavailable states
   instead of mock/template data.
 - The Users module is read-only because the backend currently exposes only list
