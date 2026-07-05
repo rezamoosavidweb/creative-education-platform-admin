@@ -1,10 +1,19 @@
 import { describe, expect, it } from 'vitest'
 import {
+  canCancelOrder,
+  canCancelSubscription,
+  canRefundOrder,
+  canRetryOrderPayment,
   formatMoney,
+  getCouponStatusTone,
+  getCouponValue,
   getCommerceItems,
   getOrderItemCount,
   getOrderStatusTone,
+  getRedemptionSummary,
+  type Coupon,
   type Order,
+  type Subscription,
 } from './billing-query'
 
 const order: Order = {
@@ -26,6 +35,28 @@ const order: Order = {
   status: 'PAID',
   subtotalAmount: 1200,
   totalAmount: 1200,
+}
+
+const subscription: Subscription = {
+  currentPeriodEnd: '2026-02-01T00:00:00.000Z',
+  id: 'subscription-1',
+  resourceId: 'course-1',
+  resourceType: 'COURSE',
+  status: 'ACTIVE',
+  subscriberUserId: 'user-1',
+  offeringId: 'offering-1',
+}
+
+const coupon: Coupon = {
+  code: 'SAVE20',
+  currency: null,
+  discountType: 'PERCENTAGE',
+  expiresAt: null,
+  id: 'coupon-1',
+  maxRedemptions: 10,
+  redemptionCount: 2,
+  status: 'ACTIVE',
+  value: 20,
 }
 
 describe('billing query helpers', () => {
@@ -53,5 +84,30 @@ describe('billing query helpers', () => {
     expect(getOrderStatusTone('PAID')).toBe('ok')
     expect(getOrderStatusTone('EXPIRED')).toBe('err')
     expect(getOrderStatusTone('PENDING')).toBe('warn')
+  })
+
+  it('derives supported order and subscription actions from backend statuses', () => {
+    expect(canCancelOrder({ ...order, status: 'PENDING' })).toBe(true)
+    expect(canRetryOrderPayment({ ...order, status: 'PENDING' })).toBe(true)
+    expect(canRefundOrder(order)).toBe(true)
+    expect(canCancelSubscription(subscription)).toBe(true)
+    expect(
+      canCancelSubscription({ ...subscription, status: 'CANCELLED' })
+    ).toBe(false)
+  })
+
+  it('formats coupon values and redemption state', () => {
+    expect(getCouponValue(coupon)).toBe('20%')
+    expect(
+      getCouponValue({
+        ...coupon,
+        currency: 'USD',
+        discountType: 'FIXED',
+        value: 1234,
+      })
+    ).toBe('$12.34')
+    expect(getRedemptionSummary(coupon)).toBe('2 / 10 redeemed')
+    expect(getCouponStatusTone('ACTIVE')).toBe('ok')
+    expect(getCouponStatusTone('DISABLED')).toBe('neutral')
   })
 })

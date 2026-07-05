@@ -53,6 +53,8 @@ root standards docs.
       backend analytics contract exists.
 - [x] Billing module migrated from mock plan/invoice UI to current-user commerce
       order, subscription, and payout contracts.
+- [x] Billing/commerce expanded with seller balances, payout requests, admin
+      payout decisions, coupons, order actions, and subscription cancellation.
 - [x] Notifications module migrated from mock inbox data to current-user backend
       notification inbox contracts.
 - [x] Notifications administration expanded with preferences, inbox detail,
@@ -103,6 +105,7 @@ module passes checks or has documented blockers.
 - [x] Audit logs module compliance audit.
 - [x] Analytics module compliance audit.
 - [x] Billing module compliance audit.
+- [x] Billing/commerce module product-complete backend-supported workflow slice.
 - [x] Notifications module compliance audit.
 - [x] Notifications module product-complete backend-supported administration
       slice.
@@ -146,8 +149,11 @@ module passes checks or has documented blockers.
   Prometheus `/metrics` scrape endpoint is operational infrastructure, not an
   Admin analytics contract.
 - Billing is current-user commerce history through `/orders/mine`,
-  `/subscriptions/mine`, and `/payouts/mine`; no invoice, plan, usage, or global
-  billing admin endpoints are currently exposed.
+  `/subscriptions/mine`, and `/payouts/mine`, plus seller balances, payout
+  requests, current-user order/subscription actions, admin payout decisions, and
+  coupon management. No invoice, plan, usage, global order listing, global
+  subscription listing, coupon edit/reactivate, or payout detail endpoints are
+  currently exposed.
 - Notifications is scoped to current-user inbox/detail, current-user
   preferences, template management, single-user templated dispatch, and delivery
   maintenance operations. Mark-read/dismiss, unread counts, global notification
@@ -162,9 +168,8 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include revenue, coupons, and deeper
-  learning workflows. Implement each as its own generated-contract-backed
-  module.
+- Backend-supported future candidates include deeper learning workflows.
+  Implement each as its own generated-contract-backed module.
 - Courses is scoped to current-user authoring plus public catalog visibility;
   no global course moderation contract exists. Course sections, lessons,
   localization, FAQs, attachments, captions, enrollment, playback, and
