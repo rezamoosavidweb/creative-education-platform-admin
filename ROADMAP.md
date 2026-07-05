@@ -63,6 +63,9 @@ root standards docs.
       navigation and replaced with direct-route unavailable states.
 - [x] Courses module added for current-user authored courses, public catalog
       visibility, draft creation, and owner lifecycle actions.
+- [x] Learning workflows expanded within Courses for course details,
+      localization, FAQs, sections, lessons, enrollment progress, playback, and
+      certificates.
 - [x] Events module added for discovery, organizer events, RSVPs, venues,
       lifecycle actions, attendee lookup, and creation workflows.
 - [x] Marketplace module added for service listings, open jobs, applications,
@@ -112,6 +115,8 @@ module passes checks or has documented blockers.
 - [x] Projects/tasks/template modules: decide keep, rename, or remove based on
       backend domain fit.
 - [x] Courses module initial backend-backed slice.
+- [x] Learning module backend-backed course authoring, learner progress,
+      playback, and certificate slice.
 - [x] Events module backend-backed discovery, organizer, RSVP, and venue slice.
 - [x] Marketplace module backend-backed service, job, application, and contract
       slice.
@@ -168,12 +173,13 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include deeper learning workflows.
-  Implement each as its own generated-contract-backed module.
 - Courses is scoped to current-user authoring plus public catalog visibility;
   no global course moderation contract exists. Course sections, lessons,
   localization, FAQs, attachments, captions, enrollment, playback, and
-  certificates remain future learning slices.
+  certificates are implemented through backend learning contracts. Global
+  enrollment listing, certificate revocation/issuance, lesson search, bulk
+  reordering, and media-library selection remain blocked by missing contracts or
+  adjacent UI workflows.
 - Events is scoped to published discovery, current-user organizer events,
   RSVPs, attendee lookup, and venue creation. No event update/delete, global
   event moderation, venue ownership, or event pagination contracts exist yet.
@@ -191,6 +197,10 @@ module passes checks or has documented blockers.
 - Search is scoped to backend faceted search, autocomplete, term suggestions,
   and cursor pagination. Local response normalization exists because generated
   nested search arrays currently come through as singular DTO types.
+- Learning uses local response/body normalization because generated nested
+  course-detail, section, lesson, enrollment, FAQ, attachment, and caption
+  fields currently come through as singular DTO types while backend contracts
+  operate on arrays.
 - Shared `ApiQueryState` is now the preferred non-table loading/error/empty
   wrapper for backend-backed feature screens.
 
@@ -234,6 +244,9 @@ For every module:
 - Generated notification GET endpoints currently appear as mutation hooks, so
   feature hooks wrap the generated request functions with TanStack Query instead
   of using the generated hook names directly.
+- Generated learning nested arrays currently appear as singular DTO fields, so
+  the Courses service owns normalization helpers and request-body adapters until
+  the backend OpenAPI schema emits array item metadata correctly.
 
 ## Pending Automation
 

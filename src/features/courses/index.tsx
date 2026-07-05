@@ -6,8 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ApiEmpty, ApiError, ApiLoading } from '@/components/api'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
+import { CourseBuilderDialog } from './components/course-builder-dialog'
 import { CoursesTable } from './components/courses-table'
 import { CreateCourseDialog } from './components/create-course-dialog'
+import {
+  CertificatesPanel,
+  LearningProgressPanel,
+} from './components/learning-panels'
 import {
   useArchiveCourse,
   usePublishCourse,
@@ -18,6 +23,7 @@ import type { Course } from './types'
 
 export function Courses() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [builderCourse, setBuilderCourse] = useState<Course | null>(null)
   const authoredQuery = useServerQuery({
     request: {
       method: 'get',
@@ -70,6 +76,8 @@ export function Courses() {
           <TabsList>
             <TabsTrigger value='authored'>Authored</TabsTrigger>
             <TabsTrigger value='catalog'>Catalog</TabsTrigger>
+            <TabsTrigger value='learning'>Learning</TabsTrigger>
+            <TabsTrigger value='certificates'>Certificates</TabsTrigger>
           </TabsList>
 
           <TabsContent value='authored' className='mt-4'>
@@ -96,6 +104,7 @@ export function Courses() {
                 <CoursesTable
                   courses={authoredCourses}
                   onArchive={archiveCourse}
+                  onBuild={setBuilderCourse}
                   onPublish={publishCourse}
                   onUnpublish={unpublishCourse}
                   showActions
@@ -127,10 +136,25 @@ export function Courses() {
                 <CoursesTable courses={catalogCourses} />
               )}
           </TabsContent>
+
+          <TabsContent value='learning' className='mt-4'>
+            <LearningProgressPanel courses={catalogCourses} />
+          </TabsContent>
+
+          <TabsContent value='certificates' className='mt-4'>
+            <CertificatesPanel />
+          </TabsContent>
         </Tabs>
       </Main>
 
       <CreateCourseDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      <CourseBuilderDialog
+        course={builderCourse}
+        open={Boolean(builderCourse)}
+        onOpenChange={(open) => {
+          if (!open) setBuilderCourse(null)
+        }}
+      />
     </>
   )
 }

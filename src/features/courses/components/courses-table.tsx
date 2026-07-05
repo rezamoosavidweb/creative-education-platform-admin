@@ -1,4 +1,4 @@
-import { Archive, EyeOff, Send } from 'lucide-react'
+import { Archive, Eye, EyeOff, Send } from 'lucide-react'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/lib/api'
 import { Button } from '@/components/ui/button'
@@ -22,6 +22,7 @@ import type { Course } from '../types'
 type CoursesTableProps = {
   courses: Course[]
   onArchive?: (course: Course) => Promise<void>
+  onBuild?: (course: Course) => void
   onPublish?: (course: Course) => Promise<void>
   onUnpublish?: (course: Course) => Promise<void>
   showActions?: boolean
@@ -30,6 +31,7 @@ type CoursesTableProps = {
 export function CoursesTable({
   courses,
   onArchive,
+  onBuild,
   onPublish,
   onUnpublish,
   showActions = false,
@@ -83,6 +85,16 @@ export function CoursesTable({
               {showActions && (
                 <TableCell>
                   <div className='flex justify-end gap-2'>
+                    {onBuild && (
+                      <Button
+                        size='icon'
+                        variant='ghost'
+                        aria-label={`Build ${course.title}`}
+                        onClick={() => onBuild(course)}
+                      >
+                        <Eye className='size-4' />
+                      </Button>
+                    )}
                     {course.status !== 'PUBLISHED' && (
                       <Button
                         size='icon'
