@@ -68,6 +68,8 @@ root standards docs.
       certificates.
 - [x] Events module added for discovery, organizer events, RSVPs, venues,
       lifecycle actions, attendee lookup, and creation workflows.
+- [x] Community module added for current-user groups, invitations,
+      collaborations, and scheduled community sessions.
 - [x] Marketplace module added for service listings, open jobs, applications,
       and current-user contracts.
 - [x] Reviews module added for current-user reviews, subject review lookup,
@@ -118,6 +120,8 @@ module passes checks or has documented blockers.
 - [x] Learning module backend-backed course authoring, learner progress,
       playback, and certificate slice.
 - [x] Events module backend-backed discovery, organizer, RSVP, and venue slice.
+- [x] Community module backend-backed current-user group, invitation,
+      collaboration, and group-session slice.
 - [x] Marketplace module backend-backed service, job, application, and contract
       slice.
 - [x] Reviews module backend-backed current-user review and subject reputation
@@ -183,6 +187,10 @@ module passes checks or has documented blockers.
 - Events is scoped to published discovery, current-user organizer events,
   RSVPs, attendee lookup, and venue creation. No event update/delete, global
   event moderation, venue ownership, or event pagination contracts exist yet.
+- Community is scoped to current-user groups, invitations, collaborations, and
+  group sessions. No global community moderation, group discovery, group update,
+  invitation cancellation, session update/cancel, collaboration update/cancel,
+  participant search, or backend pagination contracts exist yet.
 - Marketplace is scoped to published service discovery, current-user service
   listings, open job discovery, submitted applications, hirer application
   review by job ID, and current-user contracts. No current-user posted jobs

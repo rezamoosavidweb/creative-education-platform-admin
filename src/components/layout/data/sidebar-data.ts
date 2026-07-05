@@ -10,6 +10,7 @@ import {
   KeyRound,
   LayoutDashboard,
   Lock,
+  MessageSquare,
   Search,
   Settings,
   ShieldCheck,
@@ -78,6 +79,11 @@ export const sidebarData: SidebarData = {
           title: 'Events',
           url: '/events',
           icon: CalendarDays,
+        },
+        {
+          title: 'Community',
+          url: '/community',
+          icon: MessageSquare,
         },
         {
           title: 'Marketplace',
