@@ -112,8 +112,6 @@ export const sidebarData: SidebarData = {
         {
           title: 'Notifications',
           url: '/notifications',
-          badge: '3',
-          badgeVariant: 'destructive',
           icon: Bell,
         },
         {

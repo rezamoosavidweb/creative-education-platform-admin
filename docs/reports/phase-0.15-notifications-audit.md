@@ -32,6 +32,6 @@ and dismiss were removed because the backend does not expose those contracts.
 
 ## Decision
 
-Keep this page scoped to the caller's inbox. Template management, send
-operations, and delivery operations should be separate capability-gated admin
-features.
+Initial scope kept this page to the caller's inbox. This was superseded by
+`docs/reports/phase-0.24-notifications-admin.md`, which adds the supported
+capability-gated admin workflows to the same Notifications workspace.

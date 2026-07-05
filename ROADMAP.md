@@ -55,6 +55,8 @@ root standards docs.
       order, subscription, and payout contracts.
 - [x] Notifications module migrated from mock inbox data to current-user backend
       notification inbox contracts.
+- [x] Notifications administration expanded with preferences, inbox detail,
+      template management, dispatch, and delivery operations.
 - [x] Remaining template modules audited; unsupported mock surfaces removed from
       navigation and replaced with direct-route unavailable states.
 - [x] Courses module added for current-user authored courses, public catalog
@@ -102,6 +104,8 @@ module passes checks or has documented blockers.
 - [x] Analytics module compliance audit.
 - [x] Billing module compliance audit.
 - [x] Notifications module compliance audit.
+- [x] Notifications module product-complete backend-supported administration
+      slice.
 - [x] Projects/tasks/template modules: decide keep, rename, or remove based on
       backend domain fit.
 - [x] Courses module initial backend-backed slice.
@@ -144,9 +148,11 @@ module passes checks or has documented blockers.
 - Billing is current-user commerce history through `/orders/mine`,
   `/subscriptions/mine`, and `/payouts/mine`; no invoice, plan, usage, or global
   billing admin endpoints are currently exposed.
-- Notifications inbox uses `/notifications/mine`. Mark-read/dismiss actions are
-  not exposed by the backend; notification templates, send, and delivery admin
-  operations should be separate capability-gated modules.
+- Notifications is scoped to current-user inbox/detail, current-user
+  preferences, template management, single-user templated dispatch, and delivery
+  maintenance operations. Mark-read/dismiss, unread counts, global notification
+  browsing, recipient search, scheduled dispatch, delivery listing, template
+  deletion, and global moderation are not exposed by the backend.
 - Some feature folders use older `data/` patterns; new real features should use
   `services/`, `hooks`, `schemas`, and generated API types.
 - Some shared rules are documented but not yet enforced by ESLint or tests.
@@ -156,9 +162,9 @@ module passes checks or has documented blockers.
   it.
 - Sidebar/navigation now advertises backend-backed workflows only. Unsupported
   template routes remain direct-link compatible with clear unavailable states.
-- Backend-supported future candidates include notification administration,
-  revenue, coupons, and deeper learning workflows. Implement each as its own
-  generated-contract-backed module.
+- Backend-supported future candidates include revenue, coupons, and deeper
+  learning workflows. Implement each as its own generated-contract-backed
+  module.
 - Courses is scoped to current-user authoring plus public catalog visibility;
   no global course moderation contract exists. Course sections, lessons,
   localization, FAQs, attachments, captions, enrollment, playback, and
@@ -217,6 +223,12 @@ For every module:
   system.
 - Keep API-state UI primitives in `src/components/api` when they are reused
   across backend-backed modules.
+- Keep notification inbox pagination on `useServerQuery` while the generated
+  Orval functions return response bodies only; the inbox needs the backend
+  `nextCursor` response header preserved by the shared API client.
+- Generated notification GET endpoints currently appear as mutation hooks, so
+  feature hooks wrap the generated request functions with TanStack Query instead
+  of using the generated hook names directly.
 
 ## Pending Automation
 

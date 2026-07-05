@@ -10,17 +10,21 @@ import {
 
 type NotificationListProps = {
   items: Notification[]
+  onSelect?: (notification: Notification) => void
 }
 
 export const NotificationList = memo(function NotificationList({
   items,
+  onSelect,
 }: NotificationListProps) {
   return (
     <div className='flex flex-col gap-2'>
       {items.map((item) => (
-        <div
+        <button
+          type='button'
           key={item.id}
-          className='overflow-hidden rounded-lg border border-[var(--bdr)] bg-[var(--sur)]'
+          onClick={() => onSelect?.(item)}
+          className='overflow-hidden rounded-lg border border-[var(--bdr)] bg-[var(--sur)] text-left transition-colors hover:bg-[var(--sur2)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none'
         >
           <div className='flex items-start gap-3.5 px-[18px] py-3.5'>
             <div className='flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-[var(--sur3)] text-[var(--t2)]'>
@@ -43,7 +47,7 @@ export const NotificationList = memo(function NotificationList({
               </p>
             </div>
           </div>
-        </div>
+        </button>
       ))}
     </div>
   )
