@@ -37,6 +37,7 @@ import { Route as AuthenticatedReviewsIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedReferenceIndexRouteImport } from './routes/_authenticated/reference/index'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
 import { Route as AuthenticatedProfilesIndexRouteImport } from './routes/_authenticated/profiles/index'
+import { Route as AuthenticatedPostsIndexRouteImport } from './routes/_authenticated/posts/index'
 import { Route as AuthenticatedPermissionsIndexRouteImport } from './routes/_authenticated/permissions/index'
 import { Route as AuthenticatedOrganizationsIndexRouteImport } from './routes/_authenticated/organizations/index'
 import { Route as AuthenticatedNotificationsIndexRouteImport } from './routes/_authenticated/notifications/index'
@@ -213,6 +214,11 @@ const AuthenticatedProfilesIndexRoute =
     path: '/profiles/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPostsIndexRoute = AuthenticatedPostsIndexRouteImport.update({
+  id: '/posts/',
+  path: '/posts/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPermissionsIndexRoute =
   AuthenticatedPermissionsIndexRouteImport.update({
     id: '/permissions/',
@@ -425,6 +431,7 @@ export interface FileRoutesByFullPath {
   '/notifications/': typeof AuthenticatedNotificationsIndexRoute
   '/organizations/': typeof AuthenticatedOrganizationsIndexRoute
   '/permissions/': typeof AuthenticatedPermissionsIndexRoute
+  '/posts/': typeof AuthenticatedPostsIndexRoute
   '/profiles/': typeof AuthenticatedProfilesIndexRoute
   '/projects/': typeof AuthenticatedProjectsIndexRoute
   '/reference/': typeof AuthenticatedReferenceIndexRoute
@@ -480,6 +487,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsIndexRoute
   '/organizations': typeof AuthenticatedOrganizationsIndexRoute
   '/permissions': typeof AuthenticatedPermissionsIndexRoute
+  '/posts': typeof AuthenticatedPostsIndexRoute
   '/profiles': typeof AuthenticatedProfilesIndexRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/reference': typeof AuthenticatedReferenceIndexRoute
@@ -540,6 +548,7 @@ export interface FileRoutesById {
   '/_authenticated/notifications/': typeof AuthenticatedNotificationsIndexRoute
   '/_authenticated/organizations/': typeof AuthenticatedOrganizationsIndexRoute
   '/_authenticated/permissions/': typeof AuthenticatedPermissionsIndexRoute
+  '/_authenticated/posts/': typeof AuthenticatedPostsIndexRoute
   '/_authenticated/profiles/': typeof AuthenticatedProfilesIndexRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
   '/_authenticated/reference/': typeof AuthenticatedReferenceIndexRoute
@@ -598,6 +607,7 @@ export interface FileRouteTypes {
     | '/notifications/'
     | '/organizations/'
     | '/permissions/'
+    | '/posts/'
     | '/profiles/'
     | '/projects/'
     | '/reference/'
@@ -653,6 +663,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/organizations'
     | '/permissions'
+    | '/posts'
     | '/profiles'
     | '/projects'
     | '/reference'
@@ -712,6 +723,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications/'
     | '/_authenticated/organizations/'
     | '/_authenticated/permissions/'
+    | '/_authenticated/posts/'
     | '/_authenticated/profiles/'
     | '/_authenticated/projects/'
     | '/_authenticated/reference/'
@@ -937,6 +949,13 @@ declare module '@tanstack/react-router' {
       path: '/profiles'
       fullPath: '/profiles/'
       preLoaderRoute: typeof AuthenticatedProfilesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/posts/': {
+      id: '/_authenticated/posts/'
+      path: '/posts'
+      fullPath: '/posts/'
+      preLoaderRoute: typeof AuthenticatedPostsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/permissions/': {
@@ -1193,6 +1212,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotificationsIndexRoute: typeof AuthenticatedNotificationsIndexRoute
   AuthenticatedOrganizationsIndexRoute: typeof AuthenticatedOrganizationsIndexRoute
   AuthenticatedPermissionsIndexRoute: typeof AuthenticatedPermissionsIndexRoute
+  AuthenticatedPostsIndexRoute: typeof AuthenticatedPostsIndexRoute
   AuthenticatedProfilesIndexRoute: typeof AuthenticatedProfilesIndexRoute
   AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
   AuthenticatedReferenceIndexRoute: typeof AuthenticatedReferenceIndexRoute
@@ -1232,6 +1252,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotificationsIndexRoute: AuthenticatedNotificationsIndexRoute,
   AuthenticatedOrganizationsIndexRoute: AuthenticatedOrganizationsIndexRoute,
   AuthenticatedPermissionsIndexRoute: AuthenticatedPermissionsIndexRoute,
+  AuthenticatedPostsIndexRoute: AuthenticatedPostsIndexRoute,
   AuthenticatedProfilesIndexRoute: AuthenticatedProfilesIndexRoute,
   AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
   AuthenticatedReferenceIndexRoute: AuthenticatedReferenceIndexRoute,

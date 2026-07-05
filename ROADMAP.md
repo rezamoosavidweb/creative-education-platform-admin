@@ -78,6 +78,8 @@ root standards docs.
       owner delete workflows.
 - [x] Search module added for global faceted search, autocomplete, term
       suggestions, facets, and cursor pagination.
+- [x] Posts module added for paginated post browsing, translated creation,
+      detail lookup, owner access checks, and owner-only deletion.
 - [x] Quality refactor completed for Marketplace, Reviews, Media, and Search.
 
 ## In Progress
@@ -130,6 +132,8 @@ module passes checks or has documented blockers.
       slice.
 - [x] Search module backend-backed global search, suggestions, facets, and
       pagination slice.
+- [x] Posts module backend-backed paginated list, translated create, detail,
+      access-check, and delete slice.
 - [x] Cross-module quality refactor for recently added backend-backed modules.
 
 ## Known Technical Debt
@@ -205,6 +209,10 @@ module passes checks or has documented blockers.
 - Search is scoped to backend faceted search, autocomplete, term suggestions,
   and cursor pagination. Local response normalization exists because generated
   nested search arrays currently come through as singular DTO types.
+- Posts is scoped to paginated browsing, translated creation, detail lookup,
+  owner access checks, and owner-only deletion. No mutable translation update,
+  backend search/filtering, global moderation, publish/archive, comments,
+  reactions, author lookup, or bulk action contracts exist yet.
 - Learning uses local response/body normalization because generated nested
   course-detail, section, lesson, enrollment, FAQ, attachment, and caption
   fields currently come through as singular DTO types while backend contracts
