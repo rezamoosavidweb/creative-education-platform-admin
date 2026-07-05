@@ -13,8 +13,9 @@ root standards docs.
 - Orval generation exists at `src/lib/api/generated/`.
 - Shared API, auth, capabilities, query, form, server-table, and API-state
   foundations exist.
-- Many business pages still use template or mock data and must be migrated
-  module by module.
+- Backend-supported Admin modules have been migrated or audited module by
+  module. Remaining unavailable surfaces are direct-route compatible template
+  pages with documented backend limitations.
 
 ## Completed
 
@@ -81,6 +82,8 @@ root standards docs.
 - [x] Posts module added for paginated post browsing, translated creation,
       detail lookup, owner access checks, and owner-only deletion.
 - [x] Quality refactor completed for Marketplace, Reviews, Media, and Search.
+- [x] Full-project release audit captured in
+      `docs/reports/phase-0.29-release-audit.md`.
 
 ## In Progress
 
